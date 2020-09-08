@@ -163,7 +163,6 @@ public class TrainActivity extends AppCompatActivity implements CameraBridgeView
         for(int i =0 ; i<imagesLabels.size();i++){
             local.putImage(imagesLabels.get(i)+i+".jpg",imagesLabels.get(i),images.get(i),number); //store every captured + grascaled + cropped image to external file
 
-            //for unique random name
         }
 
         Mat vectorClasses = new Mat(classes.length, 1, CvType.CV_32SC1); // CV_32S == int

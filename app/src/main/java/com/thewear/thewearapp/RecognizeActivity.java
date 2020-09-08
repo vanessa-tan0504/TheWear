@@ -172,8 +172,12 @@ public class RecognizeActivity extends AppCompatActivity implements CameraBridge
             startActivity(intent);
         }else if(predict[0]>=125)
             Toast.makeText(getApplicationContext(), "You're not the right person "+predict[0], LENGTH_SHORT).show();
+
         Log.i(TAG, "RECOGNIZE: label value is "+ label[0]);
         Log.i(TAG, "RECOGNIZE: predict value is "+ predict[0]);
+
+
+
     }
 
     ////a.1 basic setup for opencv environment, make sure gray faces area does not over by 2 etc.
