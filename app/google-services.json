@@ -1,0 +1,122 @@
+{
+  "project_info": {
+    "project_number": "532237853026",
+    "firebase_url": "https://the-wear.firebaseio.com",
+    "project_id": "the-wear",
+    "storage_bucket": "the-wear.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:532237853026:android:c50a79b747e1362708cc3b",
+        "android_client_info": {
+          "package_name": "com.example.firestorageexample"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "532237853026-kusdehu9emmti1oppqn2ds5qh7705i8q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.firestorageexample",
+            "certificate_hash": "8e35791c4077934e8e0f01a06f978f4fbcda58bd"
+          }
+        },
+        {
+          "client_id": "532237853026-vh4nqiqtjr6a5oqrn09tnsp4s2j30igf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC7tdI73nvNxEVfjfaGHA4VdTynia6ZDsY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "532237853026-vh4nqiqtjr6a5oqrn09tnsp4s2j30igf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:532237853026:android:f927b8d5f5f9849e08cc3b",
+        "android_client_info": {
+          "package_name": "com.kdtech.mlwithandroid"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "532237853026-8qfucpllruoa2e6j49td4iu4t01iqkva.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kdtech.mlwithandroid",
+            "certificate_hash": "8e35791c4077934e8e0f01a06f978f4fbcda58bd"
+          }
+        },
+        {
+          "client_id": "532237853026-vh4nqiqtjr6a5oqrn09tnsp4s2j30igf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC7tdI73nvNxEVfjfaGHA4VdTynia6ZDsY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "532237853026-vh4nqiqtjr6a5oqrn09tnsp4s2j30igf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:532237853026:android:b87b0cbe78e6635808cc3b",
+        "android_client_info": {
+          "package_name": "com.thewear.thewearapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "532237853026-600usu1qgvhs5vm9kr9crdh7gunoloeh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.thewear.thewearapp",
+            "certificate_hash": "8e35791c4077934e8e0f01a06f978f4fbcda58bd"
+          }
+        },
+        {
+          "client_id": "532237853026-vh4nqiqtjr6a5oqrn09tnsp4s2j30igf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC7tdI73nvNxEVfjfaGHA4VdTynia6ZDsY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "532237853026-vh4nqiqtjr6a5oqrn09tnsp4s2j30igf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
