@@ -2,15 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.thewear.thewearapp">
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.INTERNET" />
-
-    <uses-feature android:name="android.hardware.camera" android:required="false"/>
-    <uses-feature android:name="android.hardware.camera.autofocus" android:required="false"/>
-    <uses-feature android:name="android.hardware.camera.front" android:required="true"/>
-    <uses-feature android:name="android.hardware.camera.front.autofocus" android:required="false"/>
 
     <application
         android:allowBackup="true"
@@ -19,27 +10,49 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.thewear.thewearapp.MainActivity" android:label="@string/app_name">
+
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.thewear.thewearapp.TrainActivity" android:label="@string/app_train_page"
-            android:screenOrientation="fullSensor"
-
-            />
-        <activity android:name="com.thewear.thewearapp.RecognizeActivity" android:label="@string/app_recognize_page"
-            android:screenOrientation="fullSensor"
-
-            />
-
-        <activity android:name="com.thewear.thewearapp.RegisterActivity" android:label="@string/app_recognize_page"
-            android:screenOrientation="portrait"
-
-            />
-
+        <activity
+            android:name=".TrainActivity"
+            android:label="@string/app_train_page"
+            android:screenOrientation="fullSensor" />
+        <activity
+            android:name=".RecognizeActivity"
+            android:label="@string/app_recognize_page"
+            android:screenOrientation="fullSensor" />
+        <activity
+            android:name=".RegisterActivity"
+            android:label="@string/app_recognize_page"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ShopActivity"
+            android:screenOrientation="portrait" />
     </application>
+    <uses-feature
+        android:name="android.hardware.camera.autofocus"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.camera.front"
+        android:required="true" />
+    <uses-feature
+        android:name="android.hardware.camera.front.autofocus"
+        android:required="false" />
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <uses-permission android:name="android.permission.CAMERA" />
 
 </manifest>

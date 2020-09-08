@@ -374,6 +374,7 @@ public class TrainActivity extends AppCompatActivity implements CameraBridgeView
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         Stetho.initializeWithDefaults(this);
         Intent intent = getIntent(); //add 26/5
+        final Intent intent2;
         detect = (Button)findViewById(R.id.take_picture_button);
         prestart= (Button)findViewById(R.id.prestart);
         appname1= (TextView)findViewById(R.id.appname);
@@ -437,16 +438,23 @@ public class TrainActivity extends AppCompatActivity implements CameraBridgeView
                         capture_count++;
                         if(capture_count==3){ //9 for 8 image
                             detect.setEnabled(false);
-                            Toast.makeText(TrainActivity.this, "Training complete", Toast.LENGTH_SHORT).show();
-                            new AlertDialog.Builder(TrainActivity.this).setTitle("Sent Order")
+                            Toast.makeText(TrainActivity.this, "Capture complete", Toast.LENGTH_SHORT).show();
+                            new AlertDialog.Builder(TrainActivity.this).setTitle("capture complete")
                                     .setMessage("Face Recognition Success")
-                                    .setNeutralButton("OK", new DialogInterface.OnClickListener() {
+                                    .setNeutralButton("start train", new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
                                             onStop();
-                                            Intent i = new Intent(TrainActivity.this, MainActivity.class);
-                                            startActivity(i);
-                                            //can change to onbackpress?
+                                            new Handler().postDelayed(new Runnable() { //pause 3 second only resume to walkthru
+                                                @Override
+                                                public void run() {
+                                                    Intent intent1 = new Intent(TrainActivity.this, ShopActivity.class);
+                                                    startActivity(intent1);
+                                                   // finish();//finish welcome activity
+                                                }
+                                            }, 5000);
+
+                                            //onBackPressed();
                                         }
                                     })
                             .show();

@@ -44,17 +44,6 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register_activity);
 
-//        FirebaseOptions options = new FirebaseOptions.Builder()
-//                .setProjectId("the-wear")
-//                .setApplicationId("1:532237853026:android:b87b0cbe78e6635808cc3b")
-//                .setApiKey("AIzaSyC7tdI73nvNxEVfjfaGHA4VdTynia6ZDsY")
-//                // setDatabaseURL(...)
-//                // setStorageBucket(...)
-//                .build();
-//
-//        FirebaseApp.initializeApp(this,options,"the-wear");
-
-
         //get firebase auth instance
         auth= FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();

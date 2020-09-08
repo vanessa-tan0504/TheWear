@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 number++;
                 Intent swap = new Intent(MainActivity.this, RegisterActivity.class);
-                swap.putExtra("NUMBER",number);
+                //swap.putExtra("NUMBER",number);
                 startActivity(swap);
             }
         });
