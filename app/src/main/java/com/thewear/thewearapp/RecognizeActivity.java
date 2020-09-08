@@ -165,17 +165,15 @@ public class RecognizeActivity extends AppCompatActivity implements CameraBridge
          */
         //recognize.predict(croped, label, predict);
         recognize.predict(destination, label, predict);
-        if(label[0] != -1 && (int)predict[0] < 125) //"predict" need to be small value as possible to get high confidence
+        if(label[0] != -1 && (int)predict[0] < 125) { //"predict" need to be small value as possible to get high confidence
             //Toast.makeText(getApplicationContext(), "Welcome "+imagesLabels.get(label[0])+"", LENGTH_SHORT).show();
-            Toast.makeText(getApplicationContext(), "Welcome "+predict[0]+"", LENGTH_SHORT).show();
-        else if(predict[0]>=125)
+           // Toast.makeText(getApplicationContext(), "Welcome " + predict[0] + "", LENGTH_SHORT).show();
+            Intent intent = new Intent(RecognizeActivity.this, ShopActivity.class);
+            startActivity(intent);
+        }else if(predict[0]>=125)
             Toast.makeText(getApplicationContext(), "You're not the right person "+predict[0], LENGTH_SHORT).show();
-
         Log.i(TAG, "RECOGNIZE: label value is "+ label[0]);
         Log.i(TAG, "RECOGNIZE: predict value is "+ predict[0]);
-
-
-
     }
 
     ////a.1 basic setup for opencv environment, make sure gray faces area does not over by 2 etc.
@@ -204,8 +202,6 @@ public class RecognizeActivity extends AppCompatActivity implements CameraBridge
                     Toast.makeText(getApplicationContext(), "Can't Detect Faces", LENGTH_SHORT).show();
                 classifier.detectMultiScale(gray,faces,1.1,3,0|CASCADE_SCALE_IMAGE, new Size(30,30)); //get face to chg to gray scale image
                 //eye_cascade.detectMultiScale(gray,eyes,1.1,3,0|CASCADE_SCALE_IMAGE, new Size(gray.size().width*0.2, gray.size().height*0.2));
-
-
 
                 if(!faces.empty()) {
                     if(faces.toArray().length > 1)

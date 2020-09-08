@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/content_main"
     android:layout_width="match_parent"
@@ -7,8 +8,7 @@
     tools:context=".RecognizeActivity"
     tools:showIn="@layout/recognize_main">
 
-    <LinearLayout
-        style="?metaButtonBarStyle"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -18,16 +18,24 @@
 
         <Button
             android:id="@+id/recognize_button"
-            style="?metaButtonBarButtonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="24dp"
             android:layout_weight="1"
+            android:background="@drawable/rounded_btn_black"
+            android:fontFamily="@font/muli_regular"
             android:paddingTop="20dp"
             android:paddingBottom="20dp"
-            android:background="@color/black_overlay"
+            android:text="CAPTURE FACE TO VERIFY"
             android:textColor="@android:color/white"
-            android:text="@string/recognize_button" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </RelativeLayout>
