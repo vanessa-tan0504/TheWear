@@ -60,41 +60,46 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(swap);
             }
         });
+
         Button login = (Button)findViewById(R.id.btn_login);
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                //retrive xml model from firebase
-                StorageReference mStorageRef;
-                mStorageRef = FirebaseStorage.getInstance().getReference("Bunhair"); // getInstance = root firebase file images= foldername
-                StorageReference ref = mStorageRef.child("Model XML");
-                File storagePath = new File(Environment.getExternalStorageDirectory(),"TrainedData");
-                // Create direcorty if not exists
-                if(!storagePath.exists()) {
-                    Log.e(TAG, "directory exsisted");
-                    storagePath.mkdirs();
-                }
+                Intent swap = new Intent(MainActivity.this, LoginActivity.class);
+                //swap.putExtra("NUMBER",number);
+                startActivity(swap);
 
-                final File myFile = new File(storagePath,"test_model.xml");
-                ref.getFile(myFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                //retrive xml model from firebase
+//                StorageReference mStorageRef;
+//                mStorageRef = FirebaseStorage.getInstance().getReference("Bunhair"); // getInstance = root firebase file images= foldername
+//                StorageReference ref = mStorageRef.child("Model XML");
+//                File storagePath = new File(Environment.getExternalStorageDirectory(),"TrainedData");
+//                // Create direcorty if not exists
+//                if(!storagePath.exists()) {
+//                    Log.e(TAG, "directory exsisted");
+//                    storagePath.mkdirs();
+//                }
+
+              //  final File myFile = new File(storagePath,"test_model.xml");
+               // ref.getFile(myFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                //    @Override
+                //    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
                         // Local temp file has been created
                         //Toast.makeText(MainActivity.this, "success", Toast.LENGTH_SHORT).show();
-                        Log.e(TAG,"local tem file created  created "+ myFile.toString());
-                        Intent swap = new Intent(MainActivity.this, RecognizeActivity.class);
-                        swap.putExtra("NUMBER",number);
-                        startActivity(swap);
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
+                      //  Log.e(TAG,"local tem file created  created "+ myFile.toString());
+//                        Intent swap = new Intent(MainActivity.this, LoginActivity.class);
+//                       // swap.putExtra("NUMBER",number);
+//                        startActivity(swap);
+//              //      }
+            //    }).addOnFailureListener(new OnFailureListener() {
+            //        @Override
+             //       public void onFailure(@NonNull Exception exception) {
                         // Handle any errors
                         // Toast.makeText(MainActivity.this, "no success", Toast.LENGTH_SHORT).show();
-                        Log.e(TAG,"file not created "+ exception.toString());
-                    }
-                });
+             //           Log.e(TAG,"file not created "+ exception.toString());
+            //        }
+            //    });
 
             }
         });
