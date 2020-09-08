@@ -211,7 +211,7 @@ public class TrainActivity extends AppCompatActivity implements CameraBridgeView
 
     }
 
-    //add identify image histogram but what for?????
+    //add identify image histogram
     private void calcHist() {
         String filename="",foldername="";
         for(int i=0;i<imagesLabels.size();i++){
@@ -372,8 +372,6 @@ public class TrainActivity extends AppCompatActivity implements CameraBridgeView
 
         if (hasPermissions()){ //if camera permission granted=goto hasPermissions() function
             //Toast.makeText(this,"Number:"+number,Toast.LENGTH_LONG).show();
-            //add 26/5
-           // Toast.makeText(this, "Permission Granted"+ number +" Clear:"+isClear, Toast.LENGTH_SHORT).show();
             username=intent.getStringExtra("username");
             Toast.makeText(TrainActivity.this, "Welcome! " + username, Toast.LENGTH_SHORT).show();
             Log.i(TAG, "Permission Granted Before");
@@ -404,7 +402,9 @@ public class TrainActivity extends AppCompatActivity implements CameraBridgeView
                             return;
                         }
                         cropedImages(gray); //5. crop image
-                        showLabelsDialog();//6. then oni ask user write / choose name
+                        //showLabelsDialog();//6. then oni ask user write / choose name
+                        addLabel(username);
+                       // imagesLabels.add(label)
                         //Toast.makeText(getApplicationContext(), "Face Detected", Toast.LENGTH_SHORT).show();
                         detect.setText("Succeed Captured :"+capture_count +"/8");
                         capture_count++;
@@ -412,6 +412,17 @@ public class TrainActivity extends AppCompatActivity implements CameraBridgeView
                             detect.setEnabled(false);
                            // onBackPressed();
                             Toast.makeText(TrainActivity.this, "Training complete", Toast.LENGTH_SHORT).show();
+                            new AlertDialog.Builder(TrainActivity.this).setTitle("Sent Order")
+                                    .setMessage("Face Recognition Success")
+                                    .setNeutralButton("OK", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            onStop();
+                                            Intent i = new Intent(TrainActivity.this, MainActivity.class);
+                                            startActivity(i);
+                                        }
+                                    })
+                            .show();
                         }
                     }
                 }else
