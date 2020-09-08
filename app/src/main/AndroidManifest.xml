@@ -37,6 +37,9 @@
         <activity
             android:name=".LoginActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".IntroActivity"
+            android:screenOrientation="portrait" />
     </application>
     <uses-feature
         android:name="android.hardware.camera.autofocus"
