@@ -158,7 +158,6 @@ public class TrainActivity extends AppCompatActivity implements CameraBridgeView
             local.putImage(imagesLabels.get(i)+i+".jpg",imagesLabels.get(i),images.get(i),number); //store every captured + grascaled + cropped image to external file
 
             //for unique random name
-        //  local.putImage("temp "+uniqueLabels[i]+i+".jpg",images.get(i)); //store every captured + grascaled + cropped image to external file
         }
 
         Mat vectorClasses = new Mat(classes.length, 1, CvType.CV_32SC1); // CV_32S == int
@@ -198,9 +197,7 @@ public class TrainActivity extends AppCompatActivity implements CameraBridgeView
             Log.i(TAG,"Threshold: "+ ((LBPHFaceRecognizer) recognize).getRadius());
             List<Mat> histograms = ((LBPHFaceRecognizer) recognize).getHistograms();
             Log.i(TAG,"Histogram Size: "+ histograms.size());
-//            for(int i=0;i<histograms.size();i++){
-//                local.putImage("histogram" + i +".jpg",histograms.get(i));
-//            }
+
 
             calcHist();
 
@@ -286,53 +283,11 @@ public class TrainActivity extends AppCompatActivity implements CameraBridgeView
     public void showLabelsDialog() {
         Set<String> uniqueLabelsSet = new HashSet<>(imagesLabels); // Get all unique labels
         if (!uniqueLabelsSet.isEmpty()) {
-//            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//            builder.setTitle("Select label:");
-//            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-//                @Override
-//                public void onClick(DialogInterface dialog, int which) {
-//                    dialog.dismiss();
-//                    images.remove(images.size()-1);
-//                }
-//            });
-            //add 26/5
-//            builder.setNeutralButton("Add new", new DialogInterface.OnClickListener() {
-//                @Override
-//                public void onClick(DialogInterface dialog, int which) {
-//                    showEnterLabelDialog();
-//                }
-//            });
-//            //add 26/5
-//            builder.setCancelable(false); // Prevent the user from closing the dialog
-
             String[] uniqueLabels = uniqueLabelsSet.toArray(new String[uniqueLabelsSet.size()]); // Convert to String array for ArrayAdapter
             Arrays.sort(uniqueLabels); // Sort labels alphabetically
-//            final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, uniqueLabels) {
-//                @Override
-//                public @Nonnull
-//                View getView(int position, @Nullable View convertView, @Nonnull ViewGroup parent) {
-//                    TextView textView = (TextView) super.getView(position, convertView, parent);
-//                    if (getResources().getBoolean(R.bool.isTablet))
-//                        textView.setTextSize(20); // Make text slightly bigger on tablets compared to phones
-//                    else
-//                        textView.setTextSize(18); // Increase text size a little bit
-//                    return textView;
-//                }
-//            };
-//            ListView mListView = new ListView(this);
-//            mListView.setAdapter(arrayAdapter); // Set adapter, so the items actually show up
-//            builder.setView(mListView); // Set the ListView
-
-           // final AlertDialog dialog = builder.show(); // Show dialog and store in final variable, so it can be dismissed by the ListView
-
-           // mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-              //  @Override
-              //  public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                  //  dialog.dismiss();
                     addLabel(username);
                     Log.i(TAG, "Labels Size "+imagesLabels.size()+""); //number / photo of user's image capture
-              //  }
-           // });
+
         } else {
             showEnterLabelDialog(); //6.1
         }
@@ -341,46 +296,8 @@ public class TrainActivity extends AppCompatActivity implements CameraBridgeView
 
     //6.1 dialog box for enter name (for first time snap)
     private void showEnterLabelDialog() {
-//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//        builder.setTitle("Please enter your name:");
-//
-//        final EditText input = new EditText(this);
-//        input.setInputType(InputType.TYPE_CLASS_TEXT);
-//        builder.setView(input);
-//
-//        builder.setPositiveButton("Submit", null); // Set up positive button, but do not provide a listener, so we can check the string before dismissing the dialog
-//        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                dialog.dismiss();
-//                images.remove(images.size()-1);
-//            }
-//        });
-//        builder.setCancelable(false); // User has to input a name
-//        AlertDialog dialog = builder.create();
-
-        // Source: http://stackoverflow.com/a/7636468/2175837
-//        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
-//            @Override
-//            public void onShow(final DialogInterface dialog) {
-//                Button mButton = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE);
-//                mButton.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                   // public void onClick(View view) {
                         String string = username;
-//                        //if (!string.isEmpty()) { // Make sure the input is valid
-//                            // If input is valid, dismiss the dialog and add the label to the array
-//                            //dialog.dismiss();
                             addLabel(string);
-//                       // }
-//                    //}
-//                });
-//            }
-//        });
-        // Show keyboard, so the user can start typing straight away
-        //dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-
-        //dialog.show();
     }
 
     // 7. add name
@@ -393,7 +310,7 @@ public class TrainActivity extends AppCompatActivity implements CameraBridgeView
 
     //save trained data
     public boolean SaveImage() {
-        String username="";
+        //String username="";
         for(int i=0;i<imagesLabels.size();i++){
             if(i==0){
                 username=imagesLabels.get(i);
@@ -452,16 +369,6 @@ public class TrainActivity extends AppCompatActivity implements CameraBridgeView
         Stetho.initializeWithDefaults(this);
         Intent intent = getIntent(); //add 26/5
 
-        //number = intent.getIntExtra("NUMBER",0); //add 26/5
-       // mStorageRef = FirebaseStorage.getInstance().getReference("uploads"); //get instance for cloud storage
-       // db=FirebaseFirestore.getInstance(); //set instance for firestore
-
-        //add
-//        if(number!=1){ //first time in don;t clear first, if 2nd time in only clear
-//            local.clear();
-//            isClear=true;
-//        }
-        //add
 
         if (hasPermissions()){ //if camera permission granted=goto hasPermissions() function
             //Toast.makeText(this,"Number:"+number,Toast.LENGTH_LONG).show();
