@@ -280,25 +280,25 @@ public class TrainActivity extends AppCompatActivity implements CameraBridgeView
     //add
 
     //6. show dialog box
-    public void showLabelsDialog() {
-        Set<String> uniqueLabelsSet = new HashSet<>(imagesLabels); // Get all unique labels
-        if (!uniqueLabelsSet.isEmpty()) {
-            String[] uniqueLabels = uniqueLabelsSet.toArray(new String[uniqueLabelsSet.size()]); // Convert to String array for ArrayAdapter
-            Arrays.sort(uniqueLabels); // Sort labels alphabetically
-                    addLabel(username);
-                    Log.i(TAG, "Labels Size "+imagesLabels.size()+""); //number / photo of user's image capture
-
-        } else {
-            showEnterLabelDialog(); //6.1
-        }
-
-    }
+//    public void showLabelsDialog() {
+//        Set<String> uniqueLabelsSet = new HashSet<>(imagesLabels); // Get all unique labels
+//        if (!uniqueLabelsSet.isEmpty()) {
+//            String[] uniqueLabels = uniqueLabelsSet.toArray(new String[uniqueLabelsSet.size()]); // Convert to String array for ArrayAdapter
+//            Arrays.sort(uniqueLabels); // Sort labels alphabetically
+//                    addLabel(username);
+//                    Log.i(TAG, "Labels Size "+imagesLabels.size()+""); //number / photo of user's image capture
+//
+//        } else {
+//            showEnterLabelDialog(); //6.1
+//        }
+//
+//    }
 
     //6.1 dialog box for enter name (for first time snap)
-    private void showEnterLabelDialog() {
-                        String string = username;
-                            addLabel(string);
-    }
+//    private void showEnterLabelDialog() {
+//                        String string = username;
+//                            addLabel(string);
+//    }
 
     // 7. add name
     private void addLabel(String string) {
@@ -402,15 +402,12 @@ public class TrainActivity extends AppCompatActivity implements CameraBridgeView
                             return;
                         }
                         cropedImages(gray); //5. crop image
-                        //showLabelsDialog();//6. then oni ask user write / choose name
+
                         addLabel(username);
-                       // imagesLabels.add(label)
-                        //Toast.makeText(getApplicationContext(), "Face Detected", Toast.LENGTH_SHORT).show();
                         detect.setText("Succeed Captured :"+capture_count +"/8");
                         capture_count++;
                         if(capture_count==3){ //9 for 8 image
                             detect.setEnabled(false);
-                           // onBackPressed();
                             Toast.makeText(TrainActivity.this, "Training complete", Toast.LENGTH_SHORT).show();
                             new AlertDialog.Builder(TrainActivity.this).setTitle("Sent Order")
                                     .setMessage("Face Recognition Success")
@@ -420,6 +417,7 @@ public class TrainActivity extends AppCompatActivity implements CameraBridgeView
                                             onStop();
                                             Intent i = new Intent(TrainActivity.this, MainActivity.class);
                                             startActivity(i);
+                                            //can change to onbackpress?
                                         }
                                     })
                             .show();
