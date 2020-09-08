@@ -9,6 +9,7 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import android.os.Handler;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.provider.MediaStore;
 import android.text.InputType;
@@ -106,6 +108,10 @@ public class TrainActivity extends AppCompatActivity implements CameraBridgeView
     boolean isClear = false;
     int capture_count=1;
     String username;
+    private Button detect;
+    private Button prestart;
+    private TextView appname1,appname2,precam1,precam2;
+    private ConstraintLayout prestart_screen;
 
 
     //9. after camera onStop (exit camera), store captured images, process image with regconizer
@@ -368,6 +374,13 @@ public class TrainActivity extends AppCompatActivity implements CameraBridgeView
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         Stetho.initializeWithDefaults(this);
         Intent intent = getIntent(); //add 26/5
+        detect = (Button)findViewById(R.id.take_picture_button);
+        prestart= (Button)findViewById(R.id.prestart);
+        appname1= (TextView)findViewById(R.id.appname);
+        appname2= (TextView)findViewById(R.id.appname2);
+        precam1= (TextView)findViewById(R.id.precam1);
+        precam2= (TextView)findViewById(R.id.precam2);
+        prestart_screen = (ConstraintLayout)findViewById(R.id.prestart_constraint);
 
 
         if (hasPermissions()){ //if camera permission granted=goto hasPermissions() function
@@ -375,7 +388,8 @@ public class TrainActivity extends AppCompatActivity implements CameraBridgeView
             username=intent.getStringExtra("username");
             Toast.makeText(TrainActivity.this, "Welcome! " + username, Toast.LENGTH_SHORT).show();
             Log.i(TAG, "Permission Granted Before");
-
+            detect.setVisibility(View.INVISIBLE);
+            detect.setEnabled(false);
         }
         else {
             requestPerms(); //if camera permission not granted=goto requestPerms() function
@@ -386,7 +400,22 @@ public class TrainActivity extends AppCompatActivity implements CameraBridgeView
         openCVCamera.setVisibility(SurfaceView.VISIBLE);
         openCVCamera.setCvCameraViewListener(this);
         local = new Storage(this);
-        final Button detect = (Button)findViewById(R.id.take_picture_button);
+
+        prestart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                prestart.setVisibility(View.INVISIBLE);
+                prestart.setEnabled(false);
+                appname1.setVisibility(View.INVISIBLE);
+                appname2.setVisibility(View.INVISIBLE);
+                precam1.setVisibility(View.INVISIBLE);
+                precam2.setVisibility(View.INVISIBLE);
+                prestart_screen.setBackgroundColor(Color.parseColor("#001C1B1B"));
+                detect.setVisibility(View.VISIBLE);
+                detect.setEnabled(true);
+            }
+        });
+
         detect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -395,7 +424,7 @@ public class TrainActivity extends AppCompatActivity implements CameraBridgeView
                 classifier.detectMultiScale(gray,faces,1.1,3,0|CASCADE_SCALE_IMAGE, new Size(30,30)); //classify face from images
                 if(!faces.empty()) {
                     if(faces.toArray().length > 1)
-                        Toast.makeText(getApplicationContext(), "Mutliple Faces Are not allowed", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Multiple Faces Are not allowed", Toast.LENGTH_SHORT).show();
                     else {
                         if(gray.total() == 0) {
                             Log.i(TAG, "Empty gray image");
@@ -404,7 +433,7 @@ public class TrainActivity extends AppCompatActivity implements CameraBridgeView
                         cropedImages(gray); //5. crop image
 
                         addLabel(username);
-                        detect.setText("Succeed Captured :"+capture_count +"/8");
+                        detect.setText("CAPTURED FACE :"+capture_count +"/8");
                         capture_count++;
                         if(capture_count==3){ //9 for 8 image
                             detect.setEnabled(false);

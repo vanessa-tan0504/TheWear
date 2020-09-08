@@ -6,4 +6,14 @@
     <string name="app_recognize_page">Face Recognizing</string>
     <string name="picture_button">Take Photo</string>
     <string name="recognize_button">Recognize</string>
+    <string name="precam">TheWear application implements the facial
+        recognition technology to provide a more secured
+        service. By accepting the facial recognition feature,
+        TheWear application will receive images and other
+        data for security improvement and enhanced user
+        experience purpose. </string>
+    <string name="precam2">Please click “Proceed” and face forward toward the
+device. Please ensure you are in a birght room and
+make sure to show your face is fully shown on the
+camera</string>
 </resources>
