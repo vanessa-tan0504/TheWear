@@ -44,6 +44,8 @@ public class IntroActivity extends AppCompatActivity implements ViewPager.OnPage
             }
         });
 
+        FadeOutTransformation fadeOutTransformation = new FadeOutTransformation();
+        viewPager.setPageTransformer(true, fadeOutTransformation);
         dotsIndicator.setViewPager(viewPager);
     }
 

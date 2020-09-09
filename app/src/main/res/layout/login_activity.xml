@@ -97,7 +97,7 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <Button
+    <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
         android:id="@+id/btn_login"
         android:layout_width="295dp"
         android:layout_height="41dp"
@@ -120,6 +120,15 @@
         android:text="SIGN UP NEW ACCOUNT"
         android:textColor="#FFFFFF"
         android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/progress"
+        android:layout_width="206dp"
+        android:layout_height="99dp"
+        android:layout_gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
