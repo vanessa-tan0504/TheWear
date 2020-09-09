@@ -79,7 +79,6 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 onWindowFocusChanged(true);
 
-                ProgressType progressType=ProgressType.INDETERMINATE;
                 btnLogin.startAnimation();
 
                 String email = inputEmail.getText().toString().trim();
@@ -100,7 +99,6 @@ public class LoginActivity extends AppCompatActivity {
                     delay_anim(white_btn); //delay and revert anim
                     return;
                 }
-
 
                 //authenticate user
                 auth.signInWithEmailAndPassword(email, password)
@@ -138,7 +136,6 @@ public class LoginActivity extends AppCompatActivity {
                                                 @Override
                                                 public void run() {
                                                     btnLogin.doneLoadingAnimation(Color.BLACK,bitmap);
-
                                                 }
                                                 }, 1000);
                                             new Handler().postDelayed(new Runnable() { //pause 3 second only resume to walkthru
@@ -151,9 +148,10 @@ public class LoginActivity extends AppCompatActivity {
                                         }}).addOnFailureListener(new OnFailureListener() {
                                             @Override
                                            public void onFailure(@NonNull Exception exception) {
-
-                                     //Handle any errors
-                                     Toast.makeText(LoginActivity.this, "no success", Toast.LENGTH_SHORT).show();
+                                                btnLogin.doneLoadingAnimation(Color.RED,bitmap);
+                                                delay_anim(white_btn); //delay and revert
+                                                //Handle any errors
+                                                Toast.makeText(LoginActivity.this, "no success", Toast.LENGTH_SHORT).show();
                                                Log.e(TAG,"file not created "+ exception.toString());
                                             }
                                         });
