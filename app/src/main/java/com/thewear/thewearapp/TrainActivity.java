@@ -373,7 +373,7 @@ public class TrainActivity extends AppCompatActivity implements CameraBridgeView
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         Stetho.initializeWithDefaults(this);
         Intent intent = getIntent(); //add 26/5
-        final Intent intent2;
+       // final Intent intent2;
         detect = (Button)findViewById(R.id.take_picture_button);
         prestart= (Button)findViewById(R.id.prestart);
         appname1= (TextView)findViewById(R.id.appname);
@@ -386,7 +386,7 @@ public class TrainActivity extends AppCompatActivity implements CameraBridgeView
         if (hasPermissions()){ //if camera permission granted=goto hasPermissions() function
             //Toast.makeText(this,"Number:"+number,Toast.LENGTH_LONG).show();
             username=intent.getStringExtra("username");
-            Toast.makeText(TrainActivity.this, "Welcome! " + username, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(TrainActivity.this, "Welcome! " + username, Toast.LENGTH_SHORT).show();
             Log.i(TAG, "Permission Granted Before");
             detect.setVisibility(View.INVISIBLE);
             detect.setEnabled(false);
@@ -447,7 +447,7 @@ public class TrainActivity extends AppCompatActivity implements CameraBridgeView
                                             new Handler().postDelayed(new Runnable() { //pause 3 second only resume to walkthru
                                                 @Override
                                                 public void run() {
-                                                    Intent intent1 = new Intent(TrainActivity.this, ShopActivity.class);
+                                                    Intent intent1 = new Intent(TrainActivity.this, IntroActivity.class);
                                                     startActivity(intent1);
                                                    // finish();//finish welcome activity
                                                 }

@@ -168,7 +168,7 @@
         android:layout_marginTop="40dp"
         android:background="@drawable/rounded_btn_white"
         android:fontFamily="@font/muli_regular"
-        android:text="LOGIN EXISTING ACCOUNT"
+        android:text="SIGN UP NEW ACCOUNT"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
