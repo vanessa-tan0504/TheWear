@@ -11,17 +11,17 @@
         android:id="@+id/appname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="156dp"
         android:fontFamily="@font/muli_regular"
         android:text="TheWear"
         android:textAllCaps="false"
         android:textColor="#FFFFFF"
         android:textSize="65sp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.26" />
 
     <TextView
         android:id="@+id/appname2"
@@ -114,7 +114,7 @@
         android:id="@+id/btn_signup"
         android:layout_width="295dp"
         android:layout_height="41dp"
-        android:layout_marginBottom="148dp"
+        android:layout_marginBottom="100dp"
         android:background="@drawable/rounded_btn_black"
         android:fontFamily="@font/muli_regular"
         android:text="SIGN UP NEW ACCOUNT"
@@ -124,13 +124,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <ProgressBar
-        android:id="@+id/progress"
-        android:layout_width="206dp"
-        android:layout_height="99dp"
-        android:layout_gravity="center"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <Button
+        android:id="@+id/btn_forget"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginRight="32dp"
+        android:fontFamily="@font/muli_regular"
+        android:text="Forget Password?"
+        android:textColor="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout4" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

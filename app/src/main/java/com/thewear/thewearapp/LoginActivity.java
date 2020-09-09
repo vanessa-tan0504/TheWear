@@ -15,18 +15,12 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.Toast;
-
-import com.github.ybq.android.spinkit.SpinKitView;
-import com.github.ybq.android.spinkit.sprite.Sprite;
-import com.github.ybq.android.spinkit.style.ChasingDots;
-import com.github.ybq.android.spinkit.style.Circle;
-import com.github.ybq.android.spinkit.style.DoubleBounce;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -45,13 +39,9 @@ import br.com.simplepass.loadingbutton.customViews.CircularProgressButton;
 public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth auth;
     private EditText inputEmail,inputPass;
-    private ProgressBar progressBar;
-    private Button btnSignup;
+    private Button btnSignup,btnForget;
     private CircularProgressButton btnLogin;
     private Bitmap bitmap;
-    int fillcolor;
-    // AVLoadingIndicatorView indicatorView;
-    SpinKitView spinKitView;
     private static String TAG = TrainActivity.class.getSimpleName();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,22 +50,13 @@ public class LoginActivity extends AppCompatActivity {
 
         inputEmail = findViewById(R.id.login_email);
         inputPass = findViewById(R.id.login_pw);
-        // progressBar=findViewById(R.id.progressBar_login);
         btnLogin = findViewById(R.id.btn_login);
         btnSignup = findViewById(R.id.btn_signup);
-        ProgressBar progressBar = (ProgressBar)findViewById(R.id.progress);
-        Sprite sprite = new ChasingDots();
-        progressBar.setIndeterminateDrawable(sprite);
+        btnForget=findViewById(R.id.btn_forget);
         final Drawable black_btn = getResources().getDrawable(R.drawable.rounded_btn_black);
         final Drawable white_btn = getResources().getDrawable(R.drawable.rounded_btn_white);
         Drawable d = getResources().getDrawable(R.drawable.clifford0);
         bitmap = ((BitmapDrawable)d).getBitmap();
-
-        fillcolor=Color.WHITE;
-
-//        indicatorView = findViewById(R.id.indicator);
-//        indicatorView.setIndicator("BallZigZagDeflectIndicator");
-//        indicatorView.show();
 
         //get firebase auth instance
         auth = FirebaseAuth.getInstance();
@@ -96,6 +77,8 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                onWindowFocusChanged(true);
+
                 ProgressType progressType=ProgressType.INDETERMINATE;
                 btnLogin.startAnimation();
 
@@ -104,17 +87,17 @@ public class LoginActivity extends AppCompatActivity {
 
                 if (TextUtils.isEmpty(email)) {
                     inputEmail.setError("Enter email address");
-                    delay_anim(white_btn);
+                    delay_anim(white_btn); //delay and revert anim
                     return;
                 }
                 if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
                     inputEmail.setError("Invalid email format");
-                    delay_anim(white_btn);
+                    delay_anim(white_btn); //delay and revert anim
                     return;
                 }
                 if (TextUtils.isEmpty(password)) {
                     inputPass.setError("Enter password");
-                    delay_anim(white_btn);
+                    delay_anim(white_btn); //delay and revert anim
                     return;
                 }
 
@@ -125,11 +108,13 @@ public class LoginActivity extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 btnLogin.startAnimation();
-                               // progressBar.setVisibility(View.INVISIBLE);
                                 if (!task.isSuccessful()) {//if account cannot login
+                                    btnLogin.doneLoadingAnimation(Color.RED,bitmap);
+                                    delay_anim(white_btn); //delay and revert
                                     Toast.makeText(LoginActivity.this, "Authentication failed. " + task.getException(),
                                             Toast.LENGTH_SHORT).show();
-                                } else { //if account can login
+                                }
+                                else { //if account can login
                                     //retrive xml model from firebase
                                     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                                     String user_name = user.getDisplayName()+"";
@@ -152,9 +137,8 @@ public class LoginActivity extends AppCompatActivity {
                                             new Handler().postDelayed(new Runnable() { //pause 3 second only resume to walkthru
                                                 @Override
                                                 public void run() {
-                                                    btnLogin.doneLoadingAnimation(Color.RED,bitmap);
-//                                                    Intent intent = new Intent(LoginActivity.this, RecognizeActivity.class);
-//                                                    startActivity(intent);
+                                                    btnLogin.doneLoadingAnimation(Color.BLACK,bitmap);
+
                                                 }
                                                 }, 1000);
                                             new Handler().postDelayed(new Runnable() { //pause 3 second only resume to walkthru
@@ -167,6 +151,7 @@ public class LoginActivity extends AppCompatActivity {
                                         }}).addOnFailureListener(new OnFailureListener() {
                                             @Override
                                            public void onFailure(@NonNull Exception exception) {
+
                                      //Handle any errors
                                      Toast.makeText(LoginActivity.this, "no success", Toast.LENGTH_SHORT).show();
                                                Log.e(TAG,"file not created "+ exception.toString());
@@ -179,6 +164,30 @@ public class LoginActivity extends AppCompatActivity {
             }
             });
 
+        btnForget.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                String user_email = user.getEmail()+"";
+                //String user_email="vminhui@yahoo.com";
+                Toast.makeText(LoginActivity.this, "pw reset waiting...", Toast.LENGTH_SHORT).show();
+                FirebaseAuth.getInstance().setLanguageCode("en");
+                FirebaseAuth.getInstance().sendPasswordResetEmail(user_email)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if(task.isSuccessful()){
+                                    Toast.makeText(LoginActivity.this, "Firebase Console received", Toast.LENGTH_SHORT).show();
+                                }
+                                else{
+                                    Toast.makeText(LoginActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+
+                                }
+                            }
+                        });
+            }
+        });
+
     }
 
     public void delay_anim(final Drawable white_btn){
@@ -189,5 +198,20 @@ public class LoginActivity extends AppCompatActivity {
                 btnLogin.setBackground(white_btn);
             }
         }, 1000);
+    }
+
+    //hide status bar and below softkey
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) {
+            getWindow().getDecorView().setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+        }
     }
 }

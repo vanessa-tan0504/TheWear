@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 number++;
-                Intent swap = new Intent(MainActivity.this, IntroActivity.class);
+                Intent swap = new Intent(MainActivity.this, RegisterActivity.class);
                 //swap.putExtra("NUMBER",number);
                 startActivity(swap);
             }
