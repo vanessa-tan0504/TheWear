@@ -147,7 +147,7 @@ public class RegisterActivity extends AppCompatActivity {
                                                     if (task.isSuccessful()) {
                                                        // Toast.makeText(RegisterActivity.this, "Welcome! " + user.getDisplayName(), Toast.LENGTH_SHORT).show();
                                                         if(user!=null){
-                                                            User newuser = new User(user.getDisplayName(),user.getEmail());
+                                                            User newuser = new User(user.getDisplayName(),user.getEmail(),null);
                                                             db.collection("users").document(user.getUid()+"").set(newuser)
                                                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                                         @Override

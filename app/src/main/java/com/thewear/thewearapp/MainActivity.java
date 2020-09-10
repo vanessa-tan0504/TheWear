@@ -6,15 +6,18 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -44,6 +47,9 @@ public class MainActivity extends AppCompatActivity {
     TextView textview;
     ImageView imageView ;
     Bitmap bitmap;
+    int counter_m ;
+    int counter_f ;
+    int counter_un ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +62,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 number++;
                 Intent swap = new Intent(MainActivity.this, RegisterActivity.class);
-                //swap.putExtra("NUMBER",number);
                 startActivity(swap);
             }
         });
@@ -67,158 +72,293 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 Intent swap = new Intent(MainActivity.this, LoginActivity.class);
-                //swap.putExtra("NUMBER",number);
                 startActivity(swap);
-
-                //retrive xml model from firebase
-//                StorageReference mStorageRef;
-//                mStorageRef = FirebaseStorage.getInstance().getReference("Bunhair"); // getInstance = root firebase file images= foldername
-//                StorageReference ref = mStorageRef.child("Model XML");
-//                File storagePath = new File(Environment.getExternalStorageDirectory(),"TrainedData");
-//                // Create direcorty if not exists
-//                if(!storagePath.exists()) {
-//                    Log.e(TAG, "directory exsisted");
-//                    storagePath.mkdirs();
-//                }
-
-              //  final File myFile = new File(storagePath,"test_model.xml");
-               // ref.getFile(myFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                //    @Override
-                //    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                        // Local temp file has been created
-                        //Toast.makeText(MainActivity.this, "success", Toast.LENGTH_SHORT).show();
-                      //  Log.e(TAG,"local tem file created  created "+ myFile.toString());
-//                        Intent swap = new Intent(MainActivity.this, LoginActivity.class);
-//                       // swap.putExtra("NUMBER",number);
-//                        startActivity(swap);
-//              //      }
-            //    }).addOnFailureListener(new OnFailureListener() {
-            //        @Override
-             //       public void onFailure(@NonNull Exception exception) {
-                        // Handle any errors
-                        // Toast.makeText(MainActivity.this, "no success", Toast.LENGTH_SHORT).show();
-             //           Log.e(TAG,"file not created "+ exception.toString());
-            //        }
-            //    });
 
             }
         });
 
 
         //gender test
+        //gender test
+//        imageView=findViewById(R.id.imageView);
+//        textview=findViewById(R.id.tvIdentifiedItem);
+//        File storagePath = new File(Environment.getExternalStorageDirectory(),"sabrina0");
+//        if(!storagePath.exists()) {
+//            Log.e(TAG, "directory exsisted");
+//            storagePath.mkdirs();
+//        }
+//        final File myFile = new File(storagePath,"sabrina0.jpg");
+//        Bitmap myBitmap = BitmapFactory.decodeFile(myFile.getAbsolutePath());
+//        ImageView myImage = (ImageView) findViewById(R.id.imageView);
+//        myImage.setImageBitmap(myBitmap);
+//
+//
+//        final FirebaseCustomLocalModel localModel = new FirebaseCustomLocalModel.Builder() //from app model
+//                .setAssetFilePath("model_unquant.tflite")
+//                .build();
+//
+//        final FirebaseCustomRemoteModel remoteModel =
+//                new FirebaseCustomRemoteModel.Builder("gender_predictor").build(); //from firebase
+//        FirebaseModelDownloadConditions conditions = new FirebaseModelDownloadConditions.Builder()
+//                .requireWifi()
+//                .build();
+//
+//
+//        FirebaseModelInterpreter interpreter = null;
+//
+//        FirebaseModelManager.getInstance().isModelDownloaded(remoteModel)
+//                .addOnSuccessListener(new OnSuccessListener<Boolean>() {
+//                    @Override
+//                    public void onSuccess(Boolean isDownloaded) {
+//                        FirebaseModelInterpreterOptions options;
+//                        if (isDownloaded) {
+//                            options = new FirebaseModelInterpreterOptions.Builder(remoteModel).build(); //for user who browse online
+//                            Log.e(TAG,"FROM FIREBASE");
+//                        } else {
+//                            options = new FirebaseModelInterpreterOptions.Builder(localModel).build(); //for user who browse offline
+//                            Log.e(TAG,"FROM LOCAL");
+//                        }
+//                        try {
+//                            FirebaseModelInterpreter interpreter = FirebaseModelInterpreter.getInstance(options);
+//                            FirebaseModelInputOutputOptions inputOutputOptions =
+//                                    null;
+//                            try {
+//                                inputOutputOptions = new FirebaseModelInputOutputOptions.Builder()
+//                                        .setInputFormat(0, FirebaseModelDataType.FLOAT32, new int[]{1, 224, 224, 3})
+//                                        .setOutputFormat(0, FirebaseModelDataType.FLOAT32, new int[]{1, 3})
+//                                        // here replace 3 with no of class added in your model , for //production apps you can read the labels.txt files here and to get //no of classes dynamically
+//                                        .build();
+//                            } catch (FirebaseMLException e) {
+//                                e.printStackTrace();
+//                            }
+//        /* Here we are using static image from drawable to keep the code minimum and avoid distraction,
+//        Recommended method would be to get the image from user by camera or device photos using the same code by handling all this logic in a method and calling that every time */
+//
+//                            BitmapDrawable drawable = (BitmapDrawable)imageView.getDrawable();
+//                            Bitmap bitmap = drawable.getBitmap();
+//                            bitmap = Bitmap.createScaledBitmap(bitmap, 224, 224, true);
+//
+//                            int batchNum = 0;
+//                            float[][][][] input = new float[1][224][224][3];
+//                            for (int x = 0; x < 224; x++) {
+//                                for (int y = 0; y < 224; y++) {
+//                                    int pixel = bitmap.getPixel(x, y);
+//                                    // Normalize channel values to [-1.0, 1.0]. This requirement varies by
+//                                    // model. For example, some models might require values to be normalized
+//                                    // to the range [0.0, 1.0] instead.
+//                                    input[batchNum][x][y][0] = (Color.red(pixel) - 127) / 128.0f;
+//                                    input[batchNum][x][y][1] = (Color.green(pixel) - 127) / 128.0f;
+//                                    input[batchNum][x][y][2] = (Color.blue(pixel) - 127) / 128.0f;
+//                                }
+//                            }
+//
+//                            FirebaseModelInputs inputs = null;
+//                            try {
+//                                inputs = new FirebaseModelInputs.Builder()
+//                                        .add(input)  // add() as many input arrays as your model requires
+//                                        .build();
+//                            } catch (FirebaseMLException e) {
+//                                e.printStackTrace();
+//                            }
+//                            interpreter.run(inputs, inputOutputOptions)
+//                                    .addOnSuccessListener(
+//                                            new OnSuccessListener<FirebaseModelOutputs>() {
+//                                                @Override
+//                                                public void onSuccess(FirebaseModelOutputs result) {
+//                                                    // ...
+//                                                    float[][] output = result.getOutput(0);
+//                                                    float[] probabilities = output[0];
+//                                                    BufferedReader reader = null;
+//                                                    try {
+//                                                        reader = new BufferedReader(
+//                                                                new InputStreamReader(getAssets().open("labels.txt")));
+//                                                    } catch (IOException e) {
+//                                                        e.printStackTrace();
+//                                                    }
+//                                                    for (int i = 0; i < probabilities.length; i++) {
+//                                                        String label = null;
+//                                                        try {
+//                                                            label = reader.readLine();
+//                                                        } catch (IOException e) {
+//                                                            e.printStackTrace();
+//                                                        }
+//                                                        textview.setText(String.format("result:\n male: %1.4f || "+probabilities[0]+ "\n female: %1.4f ||"+probabilities[1]+"\n unknown: %1.4f ||"+probabilities[2],probabilities[0],probabilities[1],probabilities[2] ) );
+//                                                        Log.e(TAG, String.format("%s: %1.4f", label, probabilities[i]));
+//                                                    }
+//                                                }
+//                                            })
+//                                    .addOnFailureListener(
+//                                            new OnFailureListener() {
+//                                                @Override
+//                                                public void onFailure(@NonNull Exception e) {
+//                                                    // Task failed with an exception
+//                                                    // ...
+//                                                    Log.e(TAG, e.getMessage());
+//                                                }
+//                                            });
+//
+//                        } catch (FirebaseMLException e) {
+//                            e.printStackTrace();
+//                        }
+//
+//                    }
+//                });
+
+
+
+
+
         imageView=findViewById(R.id.imageView);
         textview=findViewById(R.id.tvIdentifiedItem);
-
-        final FirebaseCustomLocalModel localModel = new FirebaseCustomLocalModel.Builder() //from app model
-                .setAssetFilePath("model_unquant.tflite")
-                .build();
-
-        final FirebaseCustomRemoteModel remoteModel =
-                new FirebaseCustomRemoteModel.Builder("gender_predictor").build(); //from firebase
-        FirebaseModelDownloadConditions conditions = new FirebaseModelDownloadConditions.Builder()
-                .requireWifi()
-                .build();
+        StorageReference mImagRef;
+        counter_m=0; counter_f=0;counter_un=0;
 
 
-        FirebaseModelInterpreter interpreter = null;
 
-        FirebaseModelManager.getInstance().isModelDownloaded(remoteModel)
-                .addOnSuccessListener(new OnSuccessListener<Boolean>() {
-                    @Override
-                    public void onSuccess(Boolean isDownloaded) {
-                        FirebaseModelInterpreterOptions options;
-                        if (isDownloaded) {
-                            options = new FirebaseModelInterpreterOptions.Builder(remoteModel).build(); //for user who browse online
-                            Log.e(TAG,"FROM FIREBASE");
-                        } else {
-                            options = new FirebaseModelInterpreterOptions.Builder(localModel).build(); //for user who browse offline
-                            Log.e(TAG,"FROM LOCAL");
-                        }
-                        try {
-                            FirebaseModelInterpreter interpreter = FirebaseModelInterpreter.getInstance(options);
-                            FirebaseModelInputOutputOptions inputOutputOptions =
-                                    null;
-                            try {
-                                inputOutputOptions = new FirebaseModelInputOutputOptions.Builder()
-                                        .setInputFormat(0, FirebaseModelDataType.FLOAT32, new int[]{1, 224, 224, 3})
-                                        .setOutputFormat(0, FirebaseModelDataType.FLOAT32, new int[]{1, 3})
-                                        // here replace 3 with no of class added in your model , for //production apps you can read the labels.txt files here and to get //no of classes dynamically
-                                        .build();
-                            } catch (FirebaseMLException e) {
-                                e.printStackTrace();
-                            }
+            mImagRef = FirebaseStorage.getInstance().getReference("sabrina"); // getInstance = root firebase file images= foldername
+            StorageReference ref = mImagRef.child("sabrina0.jpg");
+            final long ONE_MEGABYTE = 1024 * 1024;
+            ref.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                @Override
+                public void onSuccess(byte[] bytes) {
+                    final Bitmap[] bm = {BitmapFactory.decodeByteArray(bytes, 0, bytes.length)};
+                    DisplayMetrics dm = new DisplayMetrics();
+                    getWindowManager().getDefaultDisplay().getMetrics(dm);
+
+                    imageView.setImageBitmap(bm[0]);
+                    final FirebaseCustomLocalModel localModel = new FirebaseCustomLocalModel.Builder() //from app model
+                            .setAssetFilePath("model_unquant.tflite")
+                            .build();
+
+                    final FirebaseCustomRemoteModel remoteModel =
+                            new FirebaseCustomRemoteModel.Builder("gender_predictor").build(); //from firebase
+
+                    FirebaseModelManager.getInstance().isModelDownloaded(remoteModel)
+                            .addOnSuccessListener(new OnSuccessListener<Boolean>() {
+                                @Override
+                                public void onSuccess(Boolean isDownloaded) {
+                                    FirebaseModelInterpreterOptions options;
+                                    if (isDownloaded) {
+                                        options = new FirebaseModelInterpreterOptions.Builder(remoteModel).build(); //for user who browse online
+                                        Log.e(TAG, "FROM FIREBASE");
+                                    } else {
+                                        options = new FirebaseModelInterpreterOptions.Builder(localModel).build(); //for user who browse offline
+                                        Log.e(TAG, "FROM LOCAL");
+                                    }
+                                    try {
+                                        FirebaseModelInterpreter interpreter = FirebaseModelInterpreter.getInstance(options);
+                                        FirebaseModelInputOutputOptions inputOutputOptions =
+                                                null;
+                                        try {
+                                            inputOutputOptions = new FirebaseModelInputOutputOptions.Builder()
+                                                    .setInputFormat(0, FirebaseModelDataType.FLOAT32, new int[]{1, 224, 224, 3})
+                                                    .setOutputFormat(0, FirebaseModelDataType.FLOAT32, new int[]{1, 3})
+                                                    // here replace 3 with no of class added in your model , for //production apps you can read the labels.txt files here and to get //no of classes dynamically
+                                                    .build();
+                                        } catch (FirebaseMLException e) {
+                                            e.printStackTrace();
+                                        }
         /* Here we are using static image from drawable to keep the code minimum and avoid distraction,
         Recommended method would be to get the image from user by camera or device photos using the same code by handling all this logic in a method and calling that every time */
 
-                            BitmapDrawable drawable = (BitmapDrawable)imageView.getDrawable();
-                            Bitmap bitmap = drawable.getBitmap();
-                            bitmap = Bitmap.createScaledBitmap(bitmap, 224, 224, true);
+                                        BitmapDrawable drawable = (BitmapDrawable) imageView.getDrawable();
+                                        Bitmap bitmap = drawable.getBitmap();
+                                        bitmap = Bitmap.createScaledBitmap(bitmap, 224, 224, true);
 
-                            int batchNum = 0;
-                            float[][][][] input = new float[1][224][224][3];
-                            for (int x = 0; x < 224; x++) {
-                                for (int y = 0; y < 224; y++) {
-                                    int pixel = bitmap.getPixel(x, y);
-                                    // Normalize channel values to [-1.0, 1.0]. This requirement varies by
-                                    // model. For example, some models might require values to be normalized
-                                    // to the range [0.0, 1.0] instead.
-                                    input[batchNum][x][y][0] = (Color.red(pixel) - 127) / 128.0f;
-                                    input[batchNum][x][y][1] = (Color.green(pixel) - 127) / 128.0f;
-                                    input[batchNum][x][y][2] = (Color.blue(pixel) - 127) / 128.0f;
+                                        int batchNum = 0;
+                                        float[][][][] input = new float[1][224][224][3];
+                                        for (int x = 0; x < 224; x++) {
+                                            for (int y = 0; y < 224; y++) {
+                                                int pixel = bitmap.getPixel(x, y);
+                                                // Normalize channel values to [-1.0, 1.0]. This requirement varies by
+                                                // model. For example, some models might require values to be normalized
+                                                // to the range [0.0, 1.0] instead.
+                                                input[batchNum][x][y][0] = (Color.red(pixel) - 127) / 128.0f;
+                                                input[batchNum][x][y][1] = (Color.green(pixel) - 127) / 128.0f;
+                                                input[batchNum][x][y][2] = (Color.blue(pixel) - 127) / 128.0f;
+                                            }
+                                        }
+
+                                        FirebaseModelInputs inputs = null;
+                                        try {
+                                            inputs = new FirebaseModelInputs.Builder()
+                                                    .add(input)  // add() as many input arrays as your model requires
+                                                    .build();
+                                        } catch (FirebaseMLException e) {
+                                            e.printStackTrace();
+                                        }
+                                        interpreter.run(inputs, inputOutputOptions)
+                                                .addOnSuccessListener(
+                                                        new OnSuccessListener<FirebaseModelOutputs>() {
+                                                            @Override
+                                                            public void onSuccess(FirebaseModelOutputs result) {
+                                                                // ...
+                                                                float[][] output = result.getOutput(0);
+                                                                float[] probabilities = output[0];
+                                                                BufferedReader reader = null;
+                                                                try {
+                                                                    reader = new BufferedReader(
+                                                                            new InputStreamReader(getAssets().open("labels.txt")));
+                                                                } catch (IOException e) {
+                                                                    e.printStackTrace();
+                                                                }
+                                                                for (int i = 0; i < probabilities.length; i++) {
+                                                                    String label = null;
+                                                                    try {
+                                                                        label = reader.readLine();
+                                                                    } catch (IOException e) {
+                                                                        e.printStackTrace();
+                                                                    }
+                                                                    textview.setText(String.format("result:\n male: %1.4f || " + probabilities[0] + "\n female: %1.4f ||" + probabilities[1] + "\n unknown: %1.4f ||" + probabilities[2], probabilities[0], probabilities[1], probabilities[2]));
+                                                                    float male = probabilities[0], female=probabilities[1],unknown=probabilities[2];
+                                                                    if(male>female && male>unknown) {
+                                                                        counter_m++;
+                                                                    }
+                                                                    else if(female>male && female>unknown){
+                                                                        counter_f++;
+                                                                    }
+                                                                    else if(unknown>male && unknown>female){
+                                                                        counter_un++;
+                                                                    }
+
+                                                                    Log.e(TAG, String.format("%s: %f", label, probabilities[i]));
+                                                                }
+                                                            }
+                                                        })
+                                                .addOnFailureListener(
+                                                        new OnFailureListener() {
+                                                            @Override
+                                                            public void onFailure(@NonNull Exception e) {
+                                                                // Task failed with an exception
+                                                                // ...
+                                                                Log.e(TAG, e.getMessage());
+                                                            }
+                                                        });
+
+                                    } catch (FirebaseMLException e) {
+                                        e.printStackTrace();
+                                    }
+
                                 }
-                            }
+                            });
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
 
-                            FirebaseModelInputs inputs = null;
-                            try {
-                                inputs = new FirebaseModelInputs.Builder()
-                                        .add(input)  // add() as many input arrays as your model requires
-                                        .build();
-                            } catch (FirebaseMLException e) {
-                                e.printStackTrace();
-                            }
-                            interpreter.run(inputs, inputOutputOptions)
-                                    .addOnSuccessListener(
-                                            new OnSuccessListener<FirebaseModelOutputs>() {
-                                                @Override
-                                                public void onSuccess(FirebaseModelOutputs result) {
-                                                    // ...
-                                                    float[][] output = result.getOutput(0);
-                                                    float[] probabilities = output[0];
-                                                    BufferedReader reader = null;
-                                                    try {
-                                                        reader = new BufferedReader(
-                                                                new InputStreamReader(getAssets().open("labels.txt")));
-                                                    } catch (IOException e) {
-                                                        e.printStackTrace();
-                                                    }
-                                                    for (int i = 0; i < probabilities.length; i++) {
-                                                        String label = null;
-                                                        try {
-                                                            label = reader.readLine();
-                                                        } catch (IOException e) {
-                                                            e.printStackTrace();
-                                                        }
-                                                        textview.setText(String.format("result:\n male: %1.4f || "+probabilities[0]+ "\n female: %1.4f ||"+probabilities[1]+"\n unknown: %1.4f ||"+probabilities[2],probabilities[0],probabilities[1],probabilities[2] ) );
-                                                        Log.e(TAG, String.format("%s: %1.4f", label, probabilities[i]));
-                                                    }
-                                                }
-                                            })
-                                    .addOnFailureListener(
-                                            new OnFailureListener() {
-                                                @Override
-                                                public void onFailure(@NonNull Exception e) {
-                                                    // Task failed with an exception
-                                                    // ...
-                                                    Log.e(TAG, e.getMessage());
-                                                }
-                                            });
+        Toast.makeText(this, "female: "+counter_f +" male:"+ counter_m, Toast.LENGTH_SHORT).show();
 
-                        } catch (FirebaseMLException e) {
-                            e.printStackTrace();
-                        }
+        if(counter_m > counter_f){
+            Log.e(TAG,"is a male:"+counter_m+" female only have"+counter_f);
+        }
+        else if (counter_m < counter_f){
+            Log.e(TAG,"is a female:"+counter_f+" male only have"+counter_m);
+        }
 
-                    }
-                });
+
     }
 
     //hide status bar and below softkey
