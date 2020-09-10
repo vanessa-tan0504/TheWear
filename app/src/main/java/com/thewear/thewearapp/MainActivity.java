@@ -1,5 +1,6 @@
 package com.thewear.thewearapp;
 
+import android.animation.ValueAnimator;
 import android.content.Intent;
 
 import androidx.annotation.NonNull;
@@ -19,6 +20,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
+import com.airbnb.lottie.LottieDrawable;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.ml.common.FirebaseMLException;
@@ -47,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
     TextView textview;
     ImageView imageView ;
     Bitmap bitmap;
+    LottieAnimationView anim1,anim2;
     int counter_m ;
     int counter_f ;
     int counter_un ;
@@ -76,6 +80,22 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+        //anim test
+        anim1=findViewById(R.id.anim_test);
+        anim2=findViewById(R.id.anim_test2);
+        //anim1.setSpeed(2.0F); // How fast does the animation play
+        anim1.setProgress(0.5F); // Starts the animation from 50% of the beginning
+        anim1.addAnimatorUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                // Called everytime the frame of the animation changes
+            }
+        });
+        anim1.setRepeatMode(LottieDrawable.RESTART); // Restarts the animation (you can choose to reverse it as well)
+       // anim1.cancelAnimation(); // Cancels the animation
+        anim1.playAnimation();
+        anim2.playAnimation();
 
 
         //gender test
