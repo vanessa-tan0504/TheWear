@@ -41,7 +41,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText inputEmail,inputPass;
     private Button btnSignup,btnForget;
     private CircularProgressButton btnLogin;
-    private Bitmap bitmap;
+    private Bitmap bitmapTick,bitmapCross;
     private static String TAG = TrainActivity.class.getSimpleName();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,8 +55,10 @@ public class LoginActivity extends AppCompatActivity {
         btnForget=findViewById(R.id.btn_forget);
         final Drawable black_btn = getResources().getDrawable(R.drawable.rounded_btn_black);
         final Drawable white_btn = getResources().getDrawable(R.drawable.rounded_btn_white);
-        Drawable d = getResources().getDrawable(R.drawable.clifford0);
-        bitmap = ((BitmapDrawable)d).getBitmap();
+        Drawable tick = getResources().getDrawable(R.drawable.tick_icon);
+        bitmapTick = ((BitmapDrawable)tick).getBitmap();
+        Drawable cross = getResources().getDrawable(R.drawable.cross_icon);
+        bitmapCross = ((BitmapDrawable)cross).getBitmap();
 
         //get firebase auth instance
         auth = FirebaseAuth.getInstance();
@@ -107,7 +109,7 @@ public class LoginActivity extends AppCompatActivity {
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 btnLogin.startAnimation();
                                 if (!task.isSuccessful()) {//if account cannot login
-                                    btnLogin.doneLoadingAnimation(Color.RED,bitmap);
+                                    btnLogin.doneLoadingAnimation(Color.RED,bitmapCross);
                                     delay_anim(white_btn); //delay and revert
                                     Toast.makeText(LoginActivity.this, "Authentication failed. " + task.getException(),
                                             Toast.LENGTH_SHORT).show();
@@ -135,7 +137,7 @@ public class LoginActivity extends AppCompatActivity {
                                             new Handler().postDelayed(new Runnable() { //pause 3 second only resume to walkthru
                                                 @Override
                                                 public void run() {
-                                                    btnLogin.doneLoadingAnimation(Color.BLACK,bitmap);
+                                                    btnLogin.doneLoadingAnimation(Color.BLACK,bitmapTick);
                                                 }
                                                 }, 1000);
                                             new Handler().postDelayed(new Runnable() { //pause 3 second only resume to walkthru
@@ -148,7 +150,7 @@ public class LoginActivity extends AppCompatActivity {
                                         }}).addOnFailureListener(new OnFailureListener() {
                                             @Override
                                            public void onFailure(@NonNull Exception exception) {
-                                                btnLogin.doneLoadingAnimation(Color.RED,bitmap);
+                                                btnLogin.doneLoadingAnimation(Color.RED,bitmapCross);
                                                 delay_anim(white_btn); //delay and revert
                                                 //Handle any errors
                                                 Toast.makeText(LoginActivity.this, "no success", Toast.LENGTH_SHORT).show();

@@ -45,7 +45,7 @@ public class RegisterActivity extends AppCompatActivity {
     private CircularProgressButton btnRegister;
     private ProgressBar progressBar;
     private static String TAG = RegisterActivity.class.getSimpleName();
-    private Bitmap bitmap;
+    private Bitmap bitmapTick,bitmapCross;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -64,8 +64,10 @@ public class RegisterActivity extends AppCompatActivity {
         btnLogIn=findViewById(R.id.btn_login);
         final Drawable black_btn = getResources().getDrawable(R.drawable.rounded_btn_black);
         final Drawable white_btn = getResources().getDrawable(R.drawable.rounded_btn_white);
-        Drawable d = getResources().getDrawable(R.drawable.clifford0);
-        bitmap = ((BitmapDrawable)d).getBitmap();
+        Drawable tick = getResources().getDrawable(R.drawable.tick_icon);
+        bitmapTick = ((BitmapDrawable)tick).getBitmap();
+        Drawable cross = getResources().getDrawable(R.drawable.cross_icon);
+        bitmapCross = ((BitmapDrawable)cross).getBitmap();
 
         //register button
         btnRegister.setOnClickListener(new View.OnClickListener() {
@@ -129,7 +131,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 btnRegister.startAnimation();
 
                                 if(!task.isSuccessful()){//if account cannot register
-                                    btnRegister.doneLoadingAnimation(Color.RED,bitmap);
+                                    btnRegister.doneLoadingAnimation(Color.RED,bitmapCross);
                                     delay_anim(white_btn); //delay and revert
                                     Toast.makeText(RegisterActivity.this, "Authentication failed." + task.getException(),
                                             Toast.LENGTH_SHORT).show();
@@ -156,7 +158,7 @@ public class RegisterActivity extends AppCompatActivity {
                                                                             new Handler().postDelayed(new Runnable() { //pause 3 second only resume to walkthru
                                                                                 @Override
                                                                                 public void run() {
-                                                                                    btnRegister.doneLoadingAnimation(Color.BLACK,bitmap);
+                                                                                    btnRegister.doneLoadingAnimation(Color.BLACK,bitmapTick);
                                                                                 }
                                                                             }, 1000);
                                                                             new Handler().postDelayed(new Runnable() { //pause 3 second only resume to walkthru
@@ -172,6 +174,7 @@ public class RegisterActivity extends AppCompatActivity {
                                                                     .addOnFailureListener(new OnFailureListener() {
                                                                         @Override
                                                                         public void onFailure(@NonNull Exception e) {
+                                                                            btnRegister.doneLoadingAnimation(Color.RED,bitmapCross);
                                                                             Toast.makeText(RegisterActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                                                                         }
                                                                     });

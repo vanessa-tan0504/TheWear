@@ -54,10 +54,13 @@
         android:layout_marginLeft="40dp"
         android:layout_marginBottom="220dp"
         android:background="@drawable/rounded_btn_black"
+        android:drawableRight="@drawable/arrow_icon"
         android:fontFamily="@font/muli_regular"
-        android:text="START SHOPPING"
+        android:paddingRight="10dp"
+        android:text="SHOP LATEST COLLECTION"
         android:textColor="#FFFFFF"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:paddingEnd="30dp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
