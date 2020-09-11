@@ -17,7 +17,7 @@ public class User {
 
     public void setUserName(String username){this.username = username;}
     public void setEmail(String surname){this.email = email;}
-    public void setExpGenderl(String exp_gender){this.exp_gender=exp_gender;}
+    public void setExpGender(String exp_gender){this.exp_gender=exp_gender;}
 
     public String getUserName(){ return username; }
     public String getEmail(){ return email; }

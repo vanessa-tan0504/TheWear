@@ -178,9 +178,6 @@ public class RegisterActivity extends AppCompatActivity {
                                                                             Toast.makeText(RegisterActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                                                                         }
                                                                     });
-//                                                            Intent intent= new Intent(RegisterActivity.this, TrainActivity.class);
-//                                                            intent.putExtra("username",user.getDisplayName()+"");
-//                                                            startActivity(intent);
                                                         }
                                                     }
                                                 }
