@@ -1,7 +1,9 @@
 package com.thewear.thewearapp;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Environment;
 
@@ -24,6 +26,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.facebook.stetho.Stetho;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -70,11 +73,6 @@ public class RecognizeActivity extends AppCompatActivity implements CameraBridge
     private Storage local;
     private FaceRecognizer recognize; //LBPHFaceRecognizer.create() ; .read() ; .predict
     int number;
-    String regName;
-    private ConstraintLayout constraintLayout;
-    private TextView textView;
-    private ProgressBar progressBar;
-
 
     //b.1 to check if opencv library get to call back /connect (opencv setting)
     private BaseLoaderCallback callbackLoader = new BaseLoaderCallback(this) {
@@ -166,18 +164,14 @@ public class RecognizeActivity extends AppCompatActivity implements CameraBridge
         //recognize.predict(croped, label, predict);
         recognize.predict(destination, label, predict);
         if (label[0] != -1 && (int) predict[0] < 125) { //"predict" need to be small value as possible to get high confidence
-            //Toast.makeText(getApplicationContext(), "Welcome "+imagesLabels.get(label[0])+"", LENGTH_SHORT).show();
-            // Toast.makeText(getApplicationContext(), "Welcome " + predict[0] + "", LENGTH_SHORT).show();
-            constraintLayout.setVisibility(View.VISIBLE);
-            progressBar.setVisibility(View.VISIBLE);
-            textView.setVisibility(View.VISIBLE);
-            new Handler().postDelayed(new Runnable() { //pause 3 second only resume to walkthru
+            showLoader();
+            new Handler().postDelayed(new Runnable() { //pause 3 second only resume to shop
                 @Override
                 public void run() {
                     Intent intent = new Intent(RecognizeActivity.this, ShopActivity.class);
                     startActivity(intent);
                 }
-            }, 1000);
+            }, 3000);
 
         } else if (predict[0] >= 125)
             Toast.makeText(getApplicationContext(), "You're not the right person " + predict[0], LENGTH_SHORT).show();
@@ -197,14 +191,6 @@ public class RecognizeActivity extends AppCompatActivity implements CameraBridge
         Stetho.initializeWithDefaults(this);
         Intent intent = getIntent(); //add 26/5
         number = intent.getIntExtra("NUMBER", 0); //add 26/5
-
-        constraintLayout=findViewById(R.id.loading_layout);
-        progressBar = findViewById(R.id.loading_progress);
-        textView= findViewById(R.id.loading_tv);
-        constraintLayout.setVisibility(View.INVISIBLE);
-        progressBar.setVisibility(View.INVISIBLE);
-        textView.setVisibility(View.INVISIBLE);
-
 
         openCVCamera = (CameraBridgeViewBase) findViewById(R.id.java_camera_view2);
         openCVCamera.setCameraIndex(CameraBridgeViewBase.CAMERA_ID_FRONT);
@@ -346,5 +332,22 @@ public class RecognizeActivity extends AppCompatActivity implements CameraBridge
                             | View.SYSTEM_UI_FLAG_FULLSCREEN
                             | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
         }
+    }
+
+    public void showLoader(){
+        final Dialog dialog= new Dialog(this);
+        dialog.setContentView(R.layout.dialog_loading);
+
+        TextView dialog_text = dialog.findViewById(R.id.dialog_text);
+        LottieAnimationView dialog_anim = dialog.findViewById(R.id.dialog_anim);
+
+        dialog_text.setText("Profile Verified \n Welcome Back *name*"); //for regconize
+        dialog_anim.setAnimation(R.raw.selfie_cam); //for regconize
+        dialog_anim.setSpeed(2f);
+        dialog_anim.playAnimation();
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT)); //remove white corners
+        dialog.setCanceledOnTouchOutside(false); // touch outsie cnnt cancel dialogbox
+        dialog.setCancelable(false);
+        dialog.show();
     }
 }

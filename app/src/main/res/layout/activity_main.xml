@@ -43,14 +43,15 @@
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/anim_test2"
-        android:layout_width="133dp"
-        android:layout_height="111dp"
-        android:layout_marginStart="220dp"
-        android:layout_marginLeft="220dp"
-        android:layout_marginTop="96dp"
+        android:layout_width="297dp"
+        android:layout_height="216dp"
+        android:layout_marginStart="96dp"
+        android:layout_marginLeft="96dp"
+        android:layout_marginTop="316dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:lottie_rawRes="@raw/selfie_cam" />
+        app:lottie_rawRes="@raw/selfie_cam"
+        app:lottie_scale="5" />
 
     <TextView
         android:id="@+id/appname"

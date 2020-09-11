@@ -1,26 +1,33 @@
 package com.thewear.thewearapp;
 
 import android.animation.ValueAnimator;
+import android.app.Dialog;
 import android.content.Intent;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.airbnb.lottie.LottieComposition;
+import com.airbnb.lottie.LottieCompositionFactory;
 import com.airbnb.lottie.LottieDrawable;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -51,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
     ImageView imageView ;
     Bitmap bitmap;
     LottieAnimationView anim1,anim2;
+
     int counter_m ;
     int counter_f ;
     int counter_un ;
@@ -96,6 +104,8 @@ public class MainActivity extends AppCompatActivity {
        // anim1.cancelAnimation(); // Cancels the animation
         anim1.playAnimation();
         anim2.playAnimation();
+        //anim2.setScale(3);
+
 
 
         //gender test

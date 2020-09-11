@@ -2,6 +2,7 @@ package com.thewear.thewearapp;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -37,6 +39,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.facebook.stetho.Stetho;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -438,25 +441,34 @@ public class TrainActivity extends AppCompatActivity implements CameraBridgeView
                         if(capture_count==3){ //9 for 8 image
                             detect.setEnabled(false);
                             Toast.makeText(TrainActivity.this, "Capture complete", Toast.LENGTH_SHORT).show();
-                            new AlertDialog.Builder(TrainActivity.this).setTitle("capture complete")
-                                    .setMessage("Face Recognition Success")
-                                    .setNeutralButton("start train", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            onStop();
-                                            new Handler().postDelayed(new Runnable() { //pause 3 second only resume to walkthru
-                                                @Override
-                                                public void run() {
-                                                    Intent intent1 = new Intent(TrainActivity.this, IntroActivity.class);
-                                                    startActivity(intent1);
-                                                   // finish();//finish welcome activity
-                                                }
-                                            }, 5000);
+//                            new AlertDialog.Builder(TrainActivity.this).setTitle("capture complete")
+//                                    .setMessage("Face Recognition Success")
+//                                    .setNeutralButton("start train", new DialogInterface.OnClickListener() {
+//                                        @Override
+//                                        public void onClick(DialogInterface dialog, int which) {
+//                                            onStop();
+//                                            new Handler().postDelayed(new Runnable() { //pause 3 second only resume to walkthru
+//                                                @Override
+//                                                public void run() {
+//                                                    Intent intent1 = new Intent(TrainActivity.this, IntroActivity.class);
+//                                                    startActivity(intent1);
+//                                                   // finish();//finish welcome activity
+//                                                }
+//                                            }, 5000);
+//
+//                                        }
+//                                    })
+//                            .show();
 
-                                            //onBackPressed();
-                                        }
-                                    })
-                            .show();
+                            showLoader();
+                            new Handler().postDelayed(new Runnable() { //pause 3 second only resume to shop
+                                @Override
+                                public void run() {
+                                    Intent intent1 = new Intent(TrainActivity.this, IntroActivity.class);
+                                    startActivity(intent1);
+                                }
+                            }, 3000);
+
                         }
                     }
                 }else
@@ -559,8 +571,6 @@ public class TrainActivity extends AppCompatActivity implements CameraBridgeView
         super.onPause();
         if(openCVCamera != null)
             openCVCamera.disableView();
-
-
     }
 
     //8. when terminate page lifecycle (opencv setting)
@@ -613,10 +623,7 @@ public class TrainActivity extends AppCompatActivity implements CameraBridgeView
 
         //recognize face
         classifier = FileUtils.loadXMLS(this, "lbpcascade_frontalface_improved.xml");
-
     }
-
-
 
     //stop camera frame (CameraBridgeViewBase.CvCameraViewListener2 settings)
     @Override
@@ -682,5 +689,21 @@ public class TrainActivity extends AppCompatActivity implements CameraBridgeView
                             | View.SYSTEM_UI_FLAG_FULLSCREEN
                             | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
         }
+    }
+
+    public void showLoader(){
+        final Dialog dialog= new Dialog(this);
+        dialog.setContentView(R.layout.dialog_loading);
+
+        TextView dialog_text = dialog.findViewById(R.id.dialog_text);
+        LottieAnimationView dialog_anim = dialog.findViewById(R.id.dialog_anim);
+        dialog_anim.setSpeed(2f);
+        dialog_text.setText("Face Capture Complete \n Setting Up Your Profile "); //for training
+        dialog_anim.setAnimation(R.raw.process_image); //for training
+        dialog_anim.playAnimation();
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT)); //remove white corners
+        dialog.setCanceledOnTouchOutside(false); // touch outsie cnnt cancel dialogbox
+        dialog.setCancelable(false);
+        dialog.show();
     }
 }
