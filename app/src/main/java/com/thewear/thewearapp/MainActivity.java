@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
     int counter_f=0;
     int counter_un=0 ;
     float male=0,female=0,unknown=0;
-   // int gender_counter=0;
+    int gender_counter;
 
     final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         db = FirebaseFirestore.getInstance();
 
-        Button register = (Button)findViewById(R.id.btn_register);
+        Button register = (Button) findViewById(R.id.btn_register);
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Button login = (Button)findViewById(R.id.btn_login);
+        Button login = (Button) findViewById(R.id.btn_login);
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -99,30 +99,30 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-
-
-        imageView=findViewById(R.id.imageView);
-        textview=findViewById(R.id.tvIdentifiedItem);
+        imageView = findViewById(R.id.imageView);
+        textview = findViewById(R.id.tvIdentifiedItem);
         //genderTest();
-       // Handler handler = new Handler();
-        //for(int gender_counter=0;gender_counter<3;gender_counter++){
-           // Toast.makeText(this, "j:"+gender_counter, Toast.LENGTH_SHORT).show();
-//            handler.postDelayed(new Runnable() {
-//                @Override
-//                public void run() {
 
-                    StorageReference mImagRef;
-                    mImagRef = FirebaseStorage.getInstance().getReference("Clifford"); // getInstance = root firebase file images= foldername
-                    StorageReference ref = mImagRef.child("Clifford0.jpg");
+        for (gender_counter = 0; gender_counter < 3; gender_counter++) {
+            //Toast.makeText(this, "j:" + gender_counter, Toast.LENGTH_SHORT).show();
+            Log.e(TAG,"j:" + gender_counter);
+            StorageReference mImagRef;
+            mImagRef = FirebaseStorage.getInstance().getReference("Clifford"); // getInstance = root firebase file images= foldername
+            final StorageReference ref = mImagRef.child("Clifford"+gender_counter+".jpg");
+
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Log.e(TAG,"j run:" + gender_counter);
                     final long ONE_MEGABYTE = 1024 * 1024;
                     ref.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
                         @Override
                         public void onSuccess(byte[] bytes) {
-                            final Bitmap[] bm = {BitmapFactory.decodeByteArray(bytes, 0, bytes.length)};
+                            Bitmap bm = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
                             DisplayMetrics dm = new DisplayMetrics();
                             getWindowManager().getDefaultDisplay().getMetrics(dm);
 
-                            imageView.setImageBitmap(bm[0]);
+                            imageView.setImageBitmap(bm);
 
 
                             final FirebaseCustomLocalModel localModel = new FirebaseCustomLocalModel.Builder() //from app model
@@ -238,8 +238,8 @@ public class MainActivity extends AppCompatActivity {
                                                                             Log.e(TAG, "is a male:" + counter_m + " female only have" + counter_f);
                                                                             // User newuser = new User();
                                                                             // newuser.setExpGender("female");
-                                                                            db.collection("users").document(user.getUid()+"")
-                                                                                    .update("expectedGender","male")
+                                                                            db.collection("users").document(user.getUid() + "")
+                                                                                    .update("expectedGender", "male")
                                                                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                                                         @Override
                                                                                         public void onSuccess(Void aVoid) {
@@ -254,8 +254,8 @@ public class MainActivity extends AppCompatActivity {
 
                                                                         } else if (counter_m < counter_f) {
                                                                             Log.e(TAG, "is a female:" + counter_f + " male only have" + counter_m);
-                                                                            db.collection("users").document(user.getUid()+"")
-                                                                                    .update("expectedGender","female")
+                                                                            db.collection("users").document(user.getUid() + "")
+                                                                                    .update("expectedGender", "female")
                                                                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                                                         @Override
                                                                                         public void onSuccess(Void aVoid) {
@@ -292,16 +292,13 @@ public class MainActivity extends AppCompatActivity {
                             Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
-               // }
-           // }, 1500 );
+
+                }
+            }, 1500);
         }
 
-       // }
-
-    public void genderTest(int j){
-
-
     }
+
 
     //hide status bar and below softkey
     @Override

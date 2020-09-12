@@ -1,10 +1,12 @@
 package com.thewear.thewearapp;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Environment;
@@ -15,11 +17,15 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -39,8 +45,9 @@ import br.com.simplepass.loadingbutton.customViews.CircularProgressButton;
 public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth auth;
     private EditText inputEmail,inputPass;
+    TextInputLayout reset_pw_layout;
     private Button btnSignup,btnForget;
-    private CircularProgressButton btnLogin;
+    private CircularProgressButton btnLogin,btnReset;
     private Bitmap bitmapTick,bitmapCross;
     private static String TAG = TrainActivity.class.getSimpleName();
     @Override
@@ -48,17 +55,20 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_activity);
 
+        final Drawable black_btn = getResources().getDrawable(R.drawable.rounded_btn_black);
+        final Drawable white_btn = getResources().getDrawable(R.drawable.rounded_btn_white);
         inputEmail = findViewById(R.id.login_email);
         inputPass = findViewById(R.id.login_pw);
         btnLogin = findViewById(R.id.btn_login);
+        btnReset=findViewById(R.id.btn_reset);
         btnSignup = findViewById(R.id.btn_signup);
         btnForget=findViewById(R.id.btn_forget);
-        final Drawable black_btn = getResources().getDrawable(R.drawable.rounded_btn_black);
-        final Drawable white_btn = getResources().getDrawable(R.drawable.rounded_btn_white);
+        reset_pw_layout = findViewById(R.id.reset_pw_layout);
         Drawable tick = getResources().getDrawable(R.drawable.tick_icon);
         bitmapTick = ((BitmapDrawable)tick).getBitmap();
         Drawable cross = getResources().getDrawable(R.drawable.cross_icon);
         bitmapCross = ((BitmapDrawable)cross).getBitmap();
+
 
         //get firebase auth instance
         auth = FirebaseAuth.getInstance();
@@ -88,17 +98,17 @@ public class LoginActivity extends AppCompatActivity {
 
                 if (TextUtils.isEmpty(email)) {
                     inputEmail.setError("Enter email address");
-                    delay_anim(white_btn); //delay and revert anim
+                    delay_anim(white_btn,btnLogin); //delay and revert anim
                     return;
                 }
                 if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
                     inputEmail.setError("Invalid email format");
-                    delay_anim(white_btn); //delay and revert anim
+                    delay_anim(white_btn,btnLogin); //delay and revert anim
                     return;
                 }
                 if (TextUtils.isEmpty(password)) {
                     inputPass.setError("Enter password");
-                    delay_anim(white_btn); //delay and revert anim
+                    delay_anim(white_btn,btnLogin); //delay and revert anim
                     return;
                 }
 
@@ -110,7 +120,7 @@ public class LoginActivity extends AppCompatActivity {
                                 btnLogin.startAnimation();
                                 if (!task.isSuccessful()) {//if account cannot login
                                     btnLogin.doneLoadingAnimation(Color.RED,bitmapCross);
-                                    delay_anim(white_btn); //delay and revert
+                                    delay_anim(white_btn,btnLogin); //delay and revert
                                     Toast.makeText(LoginActivity.this, "Authentication failed. " + task.getException(),
                                             Toast.LENGTH_SHORT).show();
                                 }
@@ -151,7 +161,7 @@ public class LoginActivity extends AppCompatActivity {
                                             @Override
                                            public void onFailure(@NonNull Exception exception) {
                                                 btnLogin.doneLoadingAnimation(Color.RED,bitmapCross);
-                                                delay_anim(white_btn); //delay and revert
+                                                delay_anim(white_btn,btnLogin); //delay and revert
                                                 //Handle any errors
                                                 Toast.makeText(LoginActivity.this, "no success", Toast.LENGTH_SHORT).show();
                                                Log.e(TAG,"file not created "+ exception.toString());
@@ -160,42 +170,74 @@ public class LoginActivity extends AppCompatActivity {
                         }
             }
         });
-        //end of log in button settings
+
             }
             });
+//end of log in button settings
 
+        //forget pw button setting
         btnForget.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                String user_email = user.getEmail()+"";
-                //String user_email="vminhui@yahoo.com";
-                Toast.makeText(LoginActivity.this, "pw reset waiting...", Toast.LENGTH_SHORT).show();
-                FirebaseAuth.getInstance().setLanguageCode("en");
-                FirebaseAuth.getInstance().sendPasswordResetEmail(user_email)
-                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if(task.isSuccessful()){
-                                    Toast.makeText(LoginActivity.this, "Firebase Console received", Toast.LENGTH_SHORT).show();
-                                }
-                                else{
-                                    Toast.makeText(LoginActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                final Dialog dialog = new Dialog(LoginActivity.this);
+                dialog.setContentView(R.layout.dialog_forget);
 
-                                }
-                            }
-                        });
+                final TextInputEditText inputReset= dialog.findViewById(R.id.reset_email);
+                final CircularProgressButton btnReset=dialog.findViewById(R.id.btn_reset);
+
+                btnReset.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        btnReset.startAnimation();
+                        String emailReset = inputReset.getText().toString().trim();
+                        if (TextUtils.isEmpty(emailReset)) {
+                            inputReset.setError("Enter email address");
+                            delay_anim(white_btn,btnReset); //delay and revert anim
+                        }
+                        else if (!Patterns.EMAIL_ADDRESS.matcher(emailReset).matches()) {
+                            inputReset.setError("Invalid email format");
+                            delay_anim(white_btn,btnReset); //delay and revert anim
+                        }
+                        else{
+                            Toast.makeText(LoginActivity.this, "pw reset waiting...", Toast.LENGTH_SHORT).show();
+                            FirebaseAuth.getInstance().setLanguageCode("en");
+                            FirebaseAuth.getInstance().sendPasswordResetEmail(emailReset)
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if(task.isSuccessful()){
+                                                Toast.makeText(LoginActivity.this, "Firebase Console received", Toast.LENGTH_SHORT).show();
+                                                btnReset.doneLoadingAnimation(Color.GREEN,bitmapTick);
+                                                new Handler().postDelayed(new Runnable() { //pause 3 second only resume to walkthru
+                                                    @Override
+                                                    public void run() {
+                                                        dialog.cancel();
+                                                    }
+                                                }, 1000);
+
+                                            }
+                                            else{
+                                                Toast.makeText(LoginActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                                btnReset.doneLoadingAnimation(Color.RED,bitmapCross);
+                                                delay_anim(white_btn,btnReset);
+                                            }
+                                        }
+                                    });
+                        }
+                    }
+                });
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT)); //remove white corners
+                dialog.show();
             }
         });
-
     }
 
-    public void delay_anim(final Drawable white_btn){
+    public void delay_anim(final Drawable white_btn,final CircularProgressButton btn){
         new Handler().postDelayed(new Runnable() { //pause 3 second only resume to walkthru
             @Override
             public void run() {
-                btnLogin.revertAnimation();
-                btnLogin.setBackground(white_btn);
+                btn.revertAnimation();
+                btn.setBackground(white_btn);
             }
         }, 1000);
     }
