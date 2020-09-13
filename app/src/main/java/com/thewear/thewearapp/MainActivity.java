@@ -103,12 +103,12 @@ public class MainActivity extends AppCompatActivity {
         textview = findViewById(R.id.tvIdentifiedItem);
         //genderTest();
 
-        for (gender_counter = 0; gender_counter < 3; gender_counter++) {
+      //  for (gender_counter = 0; gender_counter < 3; gender_counter++) {
             //Toast.makeText(this, "j:" + gender_counter, Toast.LENGTH_SHORT).show();
             Log.e(TAG,"j:" + gender_counter);
             StorageReference mImagRef;
-            mImagRef = FirebaseStorage.getInstance().getReference("Clifford"); // getInstance = root firebase file images= foldername
-            final StorageReference ref = mImagRef.child("Clifford"+gender_counter+".jpg");
+            mImagRef = FirebaseStorage.getInstance().getReference("cliffo"); // getInstance = root firebase file images= foldername
+            final StorageReference ref = mImagRef.child("cliffo0.jpg");
 
             new Handler().postDelayed(new Runnable() {
                 @Override
@@ -236,37 +236,37 @@ public class MainActivity extends AppCompatActivity {
 
                                                                         if (counter_m > counter_f) {
                                                                             Log.e(TAG, "is a male:" + counter_m + " female only have" + counter_f);
-                                                                            // User newuser = new User();
-                                                                            // newuser.setExpGender("female");
-                                                                            db.collection("users").document(user.getUid() + "")
-                                                                                    .update("expectedGender", "male")
-                                                                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                                                        @Override
-                                                                                        public void onSuccess(Void aVoid) {
-                                                                                            Log.d(TAG, "DocumentSnapshot successfully updated!");
-                                                                                        }
-                                                                                    }).addOnFailureListener(new OnFailureListener() {
-                                                                                @Override
-                                                                                public void onFailure(@NonNull Exception e) {
-                                                                                    Log.w(TAG, "Error updating document", e);
-                                                                                }
-                                                                            });
+                                                                           // // User newuser = new User();
+                                                                           // // newuser.setExpGender("female");
+//                                                                            db.collection("users").document(user.getUid() + "")
+//                                                                                    .update("expectedGender", "male")
+//                                                                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+//                                                                                        @Override
+//                                                                                        public void onSuccess(Void aVoid) {
+//                                                                                            Log.d(TAG, "DocumentSnapshot successfully updated!");
+//                                                                                        }
+//                                                                                    }).addOnFailureListener(new OnFailureListener() {
+//                                                                                @Override
+//                                                                                public void onFailure(@NonNull Exception e) {
+//                                                                                    Log.w(TAG, "Error updating document", e);
+//                                                                                }
+//                                                                            });
 
                                                                         } else if (counter_m < counter_f) {
                                                                             Log.e(TAG, "is a female:" + counter_f + " male only have" + counter_m);
-                                                                            db.collection("users").document(user.getUid() + "")
-                                                                                    .update("expectedGender", "female")
-                                                                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                                                        @Override
-                                                                                        public void onSuccess(Void aVoid) {
-                                                                                            Log.d(TAG, "DocumentSnapshot successfully updated!");
-                                                                                        }
-                                                                                    }).addOnFailureListener(new OnFailureListener() {
-                                                                                @Override
-                                                                                public void onFailure(@NonNull Exception e) {
-                                                                                    Log.w(TAG, "Error updating document", e);
-                                                                                }
-                                                                            });
+//                                                                            db.collection("users").document(user.getUid() + "")
+//                                                                                    .update("expectedGender", "female")
+//                                                                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+//                                                                                        @Override
+//                                                                                        public void onSuccess(Void aVoid) {
+//                                                                                            Log.d(TAG, "DocumentSnapshot successfully updated!");
+//                                                                                        }
+//                                                                                    }).addOnFailureListener(new OnFailureListener() {
+//                                                                                @Override
+//                                                                                public void onFailure(@NonNull Exception e) {
+//                                                                                    Log.w(TAG, "Error updating document", e);
+//                                                                                }
+//                                                                            });
                                                                         }
 
                                                                     }
@@ -295,7 +295,7 @@ public class MainActivity extends AppCompatActivity {
 
                 }
             }, 1500);
-        }
+       // }
 
     }
 
