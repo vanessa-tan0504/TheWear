@@ -5,18 +5,22 @@
     android:id="@+id/dialog_bg"
     android:layout_width="match_parent"
     android:layout_height="220dp"
-    android:background="@drawable/rounded_btn_black">
+    android:background="@drawable/rounded_btn_white">
 
 
     <TextView
         android:id="@+id/dialog_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
         android:layout_marginTop="32dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
         android:fontFamily="@font/muli_regular"
         android:gravity="center_horizontal"
         android:text="Enter your email address of your account. "
-        android:textColor="#FFFFFF"
+        android:textColor="#000000"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -33,7 +37,9 @@
         android:layout_marginLeft="32dp"
         android:layout_marginEnd="32dp"
         android:layout_marginRight="32dp"
-        android:textColorHint="#FFFFFF"
+        android:textColorHint="#000000"
+        app:hintTextAppearance="@style/hintText"
+        app:boxStrokeColor="#000000"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.494"
@@ -54,9 +60,11 @@
             android:inputType="textEmailAddress"
             android:maxLines="1"
             android:singleLine="true"
-            android:textColor="#FFFFFF"
-            android:textColorHighlight="#FFFFFF"
-            android:textColorHint="#FFFFFF"
+            android:textColor="#000000"
+            android:textColorHighlight="#000000"
+            android:textColorHint="#000000"
+            android:textColorLink="#000000"
+            android:textCursorDrawable="@android:drawable/screen_background_dark"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -68,12 +76,14 @@
         android:layout_width="295dp"
         android:layout_height="41dp"
         android:layout_marginTop="16dp"
-        android:background="@drawable/rounded_btn_white"
+        android:background="@drawable/rounded_btn_black"
         android:fontFamily="@font/muli_regular"
         android:text="SUBMIT"
+        android:textColor="#FFFFFF"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/reset_pw_layout" />
+        app:layout_constraintTop_toBottomOf="@+id/reset_pw_layout"
+        app:spinning_bar_color="#FFFFFF" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

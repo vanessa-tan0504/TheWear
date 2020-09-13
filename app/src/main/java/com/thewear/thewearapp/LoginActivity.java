@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
@@ -39,6 +40,7 @@ import java.io.File;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import br.com.simplepass.loadingbutton.animatedDrawables.ProgressType;
 import br.com.simplepass.loadingbutton.customViews.CircularProgressButton;
 
@@ -188,38 +190,39 @@ public class LoginActivity extends AppCompatActivity {
                 btnReset.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        onWindowFocusChanged(true);
                         btnReset.startAnimation();
                         String emailReset = inputReset.getText().toString().trim();
                         if (TextUtils.isEmpty(emailReset)) {
                             inputReset.setError("Enter email address");
-                            delay_anim(white_btn,btnReset); //delay and revert anim
+                            delay_anim(black_btn,btnReset); //delay and revert anim
                         }
                         else if (!Patterns.EMAIL_ADDRESS.matcher(emailReset).matches()) {
                             inputReset.setError("Invalid email format");
-                            delay_anim(white_btn,btnReset); //delay and revert anim
+                            delay_anim(black_btn,btnReset); //delay and revert anim
                         }
                         else{
-                            Toast.makeText(LoginActivity.this, "pw reset waiting...", Toast.LENGTH_SHORT).show();
+                           // Toast.makeText(LoginActivity.this, "pw reset waiting...", Toast.LENGTH_SHORT).show();
                             FirebaseAuth.getInstance().setLanguageCode("en");
                             FirebaseAuth.getInstance().sendPasswordResetEmail(emailReset)
                                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if(task.isSuccessful()){
-                                                Toast.makeText(LoginActivity.this, "Firebase Console received", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(LoginActivity.this, "Email sent, please check inbox", Toast.LENGTH_SHORT).show();
                                                 btnReset.doneLoadingAnimation(Color.GREEN,bitmapTick);
                                                 new Handler().postDelayed(new Runnable() { //pause 3 second only resume to walkthru
                                                     @Override
                                                     public void run() {
                                                         dialog.cancel();
                                                     }
-                                                }, 1000);
+                                                }, 1500);
 
                                             }
                                             else{
                                                 Toast.makeText(LoginActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                                                 btnReset.doneLoadingAnimation(Color.RED,bitmapCross);
-                                                delay_anim(white_btn,btnReset);
+                                                delay_anim(black_btn,btnReset);
                                             }
                                         }
                                     });
@@ -227,17 +230,21 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 });
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT)); //remove white corners
+                DisplayMetrics metrics = getResources().getDisplayMetrics(); //custom width and length of dialog box
+                int width = metrics.widthPixels;
+                int height = metrics.heightPixels;
+                dialog.getWindow().setLayout((6 * width)/7, ConstraintLayout.LayoutParams.WRAP_CONTENT);
                 dialog.show();
             }
         });
     }
 
-    public void delay_anim(final Drawable white_btn,final CircularProgressButton btn){
+    public void delay_anim(final Drawable draw_btn,final CircularProgressButton btn){
         new Handler().postDelayed(new Runnable() { //pause 3 second only resume to walkthru
             @Override
             public void run() {
                 btn.revertAnimation();
-                btn.setBackground(white_btn);
+                btn.setBackground(draw_btn);
             }
         }, 1000);
     }
