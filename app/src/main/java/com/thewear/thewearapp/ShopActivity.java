@@ -8,12 +8,15 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -50,6 +53,7 @@ public class ShopActivity extends AppCompatActivity {
     int gender_counter;
     private static String TAG = TrainActivity.class.getSimpleName();
     private FirebaseFirestore db;
+    SearchView searchView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,6 +62,8 @@ public class ShopActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        //gender predict in background
         if(user!=null){
             Toast.makeText(this, "shop in "+user.getDisplayName(), Toast.LENGTH_SHORT).show();
             //gender predict in background
@@ -253,5 +259,29 @@ public class ShopActivity extends AppCompatActivity {
         }else{
             Toast.makeText(this, "no data", Toast.LENGTH_SHORT).show();
         }
+        //end of user gender predict in background
+
+        searchView= findViewById(R.id.search_view);
+        searchView.setSubmitButtonEnabled(true); //enable submit button
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+
+
+
+
+
+
+
+
     }
 }
