@@ -1,11 +1,7 @@
 <resources>
     <string name="app_name">The Wear</string>
-    <string name="app_train">Train</string>
-    <string name="app_recognize">Recognition</string>
     <string name="app_train_page">Face Training</string>
     <string name="app_recognize_page">Face Recognizing</string>
-    <string name="picture_button">Take Photo</string>
-    <string name="recognize_button">Recognize</string>
     <string name="precam">TheWear application implements the facial
         recognition technology to provide a more secured
         service. By accepting the facial recognition feature,
