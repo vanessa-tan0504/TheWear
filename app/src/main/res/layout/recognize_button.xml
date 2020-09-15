@@ -27,7 +27,7 @@
             android:layout_marginBottom="24dp"
             android:layout_weight="1"
             android:background="@drawable/rounded_btn_black"
-            android:fontFamily="@font/muli_regular"
+            android:fontFamily="@font/montserrat"
             android:paddingTop="20dp"
             android:paddingBottom="20dp"
             android:text="CAPTURE FACE TO VERIFY"

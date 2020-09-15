@@ -12,8 +12,7 @@
         android:id="@+id/appname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="250dp"
-        android:fontFamily="@font/muli_regular"
+        android:fontFamily="@font/montserrat"
         android:text="TheWear"
         android:textAllCaps="false"
         android:textColor="#FFFFFF"
@@ -21,20 +20,20 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/appname2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/appname2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/muli_regular"
+        android:layout_marginBottom="190dp"
+        android:fontFamily="@font/montserrat"
         android:text="SHOP TIL YOU DROP"
         android:textColor="#FFFFFF"
         android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/btn_register"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appname"/>
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/btn_register"
@@ -42,7 +41,7 @@
         android:layout_height="41dp"
         android:layout_marginBottom="24dp"
         android:background="@drawable/rounded_btn_white"
-        android:fontFamily="@font/muli_regular"
+        android:fontFamily="@font/montserrat"
         android:text="SIGN UP NEW ACCOUNT"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/btn_login"
@@ -55,7 +54,7 @@
         android:layout_height="41dp"
         android:layout_marginBottom="100dp"
         android:background="@drawable/rounded_btn_black"
-        android:fontFamily="@font/muli_regular"
+        android:fontFamily="@font/montserrat"
         android:text="LOGIN EXSISTING ACCOUNT"
         android:textColor="#FFFFFF"
         android:textStyle="bold"
