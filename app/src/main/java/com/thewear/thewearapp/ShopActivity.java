@@ -1,20 +1,27 @@
 package com.thewear.thewearapp;
 
+import android.app.ActionBar;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.SearchView;
+import android.widget.ListView;
+
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -40,11 +47,13 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
+
 
 import static com.google.firebase.auth.FirebaseAuth.getInstance;
 
@@ -58,8 +67,9 @@ public class ShopActivity extends AppCompatActivity {
     int gender_counter;
     private static String TAG = TrainActivity.class.getSimpleName();
     private FirebaseFirestore db;
-    SearchView searchView;
+    androidx.appcompat.widget.SearchView searchView;
     AppBarLayout appBarLayout;
+    ArrayAdapter<String>arrayAdapter;
 
 
     @Override
@@ -67,12 +77,10 @@ public class ShopActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.shop_activity);
         db = FirebaseFirestore.getInstance();
-        //searchView = (SearchView) findViewById(R.id.search_view);
+        searchView = findViewById(R.id.search_view);
 
 
-
-
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseUser user = getInstance().getCurrentUser();
 
         //gender predict in background
         if (user != null) {
@@ -208,7 +216,7 @@ public class ShopActivity extends AppCompatActivity {
 
                                                                 Log.e(TAG, "male count:" + counter_m + " " + "female count:" + counter_f);
 
-                                                                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                                                                FirebaseUser user = getInstance().getCurrentUser();
 
                                                                 if (counter_m > counter_f) {
                                                                     Log.e(TAG, "is a male:" + counter_m + " female only have" + counter_f);
@@ -272,31 +280,34 @@ public class ShopActivity extends AppCompatActivity {
         }
         //end of user gender predict in background
 
+        //search bar icon layout on right
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            searchView.setLayoutParams(new Toolbar.LayoutParams(Gravity.RIGHT));
+        }
 
+        //search bar input text settings
+        EditText txtSearch = ((EditText)searchView.findViewById(androidx.appcompat.R.id.search_src_text));
+        txtSearch.setHintTextColor(Color.WHITE);
+        txtSearch.setTextColor(Color.WHITE);
 
+        //search bar listener
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                onWindowFocusChanged(true);
+                Toast.makeText(ShopActivity.this, "onQueryTextSubmit", Toast.LENGTH_SHORT).show();
 
-        //appBarLayout.isShown();
+                return false;
+            }
 
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                onWindowFocusChanged(true);
+                Toast.makeText(ShopActivity.this, "onQueryTextChange", Toast.LENGTH_SHORT).show();
 
-
-
-
-
-//            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//                @Override
-//                public boolean onQueryTextSubmit(String query) {
-//                    onWindowFocusChanged(true);
-//                    Toast.makeText(ShopActivity.this, "onQueryTextSubmit", Toast.LENGTH_SHORT).show();
-//                    return false;
-//                }
-//
-//                @Override
-//                public boolean onQueryTextChange(String newText) {
-//                    onWindowFocusChanged(true);
-//                    Toast.makeText(ShopActivity.this, "onQueryTextChange", Toast.LENGTH_SHORT).show();
-//                    return false;
-//                }
-//            });
+                return false;
+            }
+        });
 
 
         }

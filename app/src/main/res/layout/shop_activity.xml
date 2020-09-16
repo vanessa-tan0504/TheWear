@@ -7,39 +7,13 @@
 
     <include layout="@layout/custom_toolbar" />
 
-    <TextView
-        android:id="@+id/applogo"
+    <ListView
+        android:id="@+id/my_list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:ellipsize="end"
-        android:fontFamily="@font/montserrat"
-        android:text="TheWear"
-        android:textAllCaps="false"
-        android:textColor="#000"
-        android:textSize="25sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
-    <SearchView
-        android:id="@+id/search_view"
-        android:layout_width="match_parent"
-        android:layout_height="65dp"
-        android:layout_marginTop="32dp"
-        android:closeIcon="@drawable/cross_icon"
-        android:iconifiedByDefault="true"
-        android:layoutDirection="rtl"
-        android:queryBackground="@color/design_default_color_primary"
-        android:queryHint="Browse"
-        android:searchIcon="@drawable/tick_icon"
+        android:layout_marginEnd="411dp"
+        android:layout_marginRight="411dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
 
