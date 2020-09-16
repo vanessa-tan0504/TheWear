@@ -15,19 +15,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
 
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.appbar.AppBarLayout;
-import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.auth.FirebaseAuth;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.ml.common.FirebaseMLException;
@@ -46,13 +43,13 @@ import com.google.firebase.storage.StorageReference;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SearchView;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 
 import static com.google.firebase.auth.FirebaseAuth.getInstance;
@@ -66,10 +63,15 @@ public class ShopActivity extends AppCompatActivity {
     float male=0,female=0,unknown=0;
     int gender_counter;
     private static String TAG = TrainActivity.class.getSimpleName();
+    private HomeFragment fragment1 = new HomeFragment();
+    private CartFragment fragment2 = new CartFragment();
+    private ProfileFragment fragment3 = new ProfileFragment();
     private FirebaseFirestore db;
     androidx.appcompat.widget.SearchView searchView;
     AppBarLayout appBarLayout;
     ArrayAdapter<String>arrayAdapter;
+    BottomNavigationView bottomNavigationView;
+    ViewPager viewPager;
 
 
     @Override
@@ -77,8 +79,10 @@ public class ShopActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.shop_activity);
         db = FirebaseFirestore.getInstance();
-        searchView = findViewById(R.id.search_view);
 
+        //viewpager settings
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        bottomNavigationView= findViewById(R.id.bottom_navigation);
 
         FirebaseUser user = getInstance().getCurrentUser();
 
@@ -275,40 +279,76 @@ public class ShopActivity extends AppCompatActivity {
                     Toast.makeText(ShopActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
-        } else {
+        }
+        else {
             Toast.makeText(this, "no data", Toast.LENGTH_SHORT).show();
         }
         //end of user gender predict in background
 
-        //search bar icon layout on right
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            searchView.setLayoutParams(new Toolbar.LayoutParams(Gravity.RIGHT));
-        }
+        //viewpager swiping settings (swiping navigation method)
+        //first fragment item (menu) appear when launch , show the "menu" fragment by default
+        viewPager.setCurrentItem(0);
 
-        //search bar input text settings
-        EditText txtSearch = ((EditText)searchView.findViewById(androidx.appcompat.R.id.search_src_text));
-        txtSearch.setHintTextColor(Color.WHITE);
-        txtSearch.setTextColor(Color.WHITE);
-
-        //search bar listener
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        //initialize fragment displayed by viewpager
+        viewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
-            public boolean onQueryTextSubmit(String query) {
-                onWindowFocusChanged(true);
-                Toast.makeText(ShopActivity.this, "onQueryTextSubmit", Toast.LENGTH_SHORT).show();
-
-                return false;
+            public Fragment getItem(int position) {
+                switch (position) {
+                    case 0:
+                        return fragment1;
+                    case 1:
+                        return fragment2;
+                    case 2:
+                        return fragment3;
+                }
+                return null;
             }
 
             @Override
-            public boolean onQueryTextChange(String newText) {
-                onWindowFocusChanged(true);
-                Toast.makeText(ShopActivity.this, "onQueryTextChange", Toast.LENGTH_SHORT).show();
-
-                return false;
+            public int getCount() {
+                return 3;
             }
         });
 
+        //sync with bottom nav by highlighing icon and title
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                bottomNavigationView.getMenu().getItem(position).setChecked(true);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+        });
+        //viewpager
+
+        //bottom nav bar
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+                    case R.id.action_recents:
+                        Toast.makeText(ShopActivity.this, "Recents", Toast.LENGTH_SHORT).show();
+                        viewPager.setCurrentItem(0);
+                        return true;
+                    case R.id.action_favorites:
+                        Toast.makeText(ShopActivity.this, "Favorites", Toast.LENGTH_SHORT).show();
+                        viewPager.setCurrentItem(1);
+                        return true;
+                    case R.id.action_nearby:
+                        Toast.makeText(ShopActivity.this, "Nearby", Toast.LENGTH_SHORT).show();
+                        viewPager.setCurrentItem(2);
+                        return true;
+                }
+                return false;
+            }
+        });
+        //end of bottom nav bar
 
         }
 
