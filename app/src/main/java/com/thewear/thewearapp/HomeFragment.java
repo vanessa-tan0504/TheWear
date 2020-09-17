@@ -1,6 +1,5 @@
 package com.thewear.thewearapp;
 
-import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -12,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 import android.widget.Toolbar;
@@ -22,6 +20,7 @@ import androidx.appcompat.widget.SearchView;
 public class HomeFragment extends Fragment {
     View v;
     androidx.appcompat.widget.SearchView searchView;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -55,8 +54,13 @@ public class HomeFragment extends Fragment {
                 return false;
             }
         });
-
         //end of search bar methods
+
+        //slider
+
+        //slider end
+
+
         return v;
     }
 
