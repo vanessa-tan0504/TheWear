@@ -2,21 +2,21 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_recents"
+        android:id="@+id/home"
         android:enabled="true"
         android:icon="@drawable/cross_icon"
-        android:title="Recents"
+        android:title="HOME"
         app:showAsAction="ifRoom" />
     <item
-        android:id="@+id/action_favorites"
+        android:id="@+id/cart"
         android:enabled="true"
         android:icon="@drawable/cross_icon"
-        android:title="Favorites"
+        android:title="CART"
         app:showAsAction="ifRoom" />
     <item
-        android:id="@+id/action_nearby"
+        android:id="@+id/profile"
         android:enabled="true"
         android:icon="@drawable/cross_icon"
-        android:title="Nearby"
+        android:title="PROFILE"
         app:showAsAction="ifRoom" />
 </menu>

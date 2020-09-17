@@ -35,18 +35,28 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom_navigation"
+    <nl.joery.animatedbottombar.AnimatedBottomBar
+        android:id="@+id/bottom_bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
-        android:background="@color/black"
-        app:itemIconTint="@color/colorAccent"
-        app:itemTextColor="@color/colorAccent"
+        android:layout_height="60dp"
+        android:layout_marginBottom="32dp"
+        android:background="@color/colorAccent"
+        app:abb_indicatorAppearance="round"
+        app:abb_indicatorHeight="4dp"
+        app:abb_indicatorMargin="16dp"
+        app:abb_selectedIndex="1"
+        app:abb_selectedTabType="text"
+        app:abb_tabs="@menu/bottom_nav_menu"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/bottom_nav_menu" />
+        app:abb_tabColor="@color/black"
+        app:abb_tabColorSelected="@color/black"
+        app:abb_textAppearance="@style/btmNavFont"
+        app:abb_rippleEnabled="true"
+        app:abb_tabAnimation="slide"
+        app:abb_tabAnimationSelected="slide"
+        android:elevation="20dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

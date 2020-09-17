@@ -41,6 +41,8 @@ import com.google.firebase.ml.custom.FirebaseModelOutputs;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -51,6 +53,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
+import nl.joery.animatedbottombar.AnimatedBottomBar;
 
 
 import static com.google.firebase.auth.FirebaseAuth.getInstance;
@@ -71,7 +74,8 @@ public class ShopActivity extends AppCompatActivity {
     androidx.appcompat.widget.SearchView searchView;
     AppBarLayout appBarLayout;
     ArrayAdapter<String>arrayAdapter;
-    BottomNavigationView bottomNavigationView;
+    //BottomNavigationView bottomNavigationView;
+    AnimatedBottomBar bottomBar;
     ViewPager viewPager;
 
 
@@ -83,7 +87,8 @@ public class ShopActivity extends AppCompatActivity {
 
         //viewpager settings
         viewPager = (ViewPager) findViewById(R.id.viewpager);
-        bottomNavigationView= findViewById(R.id.bottom_navigation);
+        //bottomNavigationView= findViewById(R.id.bottom_navigation);
+        bottomBar=findViewById(R.id.bottom_bar);
 
         FirebaseUser user = getInstance().getCurrentUser();
 
@@ -319,7 +324,7 @@ public class ShopActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int position) {
-                bottomNavigationView.getMenu().getItem(position).setChecked(true);
+                //bottomNavigationView.getMenu().getItem(position).setChecked(true);
                 //hide keyboard when sliding within fragment
                 final InputMethodManager imm = (InputMethodManager)getSystemService(
                         Context.INPUT_METHOD_SERVICE);
@@ -332,28 +337,11 @@ public class ShopActivity extends AppCompatActivity {
         });
         //viewpager
 
-        //bottom nav bar
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                switch (menuItem.getItemId()) {
-                    case R.id.action_recents:
-                        Toast.makeText(ShopActivity.this, "Recents", Toast.LENGTH_SHORT).show();
-                        viewPager.setCurrentItem(0);
-                        return true;
-                    case R.id.action_favorites:
-                        Toast.makeText(ShopActivity.this, "Favorites", Toast.LENGTH_SHORT).show();
-                        viewPager.setCurrentItem(1);
-                        return true;
-                    case R.id.action_nearby:
-                        Toast.makeText(ShopActivity.this, "Nearby", Toast.LENGTH_SHORT).show();
-                        viewPager.setCurrentItem(2);
-                        return true;
-                }
-                return false;
-            }
-        });
-        //end of bottom nav bar
+        //bottom nav bar lib
+        bottomBar.setupWithViewPager(viewPager);
+
+
+
 
         }
 
