@@ -47,6 +47,7 @@ public class HomeFragment extends Fragment {
     CarouselView carouselView;
     String [] urlstring= new String [3];
     String[] descstring = new String [3];
+    String[] titlestring = new String[3];
 
 
     @Override
@@ -97,8 +98,10 @@ public class HomeFragment extends Fragment {
                             for(QueryDocumentSnapshot document : task.getResult()){
                                 String url = document.getString("url");
                                 String desc = document.getString("desc");
+                                String title = document.getString("title");
                                 urlstring[i]=url;
                                 descstring[i]=desc;
+                                titlestring[i]=title;
                                 i++;
                             }
                             carouselView.setViewListener(new ViewListener() {
@@ -106,8 +109,10 @@ public class HomeFragment extends Fragment {
                                 public View setViewForPosition(int position) {
                                    View view = getLayoutInflater().inflate(R.layout.carousel_layout,null);
                                    TextView desc = view.findViewById(R.id.carousel_desc);
+                                   TextView title = view.findViewById(R.id.carousel_title);
                                    ImageView img = view.findViewById(R.id.carousel_image);
                                     desc.setText(descstring[position]); //load description from firestore
+                                    title.setText(titlestring[position]);
                                     Glide.with(getContext()).load(urlstring[position]) //use glide to load image from firestore
                                             .listener(new RequestListener<Drawable>() {
                                                 @Override
