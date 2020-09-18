@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
@@ -48,6 +49,7 @@ public class HomeFragment extends Fragment {
     String [] urlstring= new String [3];
     String[] descstring = new String [3];
     String[] titlestring = new String[3];
+    LottieAnimationView loading_anim;
 
 
     @Override
@@ -55,7 +57,13 @@ public class HomeFragment extends Fragment {
         v=inflater.inflate(R.layout.fragment_home, container, false);
 
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        loading_anim=v.findViewById(R.id.loading_anim);
+        loading_anim.setAnimation(R.raw.circle_loading);
+        loading_anim.setSpeed(2);
+        loading_anim.playAnimation();
 
+
+        //search bar start---------------------------------------------------------------------------------------------
         searchView = v.findViewById(R.id.search_view);
         //search bar icon layout on right
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -82,9 +90,9 @@ public class HomeFragment extends Fragment {
                 return false;
             }
         });
-        //end of search bar methods
+        //end of search bar methods----------------------------------------------------------------------------
 
-        //slide show slider, image and desc load from cloud firestore
+        //slide show slider, image and desc load from cloud firestore-----------------------------------------------
         carouselView=v.findViewById(R.id.carousel);
         FirebaseFirestore db;
         db = FirebaseFirestore.getInstance();
@@ -113,6 +121,7 @@ public class HomeFragment extends Fragment {
                                    ImageView img = view.findViewById(R.id.carousel_image);
                                     desc.setText(descstring[position]); //load description from firestore
                                     title.setText(titlestring[position]);
+
                                     Glide.with(getContext()).load(urlstring[position]) //use glide to load image from firestore
                                             .listener(new RequestListener<Drawable>() {
                                                 @Override
@@ -122,6 +131,7 @@ public class HomeFragment extends Fragment {
 
                                                 @Override
                                                 public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                                    loading_anim.setVisibility(View.GONE);
                                                     return false;
                                                 }
                                             })
@@ -134,7 +144,7 @@ public class HomeFragment extends Fragment {
                     }
                 });
 
-        //slider end
+        //slider end------------------------------------------------------------
         return v;
     }
 
