@@ -26,6 +26,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
@@ -52,6 +53,7 @@ public class LoginActivity extends AppCompatActivity {
     private CircularProgressButton btnLogin,btnReset;
     private Bitmap bitmapTick,bitmapCross;
     private static String TAG = TrainActivity.class.getSimpleName();
+    private  ConstraintLayout constraintLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,6 +72,7 @@ public class LoginActivity extends AppCompatActivity {
         bitmapTick = ((BitmapDrawable)tick).getBitmap();
         Drawable cross = getResources().getDrawable(R.drawable.cross_icon);
         bitmapCross = ((BitmapDrawable)cross).getBitmap();
+        constraintLayout = findViewById(R.id.login);
 
 
         //get firebase auth instance
@@ -95,7 +98,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 btnLogin.startAnimation();
 
-                String email = inputEmail.getText().toString().trim();
+                final String email = inputEmail.getText().toString().trim();
                 final String password = inputPass.getText().toString();
 
                 if (TextUtils.isEmpty(email)) {
@@ -123,8 +126,8 @@ public class LoginActivity extends AppCompatActivity {
                                 if (!task.isSuccessful()) {//if account cannot login
                                     btnLogin.doneLoadingAnimation(Color.RED,bitmapCross);
                                     delay_anim(white_btn,btnLogin); //delay and revert
-                                    Toast.makeText(LoginActivity.this, "Authentication failed. " + task.getException(),
-                                            Toast.LENGTH_SHORT).show();
+//
+                                    Snackbar.make(constraintLayout,"Authentication failed. "+task.getException().getMessage(),Snackbar.LENGTH_LONG).show();
                                 }
                                 else { //if account can login
                                     //retrive xml model from firebase
@@ -144,7 +147,7 @@ public class LoginActivity extends AppCompatActivity {
                                         @Override
                                         public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
                                      //Local temp file has been created
-                                            Toast.makeText(LoginActivity.this, "success", Toast.LENGTH_SHORT).show();
+//
                                             Log.e(TAG,"local tem file created  created "+ myFile.toString());
                                             new Handler().postDelayed(new Runnable() { //pause 3 second only resume to walkthru
                                                 @Override
@@ -165,8 +168,8 @@ public class LoginActivity extends AppCompatActivity {
                                                 btnLogin.doneLoadingAnimation(Color.RED,bitmapCross);
                                                 delay_anim(white_btn,btnLogin); //delay and revert
                                                 //Handle any errors
-                                                Toast.makeText(LoginActivity.this, "no success", Toast.LENGTH_SHORT).show();
-                                               Log.e(TAG,"file not created "+ exception.toString());
+                                                Snackbar.make(constraintLayout,"Login Unsuccessful. Please ensure storage and camera permission is allowed",Snackbar.LENGTH_LONG).show();
+                                                Log.e(TAG,"file not created "+ exception.toString());
                                             }
                                         });
                         }
@@ -202,7 +205,6 @@ public class LoginActivity extends AppCompatActivity {
                             delay_anim(black_btn,btnReset); //delay and revert anim
                         }
                         else{
-                           // Toast.makeText(LoginActivity.this, "pw reset waiting...", Toast.LENGTH_SHORT).show();
                             FirebaseAuth.getInstance().setLanguageCode("en");
                             FirebaseAuth.getInstance().sendPasswordResetEmail(emailReset)
                                     .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -210,6 +212,7 @@ public class LoginActivity extends AppCompatActivity {
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if(task.isSuccessful()){
                                                 Toast.makeText(LoginActivity.this, "Email sent, please check inbox", Toast.LENGTH_SHORT).show();
+
                                                 btnReset.doneLoadingAnimation(Color.GREEN,bitmapTick);
                                                 new Handler().postDelayed(new Runnable() { //pause 3 second only resume to walkthru
                                                     @Override
@@ -220,7 +223,7 @@ public class LoginActivity extends AppCompatActivity {
 
                                             }
                                             else{
-                                                Toast.makeText(LoginActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                               Toast.makeText(LoginActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                                                 btnReset.doneLoadingAnimation(Color.RED,bitmapCross);
                                                 delay_anim(black_btn,btnReset);
                                             }

@@ -5,7 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black_overlay">
+    android:background="@color/black_overlay"
+    android:id="@+id/register">
 
     <TextView
         android:id="@+id/appname"

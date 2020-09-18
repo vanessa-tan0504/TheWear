@@ -20,6 +20,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -35,6 +36,7 @@ import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import br.com.simplepass.loadingbutton.customViews.CircularProgressButton;
 
 public class RegisterActivity extends AppCompatActivity {
@@ -46,6 +48,7 @@ public class RegisterActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private static String TAG = RegisterActivity.class.getSimpleName();
     private Bitmap bitmapTick,bitmapCross;
+    ConstraintLayout constraintLayout;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -68,6 +71,7 @@ public class RegisterActivity extends AppCompatActivity {
         bitmapTick = ((BitmapDrawable)tick).getBitmap();
         Drawable cross = getResources().getDrawable(R.drawable.cross_icon);
         bitmapCross = ((BitmapDrawable)cross).getBitmap();
+        constraintLayout=findViewById(R.id.register);
 
         //register button
         btnRegister.setOnClickListener(new View.OnClickListener() {
@@ -133,9 +137,9 @@ public class RegisterActivity extends AppCompatActivity {
                                 if(!task.isSuccessful()){//if account cannot register
                                     btnRegister.doneLoadingAnimation(Color.RED,bitmapCross);
                                     delay_anim(white_btn); //delay and revert
-                                    Toast.makeText(RegisterActivity.this, "Authentication failed." + task.getException(),
-                                            Toast.LENGTH_SHORT).show();
-                                    //Log.e(TAG, "onComplete: Failed=" + task.getException().getMessage());
+
+                                    Snackbar.make(constraintLayout,"Authentication failed ."+task.getException().getMessage(),Snackbar.LENGTH_LONG).show();
+
                                 }
                                 else {// if account register success ,store user's username
                                     final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -147,14 +151,13 @@ public class RegisterActivity extends AppCompatActivity {
                                                 @Override
                                                 public void onComplete(@NonNull Task<Void> task) {
                                                     if (task.isSuccessful()) {
-                                                       // Toast.makeText(RegisterActivity.this, "Welcome! " + user.getDisplayName(), Toast.LENGTH_SHORT).show();
                                                         if(user!=null){
                                                             User newuser = new User(user.getDisplayName(),user.getEmail(),null);
                                                             db.collection("users").document(user.getUid()+"").set(newuser)
                                                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                                         @Override
                                                                         public void onSuccess(Void aVoid) {
-                                                                            Toast.makeText(RegisterActivity.this, "user updated", Toast.LENGTH_SHORT).show();
+                                                                            Log.i(TAG,"Firestore updated");
                                                                             new Handler().postDelayed(new Runnable() { //pause 3 second only resume to walkthru
                                                                                 @Override
                                                                                 public void run() {
@@ -175,7 +178,8 @@ public class RegisterActivity extends AppCompatActivity {
                                                                         @Override
                                                                         public void onFailure(@NonNull Exception e) {
                                                                             btnRegister.doneLoadingAnimation(Color.RED,bitmapCross);
-                                                                            Toast.makeText(RegisterActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                                            Snackbar.make(constraintLayout,"Cannot connect to server "+e.getMessage(),Snackbar.LENGTH_LONG).show();
+
                                                                         }
                                                                     });
                                                         }
@@ -185,6 +189,8 @@ public class RegisterActivity extends AppCompatActivity {
                                         @Override
                                         public void onFailure(@NonNull Exception e) {
                                             Toast.makeText(RegisterActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                                            Snackbar.make(constraintLayout,"Please ensure camera and storage permission is enable."+e.getMessage(),Snackbar.LENGTH_LONG).show();
+
                                         }
                                     });
                                     //finish();
