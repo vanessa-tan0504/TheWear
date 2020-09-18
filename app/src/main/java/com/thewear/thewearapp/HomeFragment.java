@@ -12,14 +12,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 import android.widget.Toolbar;
+
+import com.synnapps.carouselview.CarouselView;
+import com.synnapps.carouselview.ImageListener;
 
 import androidx.appcompat.widget.SearchView;
 
 public class HomeFragment extends Fragment {
     View v;
     androidx.appcompat.widget.SearchView searchView;
+    CarouselView carouselView;
 
 
     @Override
@@ -57,6 +62,19 @@ public class HomeFragment extends Fragment {
         //end of search bar methods
 
         //slider
+        final int [] sampleimage={R.drawable.cross_icon,R.drawable.arrow_icon,R.drawable.tick_icon};
+
+        ImageListener imageListener = new ImageListener() {
+            @Override
+            public void setImageForPosition(int position, ImageView imageView) {
+                imageView.setImageResource(sampleimage[position]);
+
+            }
+        };
+        carouselView=v.findViewById(R.id.carousel);
+        carouselView.setPageCount(sampleimage.length);
+        carouselView.setImageListener(imageListener);
+
 
         //slider end
 
