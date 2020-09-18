@@ -3,6 +3,7 @@ package com.thewear.thewearapp;
 
 import android.content.Intent;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 
@@ -14,9 +15,14 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -31,8 +37,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        StorageReference storageReference = FirebaseStorage.getInstance().getReference("cover.jpg");
         ImageView main_image = findViewById(R.id.main_image);
+
         Glide.with(MainActivity.this)
                 .load("https://firebasestorage.googleapis.com/v0/b/the-wear.appspot.com/o/cover.jpg?alt=media&token=66a00207-849d-494a-b045-cda51c3237da")
                 .into(main_image);
