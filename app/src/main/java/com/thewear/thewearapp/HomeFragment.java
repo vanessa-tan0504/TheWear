@@ -2,11 +2,14 @@ package com.thewear.thewearapp;
 
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import android.view.Gravity;
@@ -15,7 +18,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Toolbar;
@@ -45,25 +50,44 @@ import java.util.List;
 import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+import nl.joery.animatedbottombar.AnimatedBottomBar;
 
 public class HomeFragment extends Fragment {
-    View v;
+    View v,v2;
     androidx.appcompat.widget.SearchView searchView;
     CarouselView carouselView;
     String [] urlstring= new String [3];
     String[] descstring = new String [3];
     String[] titlestring = new String[3];
     LottieAnimationView loading_anim;
-    RecyclerView staggeredRv;
+    RecyclerView recyclerView;
     FirestoreRecyclerAdapter adapter_rec;
     StaggeredGridLayoutManager manager;
-    DatabaseReference mDatbaseRef;
     FirebaseFirestore db_carousel,db_rec;
+    ScrollView scrollView;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         v=inflater.inflate(R.layout.fragment_home, container, false);
+
+        scrollView= v.findViewById(R.id.scrollview);
+
+        v2=inflater.inflate(R.layout.shop_activity,container,false);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            scrollView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+                @Override
+                public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                    Toast.makeText(getContext(), "scrollX"+scrollX+"scrolly"+scrollY+"oldx"+oldScrollX+"oldy"+oldScrollY, Toast.LENGTH_SHORT).show();
+
+
+                    if(scrollY>0){ //scrolldown
+                        AnimatedBottomBar btn= v2.findViewById(R.id.bottom_bar);
+                        btn.setBackgroundColor(Color.RED);
+                    }
+                }
+            });
+        }
 
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         loading_anim=v.findViewById(R.id.loading_anim);
@@ -158,20 +182,32 @@ public class HomeFragment extends Fragment {
         //staggered recycler view (recommandation)-----------------------------------------------
 
         //init rv as staggered
-        staggeredRv= v.findViewById(R.id.staggered_rv);
+        recyclerView= v.findViewById(R.id.rec_rv);
         manager= new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
-        staggeredRv.setLayoutManager(manager);
+        recyclerView.setLayoutManager(manager);
 
         //use firebase recycyler adapter
         db_rec = FirebaseFirestore.getInstance();
-        Query query = db_rec.collection("images").whereEqualTo("title","LATEST TREND"); //filter based on gender
+        //Query query = db_rec.collection("images").whereEqualTo("title","LATEST TREND"); //filter based on gender
+        Query query = db_rec.collection("images");
         FirestoreRecyclerOptions<Clothes> response = new FirestoreRecyclerOptions.Builder<Clothes>()
                 .setQuery(query,Clothes.class)
                 .build();
 
        adapter_rec= new FirestoreRecyclerAdapter<Clothes, rowHolder>(response) {
            @Override
-           protected void onBindViewHolder(@NonNull rowHolder holder, int position, @NonNull Clothes model) {
+           protected void onBindViewHolder(@NonNull rowHolder holder, final int position, @NonNull Clothes model) {
+
+               if(position % 2 != 0 ){ //odd poistion - left
+                   holder.img.setMaxHeight(300);
+
+                   holder.card.setLayoutParams(new CardView.LayoutParams(500,900));
+                   ConstraintLayout.LayoutParams layoutParams= new ConstraintLayout.LayoutParams(500,720);
+                   holder.img.setLayoutParams(layoutParams);
+
+                   //holder.img.setLayoutParams(new ImageView.LayoutParams());
+
+               }
 
               // holder.textName.setText(model.getName());
                Glide.with(getContext()).load(model.getUrl()).into(holder.img);
@@ -179,7 +215,7 @@ public class HomeFragment extends Fragment {
                holder.itemView.setOnClickListener(new View.OnClickListener() {
                    @Override
                    public void onClick(View v) {
-                       Toast.makeText(getContext(), "clicked", Toast.LENGTH_SHORT).show();
+                       Toast.makeText(getContext(), "clicked"+position, Toast.LENGTH_SHORT).show();
                    }
                });
 
@@ -200,7 +236,9 @@ public class HomeFragment extends Fragment {
        };
 
        adapter_rec.notifyDataSetChanged();
-       staggeredRv.setAdapter(adapter_rec);
+       recyclerView.setAdapter(adapter_rec);
+
+
 
         //staggered recycler view (recommandation) end-----------------------------------------------
 
@@ -209,10 +247,14 @@ public class HomeFragment extends Fragment {
 
     public class rowHolder extends  RecyclerView.ViewHolder{
         ImageView img ;
+        CardView card;
+        ConstraintLayout constraintLayout;
 
         public rowHolder(@NonNull View itemView) {
             super(itemView);
             img=itemView.findViewById(R.id.row_img);
+            card= itemView.findViewById(R.id.rec_card);
+            constraintLayout= itemView.findViewById(R.id.rec_constraint);
         }
     }
 

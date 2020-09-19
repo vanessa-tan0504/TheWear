@@ -71,10 +71,6 @@ public class ShopActivity extends AppCompatActivity {
     private CartFragment fragment2 = new CartFragment();
     private ProfileFragment fragment3 = new ProfileFragment();
     private FirebaseFirestore db;
-    androidx.appcompat.widget.SearchView searchView;
-    AppBarLayout appBarLayout;
-    ArrayAdapter<String>arrayAdapter;
-    //BottomNavigationView bottomNavigationView;
     AnimatedBottomBar bottomBar;
     ViewPager viewPager;
 

@@ -1,21 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="4dp">
+    android:layout_width="200dp"
+    android:layout_height="300dp"
+    app:cardCornerRadius="20dp"
+    app:cardPreventCornerOverlap="false"
+    app:cardUseCompatPadding="false"
+    android:layout_marginLeft="15dp"
+    android:layout_marginBottom="15dp"
+    android:padding="2dp"
+    android:id="@+id/rec_card">
 <!--    padding for space between the image/ card view-->
 
-    <ImageView
-        android:adjustViewBounds="true"
-        android:scaleType="centerCrop"
-        android:id="@+id/row_img"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/rec_constraint"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@tools:sample/backgrounds/scenic" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/row_img"
+            android:layout_width="match_parent"
+            android:layout_height="230dp"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
+        <TextView
+            android:id="@+id/clothes_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="28dp"
+            android:layout_marginLeft="28dp"
+            android:text="Fit and Flare"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/row_img"
+            app:layout_constraintVertical_bias="0.0"
+            android:fontFamily="@font/montserrat"/>
+
+        <TextView
+            android:id="@+id/clothes_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="28dp"
+            android:layout_marginLeft="28dp"
+            android:text="RM34.99"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/clothes_title"
+            android:fontFamily="@font/montserrat"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>
