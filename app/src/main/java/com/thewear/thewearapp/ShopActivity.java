@@ -92,7 +92,7 @@ public class ShopActivity extends AppCompatActivity {
 
         FirebaseUser user = getInstance().getCurrentUser();
 
-        //gender predict in background
+        //gender predict in background--------------------------------------------
         if (user != null) {
             Toast.makeText(this, "shop in " + user.getDisplayName(), Toast.LENGTH_SHORT).show();
             //gender predict in background
@@ -289,9 +289,9 @@ public class ShopActivity extends AppCompatActivity {
         else {
             Toast.makeText(this, "no data", Toast.LENGTH_SHORT).show();
         }
-        //end of user gender predict in background
+        //end of user gender predict in background---------------------------------------
 
-        //viewpager swiping settings (swiping navigation method)
+        //viewpager swiping settings (swiping navigation method)--------------------------------------
         //first fragment item (menu) appear when launch , show the "menu" fragment by default
         viewPager.setCurrentItem(0);
 
@@ -335,7 +335,7 @@ public class ShopActivity extends AppCompatActivity {
             public void onPageScrollStateChanged(int state) {
             }
         });
-        //viewpager
+        //viewpager end--------------------------------------------------------------------
 
         //bottom nav bar lib
         bottomBar.setupWithViewPager(viewPager);
