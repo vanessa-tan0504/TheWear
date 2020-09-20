@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 number++;
-                Intent swap = new Intent(MainActivity.this, ShopActivity.class);
+                Intent swap = new Intent(MainActivity.this, IntroActivity.class);
                 startActivity(swap);
             }
         });

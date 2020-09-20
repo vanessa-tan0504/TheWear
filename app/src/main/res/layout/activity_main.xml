@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-        android:tint="#98000000"
+        android:tint="#85000000"
         app:srcCompat="@drawable/main" />
 
     <Button
