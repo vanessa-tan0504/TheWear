@@ -2,7 +2,6 @@ package com.thewear.thewearapp;
 
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -18,9 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Toolbar;
@@ -35,7 +32,6 @@ import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
@@ -44,13 +40,9 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.synnapps.carouselview.CarouselView;
 import com.synnapps.carouselview.ViewListener;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
-import nl.joery.animatedbottombar.AnimatedBottomBar;
 
 public class HomeFragment extends Fragment {
     View v,v2;
@@ -64,30 +56,12 @@ public class HomeFragment extends Fragment {
     FirestoreRecyclerAdapter adapter_rec;
     StaggeredGridLayoutManager manager;
     FirebaseFirestore db_carousel,db_rec;
-    ScrollView scrollView;
+    //ScrollView scrollView;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         v=inflater.inflate(R.layout.fragment_home, container, false);
-
-        scrollView= v.findViewById(R.id.scrollview);
-
-        v2=inflater.inflate(R.layout.shop_activity,container,false);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            scrollView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
-                @Override
-                public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                    Toast.makeText(getContext(), "scrollX"+scrollX+"scrolly"+scrollY+"oldx"+oldScrollX+"oldy"+oldScrollY, Toast.LENGTH_SHORT).show();
-
-
-                    if(scrollY>0){ //scrolldown
-                        AnimatedBottomBar btn= v2.findViewById(R.id.bottom_bar);
-                        btn.setBackgroundColor(Color.RED);
-                    }
-                }
-            });
-        }
 
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         loading_anim=v.findViewById(R.id.loading_anim);
@@ -189,7 +163,7 @@ public class HomeFragment extends Fragment {
         //use firebase recycyler adapter
         db_rec = FirebaseFirestore.getInstance();
         //Query query = db_rec.collection("images").whereEqualTo("title","LATEST TREND"); //filter based on gender
-        Query query = db_rec.collection("images");
+        Query query = db_rec.collection("items");
         FirestoreRecyclerOptions<Clothes> response = new FirestoreRecyclerOptions.Builder<Clothes>()
                 .setQuery(query,Clothes.class)
                 .build();
@@ -198,19 +172,24 @@ public class HomeFragment extends Fragment {
            @Override
            protected void onBindViewHolder(@NonNull rowHolder holder, final int position, @NonNull Clothes model) {
 
-               if(position % 2 != 0 ){ //odd poistion - left
+               if(position % 2 != 0 ){ //odd position - left
                    holder.img.setMaxHeight(300);
 
+                   //set card size
                    holder.card.setLayoutParams(new CardView.LayoutParams(500,900));
                    ConstraintLayout.LayoutParams layoutParams= new ConstraintLayout.LayoutParams(500,720);
                    holder.img.setLayoutParams(layoutParams);
 
-                   //holder.img.setLayoutParams(new ImageView.LayoutParams());
+                   //set card margin
+                   ViewGroup.MarginLayoutParams cardMargin = (ViewGroup.MarginLayoutParams)holder.card.getLayoutParams();
+                   cardMargin.setMargins(15,0,0,40);
+                   holder.card.requestLayout();
 
                }
 
-              // holder.textName.setText(model.getName());
-               Glide.with(getContext()).load(model.getUrl()).into(holder.img);
+               holder.title.setText(model.getTitle());
+               holder.price.setText(String.format("RM%.2f",model.getPrice()));
+               Glide.with(getContext()).load(model.getCoverURL()).into(holder.img);
 
                holder.itemView.setOnClickListener(new View.OnClickListener() {
                    @Override
@@ -224,7 +203,7 @@ public class HomeFragment extends Fragment {
            @NonNull
            @Override
            public rowHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-               View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_item,parent,false);
+               View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.rec_item,parent,false);
 
                return new rowHolder(view);
            }
@@ -249,11 +228,14 @@ public class HomeFragment extends Fragment {
         ImageView img ;
         CardView card;
         ConstraintLayout constraintLayout;
+        TextView title,price;
 
         public rowHolder(@NonNull View itemView) {
             super(itemView);
             img=itemView.findViewById(R.id.row_img);
             card= itemView.findViewById(R.id.rec_card);
+            title=itemView.findViewById(R.id.clothes_title);
+            price=itemView.findViewById(R.id.clothes_price);
             constraintLayout= itemView.findViewById(R.id.rec_constraint);
         }
     }

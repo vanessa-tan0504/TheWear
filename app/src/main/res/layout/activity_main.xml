@@ -8,6 +8,13 @@
     android:background="@color/black_overlay"
     tools:context="com.thewear.thewearapp.MainActivity">
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:tint="#98000000"
+        app:srcCompat="@drawable/main" />
+
     <Button
         android:id="@+id/btn_register"
         android:layout_width="295dp"

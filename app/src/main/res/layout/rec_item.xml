@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rec_card"
     android:layout_width="200dp"
     android:layout_height="300dp"
-    app:cardCornerRadius="20dp"
-    app:cardPreventCornerOverlap="false"
-    app:cardUseCompatPadding="false"
     android:layout_marginLeft="15dp"
     android:layout_marginBottom="15dp"
     android:padding="2dp"
-    android:id="@+id/rec_card">
-<!--    padding for space between the image/ card view-->
+    app:cardCornerRadius="20dp"
+    app:cardPreventCornerOverlap="false"
+    app:cardUseCompatPadding="false">
+    <!--    padding for space between the image/ card view-->
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/rec_constraint"
@@ -33,25 +32,28 @@
             android:id="@+id/clothes_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="28dp"
-            android:layout_marginLeft="28dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/montserrat"
             android:text="Fit and Flare"
+            android:textSize="14sp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/row_img"
-            app:layout_constraintVertical_bias="0.0"
-            android:fontFamily="@font/montserrat"/>
+            app:layout_constraintVertical_bias="0.0" />
 
         <TextView
             android:id="@+id/clothes_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="28dp"
-            android:layout_marginLeft="28dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:fontFamily="@font/montserrat"
             android:text="RM34.99"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/clothes_title"
-            android:fontFamily="@font/montserrat"/>
+            app:layout_constraintTop_toBottomOf="@+id/clothes_title" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>
