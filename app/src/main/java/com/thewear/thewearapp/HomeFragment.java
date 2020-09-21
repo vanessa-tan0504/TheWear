@@ -11,6 +11,7 @@ import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,7 +32,12 @@ import com.bumptech.glide.request.target.Target;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
@@ -40,35 +46,47 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.synnapps.carouselview.CarouselView;
 import com.synnapps.carouselview.ViewListener;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.security.auth.callback.Callback;
+
 import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
+import static com.google.firebase.auth.FirebaseAuth.getInstance;
+
 public class HomeFragment extends Fragment {
-    View v,v2;
+    View v, v2;
     androidx.appcompat.widget.SearchView searchView;
     CarouselView carouselView;
-    String [] urlstring= new String [3];
-    String[] descstring = new String [3];
+    String[] urlstring = new String[3];
+    String[] descstring = new String[3];
     String[] titlestring = new String[3];
     LottieAnimationView loading_anim;
     RecyclerView recyclerView;
     FirestoreRecyclerAdapter adapter_rec;
     StaggeredGridLayoutManager manager;
-    FirebaseFirestore db_carousel,db_rec;
-    //ScrollView scrollView;
-
+    FirebaseFirestore db_carousel, db_rec, db_user;
+    DocumentReference docRef;
+    TextView tvgender;
+    FirebaseUser user;
+    private ArrayList<Clothes> clothesList;
+    private CartRVAdapter cartRVAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        v=inflater.inflate(R.layout.fragment_home, container, false);
+        v = inflater.inflate(R.layout.fragment_home, container, false);
 
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-        loading_anim=v.findViewById(R.id.loading_anim);
+
+        loading_anim = v.findViewById(R.id.loading_anim);
         loading_anim.setAnimation(R.raw.circle_loading);
         loading_anim.setSpeed(2);
         loading_anim.playAnimation();
-
+        tvgender = v.findViewById(R.id.tmpgender);
+        //cartRVAdapter = new CartRVAdapter(getActivity(),clothesList);
 
         //search bar start---------------------------------------------------------------------------------------------
         searchView = v.findViewById(R.id.search_view);
@@ -78,7 +96,7 @@ public class HomeFragment extends Fragment {
         }
 
         //search bar input text settings
-        EditText txtSearch = ((EditText)searchView.findViewById(androidx.appcompat.R.id.search_src_text));
+        EditText txtSearch = ((EditText) searchView.findViewById(androidx.appcompat.R.id.search_src_text));
         txtSearch.setHintTextColor(Color.WHITE);
         txtSearch.setHint("Search for");
         txtSearch.setTextColor(Color.WHITE);
@@ -100,7 +118,7 @@ public class HomeFragment extends Fragment {
         //end of search bar methods----------------------------------------------------------------------------
 
         //slide show slider, image and desc load from cloud firestore-----------------------------------------------
-        carouselView=v.findViewById(R.id.carousel);
+        carouselView = v.findViewById(R.id.carousel);
 
         db_carousel = FirebaseFirestore.getInstance();
         db_carousel.collection("images")
@@ -108,24 +126,24 @@ public class HomeFragment extends Fragment {
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if(task.isSuccessful()){
-                            int i=0;
-                            for(QueryDocumentSnapshot document : task.getResult()){
+                        if (task.isSuccessful()) {
+                            int i = 0;
+                            for (QueryDocumentSnapshot document : task.getResult()) {
                                 String url = document.getString("url");
                                 String desc = document.getString("desc");
                                 String title = document.getString("title");
-                                urlstring[i]=url;
-                                descstring[i]=desc;
-                                titlestring[i]=title;
+                                urlstring[i] = url;
+                                descstring[i] = desc;
+                                titlestring[i] = title;
                                 i++;
                             }
                             carouselView.setViewListener(new ViewListener() {
                                 @Override
                                 public View setViewForPosition(int position) {
-                                   View view = getLayoutInflater().inflate(R.layout.carousel_layout,null);
-                                   TextView desc = view.findViewById(R.id.carousel_desc);
-                                   TextView title = view.findViewById(R.id.carousel_title);
-                                   ImageView img = view.findViewById(R.id.carousel_image);
+                                    View view = getLayoutInflater().inflate(R.layout.carousel_layout, null);
+                                    TextView desc = view.findViewById(R.id.carousel_desc);
+                                    TextView title = view.findViewById(R.id.carousel_title);
+                                    ImageView img = view.findViewById(R.id.carousel_image);
                                     desc.setText(descstring[position]); //load description from firestore
                                     title.setText(titlestring[position]);
 
@@ -156,101 +174,177 @@ public class HomeFragment extends Fragment {
         //staggered recycler view (recommandation)-----------------------------------------------
 
         //init rv as staggered
-        recyclerView= v.findViewById(R.id.rec_rv);
-        manager= new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(manager);
+        recyclerView = v.findViewById(R.id.rec_rv);
+        //recyclerView.setAdapter(cartRVAdapter);
+        //manager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        //recyclerView.setLayoutManager(manager);
 
-        //use firebase recycyler adapter
-        db_rec = FirebaseFirestore.getInstance();
-        //Query query = db_rec.collection("images").whereEqualTo("title","LATEST TREND"); //filter based on gender
-        Query query = db_rec.collection("items");
-        FirestoreRecyclerOptions<Clothes> response = new FirestoreRecyclerOptions.Builder<Clothes>()
-                .setQuery(query,Clothes.class)
-                .build();
+        clothesList = new ArrayList<>();
+        cartRVAdapter = new CartRVAdapter(getActivity(),clothesList);
+        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+        recyclerView.setAdapter(cartRVAdapter);
 
-       adapter_rec= new FirestoreRecyclerAdapter<Clothes, rowHolder>(response) {
-           @Override
-           protected void onBindViewHolder(@NonNull rowHolder holder, final int position, @NonNull Clothes model) {
+        db_rec=FirebaseFirestore.getInstance();
+        user= FirebaseAuth.getInstance().getCurrentUser();
+        String userID= user.getUid();
+        String tempgen;
 
-               if(position % 2 != 0 ){ //odd position - left
-                   holder.img.setMaxHeight(300);
+        db_rec.collection("items").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
 
-                   //set card size
-                   holder.card.setLayoutParams(new CardView.LayoutParams(500,900));
-                   ConstraintLayout.LayoutParams layoutParams= new ConstraintLayout.LayoutParams(500,720);
-                   holder.img.setLayoutParams(layoutParams);
-
-                   //set card margin
-                   ViewGroup.MarginLayoutParams cardMargin = (ViewGroup.MarginLayoutParams)holder.card.getLayoutParams();
-                   cardMargin.setMargins(15,0,0,40);
-                   holder.card.requestLayout();
-
-               }
-
-               holder.title.setText(model.getTitle());
-               holder.price.setText(String.format("RM%.2f",model.getPrice()));
-               Glide.with(getContext()).load(model.getCoverURL()).into(holder.img);
-
-               holder.itemView.setOnClickListener(new View.OnClickListener() {
-                   @Override
-                   public void onClick(View v) {
-                       Toast.makeText(getContext(), "clicked"+position, Toast.LENGTH_SHORT).show();
-                   }
-               });
-
-           }
-
-           @NonNull
-           @Override
-           public rowHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-               View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.rec_item,parent,false);
-
-               return new rowHolder(view);
-           }
-
-           @Override
-           public void onError(@NonNull FirebaseFirestoreException e) {
-               Toast.makeText(getContext(), "error: "+e.getMessage(), Toast.LENGTH_SHORT).show();
-           }
-       };
-
-       adapter_rec.notifyDataSetChanged();
-       recyclerView.setAdapter(adapter_rec);
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                if (!queryDocumentSnapshots.isEmpty()) {
+                    List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
+                    for (DocumentSnapshot d : list) {
+                        Clothes c = d.toObject(Clothes.class);
+                        clothesList.add(c);
+                    }
+                }
+                cartRVAdapter.notifyDataSetChanged();
+            }
+        });
 
 
+
+
+
+
+
+
+
+
+//        readData(new FirestoreCallback() {
+//            @Override
+//            public void onCallback(String tempgender) {
+//
+//            }
+//        });
+
+
+//
+//        //use firebase recycyler adapter
+//        db_rec = FirebaseFirestore.getInstance();
+//        //Query query = db_rec.collection("images").whereEqualTo("title","LATEST TREND"); //filter based on gender
+//        Query query = db_rec.collection("items");
+//        FirestoreRecyclerOptions<Clothes> response = new FirestoreRecyclerOptions.Builder<Clothes>()
+//                .setQuery(query, Clothes.class)
+//                .build();
+//
+//        adapter_rec = new FirestoreRecyclerAdapter<Clothes, clothesHolder>(response) {
+//            @Override
+//            protected void onBindViewHolder(@NonNull clothesHolder holder, final int position, @NonNull Clothes model) {
+//
+//                if (position % 2 != 0) { //odd position - left
+//                    holder.img.setMaxHeight(300);
+//
+//                    //set card size
+//                    holder.card.setLayoutParams(new CardView.LayoutParams(500, 910));
+//                    ConstraintLayout.LayoutParams layoutParams = new ConstraintLayout.LayoutParams(500, 720);
+//                    holder.img.setLayoutParams(layoutParams);
+//
+//                    //set card margin
+//                    ViewGroup.MarginLayoutParams cardMargin = (ViewGroup.MarginLayoutParams) holder.card.getLayoutParams();
+//                    cardMargin.setMargins(15, 0, 0, 40);
+//                    holder.card.requestLayout();
+//
+//                }
+//
+//                holder.title.setText(model.getTitle());
+//                holder.price.setText(String.format("RM%.2f", model.getPrice()));
+//                Glide.with(getContext()).load(model.getCoverURL()).into(holder.img);
+//
+//                holder.itemView.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        Toast.makeText(getContext(), "clicked" + position, Toast.LENGTH_SHORT).show();
+//                    }
+//                });
+//
+//            }
+//
+//            @NonNull
+//            @Override
+//            public clothesHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+//                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.rec_item, parent, false);
+//
+//                return new clothesHolder(view);
+//            }
+//
+//            @Override
+//            public void onError(@NonNull FirebaseFirestoreException e) {
+//                Toast.makeText(getContext(), "error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+//            }
+//        };
+//
+//        adapter_rec.notifyDataSetChanged();
+//        recyclerView.setAdapter(adapter_rec);
 
         //staggered recycler view (recommandation) end-----------------------------------------------
+
 
         return v;
     }
 
-    public class rowHolder extends  RecyclerView.ViewHolder{
-        ImageView img ;
-        CardView card;
-        ConstraintLayout constraintLayout;
-        TextView title,price;
-
-        public rowHolder(@NonNull View itemView) {
-            super(itemView);
-            img=itemView.findViewById(R.id.row_img);
-            card= itemView.findViewById(R.id.rec_card);
-            title=itemView.findViewById(R.id.clothes_title);
-            price=itemView.findViewById(R.id.clothes_price);
-            constraintLayout= itemView.findViewById(R.id.rec_constraint);
-        }
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        adapter_rec.startListening();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        adapter_rec.stopListening();
-    }
 
 
-}
+
+
+
+//    private void readData(final FirestoreCallback firestoreCallback){
+//        user = getInstance().getCurrentUser();
+//        db_user = FirebaseFirestore.getInstance();
+//        db_user.collection("users").document(user.getUid() + "")
+//                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                if (task.isSuccessful()) {
+//                    userrr = new User();
+//                    DocumentSnapshot document = task.getResult();
+//                    String gen = document.getString("expectedGender");
+//                    userrr.setExpGender(gen);
+//                    firestoreCallback.onCallback(userrr.getExpectedGender());
+//
+//                }
+//            }
+//        });
+//    }
+//
+//    private interface FirestoreCallback {
+//        void onCallback(String tempgender);
+//    }
+
+    //for recyclerview------------------------------
+//    public class clothesHolder extends  RecyclerView.ViewHolder{
+//        ImageView img ;
+//        CardView card;
+//        ConstraintLayout constraintLayout;
+//        TextView title,price;
+//
+//        public clothesHolder(@NonNull View itemView) {
+//            super(itemView);
+//            img=itemView.findViewById(R.id.row_img);
+//            card= itemView.findViewById(R.id.rec_card);
+//            title=itemView.findViewById(R.id.clothes_title);
+//            price=itemView.findViewById(R.id.clothes_price);
+//            constraintLayout= itemView.findViewById(R.id.rec_constraint);
+//        }
+//    }
+//
+//    @Override
+//    public void onStart() {
+//        super.onStart();
+//        adapter_rec.startListening();
+//    }
+//
+//    @Override
+//    public void onStop() {
+//        super.onStop();
+//        adapter_rec.stopListening();
+//    }
+
+//for recyclerview------------------------------
+
+
+
+ }
+

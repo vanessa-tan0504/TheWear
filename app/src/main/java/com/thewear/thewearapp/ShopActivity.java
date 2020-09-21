@@ -75,6 +75,7 @@ public class ShopActivity extends AppCompatActivity {
     ViewPager viewPager;
 
 
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -226,6 +227,9 @@ public class ShopActivity extends AppCompatActivity {
 
                                                                 if (counter_m > counter_f) {
                                                                     Log.e(TAG, "is a male:" + counter_m + " female only have" + counter_f);
+                                                                    //tmpgender="male";
+
+
 
                                                                     db.collection("users").document(user.getUid() + "")
                                                                             .update("expectedGender", "male")
@@ -243,6 +247,7 @@ public class ShopActivity extends AppCompatActivity {
 
                                                                 } else if (counter_m < counter_f) {
                                                                     Log.e(TAG, "is a female:" + counter_f + " male only have" + counter_m);
+
                                                                     db.collection("users").document(user.getUid() + "")
                                                                             .update("expectedGender", "female")
                                                                             .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -340,9 +345,6 @@ public class ShopActivity extends AppCompatActivity {
         FadeOutTransformation fadeOutTransformation = new FadeOutTransformation();
         viewPager.setPageTransformer(true, fadeOutTransformation);
 
-
-
-
         }
 
     //hide status bar and below softkey
@@ -360,4 +362,5 @@ public class ShopActivity extends AppCompatActivity {
         }
 
     }
+
 }

@@ -5,7 +5,7 @@ public class Clothes {
     private String title;
     private double price;
 
-    public Clothes(){}
+    public Clothes(){} //empty constructor do not delete
 
     public Clothes(String coverURL, String title, double price){
         this.coverURL=coverURL;

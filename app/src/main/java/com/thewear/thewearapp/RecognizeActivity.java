@@ -341,7 +341,7 @@ public class RecognizeActivity extends AppCompatActivity implements CameraBridge
         TextView dialog_text = dialog.findViewById(R.id.dialog_text);
         LottieAnimationView dialog_anim = dialog.findViewById(R.id.dialog_anim);
 
-        dialog_text.setText("Profile Verified \n Welcome Back *name*"); //for regconize
+        dialog_text.setText("Profile Verified. Welcome Back"); //for regconize
         dialog_anim.setAnimation(R.raw.selfie_cam); //for regconize
         dialog_anim.setSpeed(2f);
         dialog_anim.playAnimation();
