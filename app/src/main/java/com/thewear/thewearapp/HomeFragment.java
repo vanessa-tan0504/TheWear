@@ -7,11 +7,8 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.cardview.widget.CardView;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,18 +26,13 @@ import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
-import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.synnapps.carouselview.CarouselView;
@@ -48,8 +40,6 @@ import com.synnapps.carouselview.ViewListener;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.security.auth.callback.Callback;
 
 import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.RecyclerView;
@@ -66,14 +56,10 @@ public class HomeFragment extends Fragment {
     String[] titlestring = new String[3];
     LottieAnimationView loading_anim;
     RecyclerView recyclerView;
-    FirestoreRecyclerAdapter adapter_rec;
-    StaggeredGridLayoutManager manager;
     FirebaseFirestore db_carousel, db_rec, db_user;
-    DocumentReference docRef;
-    TextView tvgender;
     FirebaseUser user;
     private ArrayList<Clothes> clothesList;
-    private CartRVAdapter cartRVAdapter;
+    private RecRVAdapter recRVAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -85,8 +71,7 @@ public class HomeFragment extends Fragment {
         loading_anim.setAnimation(R.raw.circle_loading);
         loading_anim.setSpeed(2);
         loading_anim.playAnimation();
-        tvgender = v.findViewById(R.id.tmpgender);
-        //cartRVAdapter = new CartRVAdapter(getActivity(),clothesList);
+
 
         //search bar start---------------------------------------------------------------------------------------------
         searchView = v.findViewById(R.id.search_view);
@@ -173,178 +158,66 @@ public class HomeFragment extends Fragment {
 
         //staggered recycler view (recommandation)-----------------------------------------------
 
-        //init rv as staggered
+        //init rv and class list
         recyclerView = v.findViewById(R.id.rec_rv);
-        //recyclerView.setAdapter(cartRVAdapter);
-        //manager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
-        //recyclerView.setLayoutManager(manager);
-
         clothesList = new ArrayList<>();
-        cartRVAdapter = new CartRVAdapter(getActivity(),clothesList);
+        recRVAdapter = new RecRVAdapter(getActivity(),clothesList);
+        //init rv as staggered
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
-        recyclerView.setAdapter(cartRVAdapter);
+        recyclerView.setAdapter(recRVAdapter);
 
         db_rec=FirebaseFirestore.getInstance();
         user= FirebaseAuth.getInstance().getCurrentUser();
-        String userID= user.getUid();
-        String tempgen;
 
-        db_rec.collection("items").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-
+        //async callback from readData - with user's gender info, show rec based on user's gender
+        readData(new FirestoreCallback() {
             @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                if (!queryDocumentSnapshots.isEmpty()) {
-                    List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
-                    for (DocumentSnapshot d : list) {
-                        Clothes c = d.toObject(Clothes.class);
-                        clothesList.add(c);
+            public void onCallback(String tempgender) {
+
+                db_rec.collection("items").whereArrayContains("tag",tempgender+"").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        if (!queryDocumentSnapshots.isEmpty()) {
+                            List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
+                            for (DocumentSnapshot d : list) {
+                                Clothes c = d.toObject(Clothes.class);
+                                clothesList.add(c);
+                            }
+                        }
+                        recRVAdapter.notifyDataSetChanged();
                     }
-                }
-                cartRVAdapter.notifyDataSetChanged();
+                });
+
             }
         });
-
-
-
-
-
-
-
-
-
-
-//        readData(new FirestoreCallback() {
-//            @Override
-//            public void onCallback(String tempgender) {
-//
-//            }
-//        });
-
-
-//
-//        //use firebase recycyler adapter
-//        db_rec = FirebaseFirestore.getInstance();
-//        //Query query = db_rec.collection("images").whereEqualTo("title","LATEST TREND"); //filter based on gender
-//        Query query = db_rec.collection("items");
-//        FirestoreRecyclerOptions<Clothes> response = new FirestoreRecyclerOptions.Builder<Clothes>()
-//                .setQuery(query, Clothes.class)
-//                .build();
-//
-//        adapter_rec = new FirestoreRecyclerAdapter<Clothes, clothesHolder>(response) {
-//            @Override
-//            protected void onBindViewHolder(@NonNull clothesHolder holder, final int position, @NonNull Clothes model) {
-//
-//                if (position % 2 != 0) { //odd position - left
-//                    holder.img.setMaxHeight(300);
-//
-//                    //set card size
-//                    holder.card.setLayoutParams(new CardView.LayoutParams(500, 910));
-//                    ConstraintLayout.LayoutParams layoutParams = new ConstraintLayout.LayoutParams(500, 720);
-//                    holder.img.setLayoutParams(layoutParams);
-//
-//                    //set card margin
-//                    ViewGroup.MarginLayoutParams cardMargin = (ViewGroup.MarginLayoutParams) holder.card.getLayoutParams();
-//                    cardMargin.setMargins(15, 0, 0, 40);
-//                    holder.card.requestLayout();
-//
-//                }
-//
-//                holder.title.setText(model.getTitle());
-//                holder.price.setText(String.format("RM%.2f", model.getPrice()));
-//                Glide.with(getContext()).load(model.getCoverURL()).into(holder.img);
-//
-//                holder.itemView.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        Toast.makeText(getContext(), "clicked" + position, Toast.LENGTH_SHORT).show();
-//                    }
-//                });
-//
-//            }
-//
-//            @NonNull
-//            @Override
-//            public clothesHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-//                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.rec_item, parent, false);
-//
-//                return new clothesHolder(view);
-//            }
-//
-//            @Override
-//            public void onError(@NonNull FirebaseFirestoreException e) {
-//                Toast.makeText(getContext(), "error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-//            }
-//        };
-//
-//        adapter_rec.notifyDataSetChanged();
-//        recyclerView.setAdapter(adapter_rec);
-
         //staggered recycler view (recommandation) end-----------------------------------------------
-
-
         return v;
     }
 
+    // async with user's gender-----------------------------------------------------------
+    private void readData(final FirestoreCallback firestoreCallback){
+        user = getInstance().getCurrentUser();
+        db_user = FirebaseFirestore.getInstance();
+        db_user.collection("users").document(user.getUid() + "")
+                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    String gen = document.getString("expectedGender");
+                    firestoreCallback.onCallback(gen);
 
+                }
+            }
+        });
+    }
 
+    private interface FirestoreCallback {
+        void onCallback(String tempgender);
+    }
 
-
-
-//    private void readData(final FirestoreCallback firestoreCallback){
-//        user = getInstance().getCurrentUser();
-//        db_user = FirebaseFirestore.getInstance();
-//        db_user.collection("users").document(user.getUid() + "")
-//                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                if (task.isSuccessful()) {
-//                    userrr = new User();
-//                    DocumentSnapshot document = task.getResult();
-//                    String gen = document.getString("expectedGender");
-//                    userrr.setExpGender(gen);
-//                    firestoreCallback.onCallback(userrr.getExpectedGender());
-//
-//                }
-//            }
-//        });
-//    }
-//
-//    private interface FirestoreCallback {
-//        void onCallback(String tempgender);
-//    }
-
-    //for recyclerview------------------------------
-//    public class clothesHolder extends  RecyclerView.ViewHolder{
-//        ImageView img ;
-//        CardView card;
-//        ConstraintLayout constraintLayout;
-//        TextView title,price;
-//
-//        public clothesHolder(@NonNull View itemView) {
-//            super(itemView);
-//            img=itemView.findViewById(R.id.row_img);
-//            card= itemView.findViewById(R.id.rec_card);
-//            title=itemView.findViewById(R.id.clothes_title);
-//            price=itemView.findViewById(R.id.clothes_price);
-//            constraintLayout= itemView.findViewById(R.id.rec_constraint);
-//        }
-//    }
-//
-//    @Override
-//    public void onStart() {
-//        super.onStart();
-//        adapter_rec.startListening();
-//    }
-//
-//    @Override
-//    public void onStop() {
-//        super.onStop();
-//        adapter_rec.stopListening();
-//    }
-
-//for recyclerview------------------------------
-
-
+//async with user's gender- ------------------------------
 
  }
 

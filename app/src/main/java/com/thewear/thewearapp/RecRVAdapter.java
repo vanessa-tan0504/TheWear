@@ -1,5 +1,6 @@
 package com.thewear.thewearapp;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -18,15 +21,15 @@ import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class CartRVAdapter extends RecyclerView.Adapter<CartRVAdapter.ViewHolder>{
+public class RecRVAdapter extends RecyclerView.Adapter<RecRVAdapter.ViewHolder>{
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     ArrayList<Clothes> clothesList = new ArrayList<Clothes>();
     Context context;
 
 
-    public CartRVAdapter(Context context,
-                         ArrayList<Clothes> clothesList) {
+    public RecRVAdapter(Context context,
+                        ArrayList<Clothes> clothesList) {
         this.clothesList = clothesList;
         this.context = context;
 
@@ -38,11 +41,12 @@ public class CartRVAdapter extends RecyclerView.Adapter<CartRVAdapter.ViewHolder
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.rec_item, parent, false);
 
-        CartRVAdapter.ViewHolder vh = new CartRVAdapter.ViewHolder(v);
+        RecRVAdapter.ViewHolder vh = new RecRVAdapter.ViewHolder(v);
 
         return vh;
     }
 
+    @SuppressLint("ResourceType")
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
         final Clothes clothes = clothesList.get(position);
@@ -62,9 +66,10 @@ public class CartRVAdapter extends RecyclerView.Adapter<CartRVAdapter.ViewHolder
         }
 
         holder.title.setText(clothes.getTitle());
-                holder.price.setText(String.format("RM%.2f", clothes.getPrice()));
+        holder.price.setText(String.format("RM%.2f", clothes.getPrice()));
 
-                Glide.with(context).load(clothes.getCoverURL()).into(holder.img);
+                Glide.with(context).load(clothes.getCoverURL())
+                        .transition(DrawableTransitionOptions.withCrossFade()).into(holder.img);
 
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
