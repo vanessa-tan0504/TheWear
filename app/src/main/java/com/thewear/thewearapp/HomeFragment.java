@@ -54,7 +54,7 @@ public class HomeFragment extends Fragment {
     String[] urlstring = new String[3];
     String[] descstring = new String[3];
     String[] titlestring = new String[3];
-    LottieAnimationView loading_anim;
+    LottieAnimationView loading_anim,loading_anim2;
     RecyclerView recyclerView;
     FirebaseFirestore db_carousel, db_rec, db_user;
     FirebaseUser user;
@@ -71,6 +71,11 @@ public class HomeFragment extends Fragment {
         loading_anim.setAnimation(R.raw.circle_loading);
         loading_anim.setSpeed(2);
         loading_anim.playAnimation();
+
+        loading_anim2 = v.findViewById(R.id.loading_anim2);
+        loading_anim2.setAnimation(R.raw.circle_loading);
+        loading_anim2.setSpeed(2);
+        loading_anim2.playAnimation();
 
 
         //search bar start---------------------------------------------------------------------------------------------
@@ -186,6 +191,7 @@ public class HomeFragment extends Fragment {
                             }
                         }
                         recRVAdapter.notifyDataSetChanged();
+                        loading_anim2.setVisibility(View.GONE);
                     }
                 });
 
