@@ -69,12 +69,12 @@ public class HomeFragment extends Fragment {
 
         loading_anim = v.findViewById(R.id.loading_anim);
         loading_anim.setAnimation(R.raw.circle_loading);
-        loading_anim.setSpeed(2);
+        loading_anim.setSpeed(1);
         loading_anim.playAnimation();
 
         loading_anim2 = v.findViewById(R.id.loading_anim2);
         loading_anim2.setAnimation(R.raw.circle_loading);
-        loading_anim2.setSpeed(2);
+        loading_anim2.setSpeed(1);
         loading_anim2.playAnimation();
 
 

@@ -2,6 +2,7 @@ package com.thewear.thewearapp;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,17 +53,19 @@ public class RecRVAdapter extends RecyclerView.Adapter<RecRVAdapter.ViewHolder>{
         final Clothes clothes = clothesList.get(position);
 
         if (position % 2 != 0) { //odd position - left
-                    holder.img.setMaxHeight(300);
-
-                    //set card size
-                    holder.card.setLayoutParams(new CardView.LayoutParams(500, 910));
-                    ConstraintLayout.LayoutParams layoutParams = new ConstraintLayout.LayoutParams(500, 720);
-                    holder.img.setLayoutParams(layoutParams);
-
-                    //set card margin
-                    ViewGroup.MarginLayoutParams cardMargin = (ViewGroup.MarginLayoutParams) holder.card.getLayoutParams();
-                    cardMargin.setMargins(15, 0, 0, 40);
-                    holder.card.requestLayout();
+            if(position==1){
+                //set card margin
+                holder.card.setLayoutParams(new CardView.LayoutParams(500, 900));
+                ViewGroup.MarginLayoutParams cardMargin = (ViewGroup.MarginLayoutParams) holder.card.getLayoutParams();
+                cardMargin.setMargins(15, 120, 0, 40);
+                holder.card.requestLayout();
+            }
+            else{
+                holder.card.setLayoutParams(new CardView.LayoutParams(500, 800));
+                ViewGroup.MarginLayoutParams cardMargin = (ViewGroup.MarginLayoutParams) holder.card.getLayoutParams();
+                cardMargin.setMargins(15, 0, 0, 40);
+                holder.card.requestLayout();
+            }
         }
 
         holder.title.setText(clothes.getTitle());
@@ -74,10 +77,11 @@ public class RecRVAdapter extends RecyclerView.Adapter<RecRVAdapter.ViewHolder>{
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(context, "clicked" + position, Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(v.getContext(),IdvItemActivity.class);
+                        intent.putExtra("ItemID",clothes.getId()+"");
+                        v.getContext().startActivity(intent);
                     }
                 });
-
     }
 
     @Override

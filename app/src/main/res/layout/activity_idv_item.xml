@@ -1,16 +1,197 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".IdvItemActivity">
 
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/viewpager"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="wrap_content">
 
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="500dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
+        <com.tbuonomo.viewpagerdotsindicator.DotsIndicator
+            android:id="@+id/dots_indicator"
+            android:layout_width="118dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginLeft="32dp"
+            android:layout_marginBottom="16dp"
+            app:dotsColor="#FFF"
+            app:dotsCornerRadius="8dp"
+            app:dotsSize="16dp"
+            app:dotsSpacing="4dp"
+            app:dotsWidthFactor="2.5"
+            app:layout_constraintBottom_toBottomOf="@+id/viewpager"
+            app:layout_constraintStart_toStartOf="parent"
+            app:progressMode="true"
+            app:selectedDotColor="#FFFFFF" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <ImageView
+        android:id="@+id/backbtn"
+        android:layout_width="24dp"
+        android:layout_height="22dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/cross_icon"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/item_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginTop="14dp"
+            android:fontFamily="@font/montserrat"
+            android:text="title"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/viewpager" />
+
+        <TextView
+            android:id="@+id/item_desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginRight="24dp"
+            android:fontFamily="@font/montserrat"
+            android:text="desc"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/item_title" />
+
+        <TextView
+            android:id="@+id/tv_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginTop="24dp"
+            android:text="SIZE"
+            android:fontFamily="@font/montserrat"
+            android:textSize="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/item_desc" />
+
+        <RadioGroup
+            android:id="@+id/radioGroupsize"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_size">
+
+            <com.thewear.thewearapp.CustomRadioBtn
+                android:id="@+id/rad_s"
+                style="@style/customRadio"
+                android:layout_width="78dp"
+                android:layout_height="38dp"
+                android:layout_marginEnd="20dp"
+                android:minWidth="70dp"
+                android:text="S"
+                android:textStyle="bold" />
+
+            <com.thewear.thewearapp.CustomRadioBtn
+                android:id="@+id/rad_m"
+                style="@style/customRadio"
+                android:layout_width="78dp"
+                android:layout_height="38dp"
+                android:layout_marginEnd="20dp"
+                android:minWidth="70dp"
+                android:text="M"
+                android:textStyle="bold" />
+
+            <com.thewear.thewearapp.CustomRadioBtn
+                android:id="@+id/rad_l"
+                style="@style/customRadio"
+                android:layout_width="78dp"
+                android:layout_height="38dp"
+                android:layout_marginEnd="20dp"
+                android:minWidth="70dp"
+                android:text="L"
+                android:textStyle="bold" />
+
+            <com.thewear.thewearapp.CustomRadioBtn
+                android:id="@+id/rad_x"
+                style="@style/customRadio"
+                android:layout_width="78dp"
+                android:layout_height="38dp"
+                android:minWidth="70dp"
+                android:text="XL"
+                android:textStyle="bold" />
+
+        </RadioGroup>
+
+        <TextView
+            android:id="@+id/tv_color"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/montserrat"
+            android:text="COLOR"
+            android:textSize="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/radioGroupsize" />
+
+        <RadioGroup
+            android:id="@+id/radioGroupcol"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_color">
+
+            <com.thewear.thewearapp.CustomRadioBtn
+                android:id="@+id/rad_black"
+                style="@style/customRadio"
+                android:layout_width="108dp"
+                android:layout_height="38dp"
+                android:layout_marginEnd="20dp"
+                android:minWidth="70dp"
+                android:text="BLACK"
+                android:textStyle="bold" />
+
+            <com.thewear.thewearapp.CustomRadioBtn
+                android:id="@+id/rad_blue"
+                style="@style/customRadio"
+                android:layout_width="108dp"
+                android:layout_height="38dp"
+                android:layout_marginEnd="20dp"
+                android:minWidth="70dp"
+                android:text="BLUE"
+                android:textStyle="bold" />
+
+            <com.thewear.thewearapp.CustomRadioBtn
+                android:id="@+id/rad_white"
+                style="@style/customRadio"
+                android:layout_width="108dp"
+                android:layout_height="38dp"
+                android:minWidth="70dp"
+                android:text="WHITE"
+                android:textStyle="bold" />
+        </RadioGroup>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>
