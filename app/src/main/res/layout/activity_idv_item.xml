@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".IdvItemActivity">
+    tools:context=".IdvItemActivity"
+    android:id="@+id/idvact">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -191,6 +192,78 @@
                 android:text="WHITE"
                 android:textStyle="bold" />
         </RadioGroup>
+
+        <TextView
+            android:id="@+id/tv_qty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/montserrat"
+            android:text="QUANTITY"
+            android:textSize="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/radioGroupcol" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_qty"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/qyt_add"
+                android:layout_width="108dp"
+                android:layout_height="38dp"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/rounded_btn_whitestroke"
+                android:fontFamily="@font/montserrat"
+                android:text="+"
+                android:textSize="25dp" />
+
+            <TextView
+                android:id="@+id/qyt_text"
+                android:layout_width="108dp"
+                android:layout_height="38dp"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/rounded_btn_black"
+                android:fontFamily="@font/montserrat"
+                android:gravity="center"
+                android:text="1"
+                android:textColor="@color/colorAccent" />
+
+            <Button
+                android:id="@+id/qyt_minus"
+                android:layout_width="108dp"
+                android:layout_height="38dp"
+                android:background="@drawable/rounded_btn_whitestroke"
+                android:fontFamily="@font/montserrat"
+                android:text="-"
+                android:textSize="25dp" />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/add_cart"
+            android:layout_width="270dp"
+            android:layout_height="45dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="32dp"
+            android:background="@drawable/rounded_btn_black"
+            android:fontFamily="@font/montserrat"
+            android:text="ADD TO CART"
+            android:textColor="@color/colorAccent"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
