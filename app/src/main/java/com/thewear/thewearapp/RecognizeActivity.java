@@ -32,6 +32,7 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.facebook.stetho.Stetho;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -222,11 +223,15 @@ public class RecognizeActivity extends AppCompatActivity implements CameraBridge
             public void onClick(View view) {
                 if (gray.total() == 0)
                     Toast.makeText(getApplicationContext(), "Can't Detect Faces", LENGTH_SHORT).show();
+                //Snackbar.make(scrollView, "failed to cart", Snackbar.LENGTH_LONG).show();
+
                 classifier.detectMultiScale(gray, faces, 1.1, 3, 0 | CASCADE_SCALE_IMAGE, new Size(30, 30)); //get face to chg to gray scale image
 
                 if (!faces.empty()) {
                     if (faces.toArray().length > 1)
                         Toast.makeText(getApplicationContext(), "Multiple Faces Are not allowed", LENGTH_SHORT).show();
+                    //Snackbar.make(scrollView, "failed to cart", Snackbar.LENGTH_LONG).show();
+
                     else {
                         if (gray.total() == 0) {
                             Log.i(TAG, "Empty gray image");
@@ -236,6 +241,8 @@ public class RecognizeActivity extends AppCompatActivity implements CameraBridge
                     }
                 } else
                     Toast.makeText(getApplicationContext(), "Unknown Face", LENGTH_SHORT).show();
+                //Snackbar.make(scrollView, "failed to cart", Snackbar.LENGTH_LONG).show();
+
             }
         });
     }

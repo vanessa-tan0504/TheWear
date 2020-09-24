@@ -11,4 +11,10 @@
         android:layout_height="match_parent"
         android:text="cart" />
 
+    <Button
+        android:id="@+id/signout"
+        android:layout_width="164dp"
+        android:layout_height="105dp"
+        android:text="signout" />
+
 </FrameLayout>

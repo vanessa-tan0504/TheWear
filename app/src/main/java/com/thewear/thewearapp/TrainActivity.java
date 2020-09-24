@@ -620,7 +620,7 @@ public class TrainActivity extends AppCompatActivity implements CameraBridgeView
             if(trainfaces()) { //go to 9, if true come back here as 10
                 images.clear();
                 imagesLabels.clear();
-                //local.clear(); //will clear all sharedpreference items (to prevent one-time usage, but recognize activity seems crash
+                local.clear();
                 Log.i(TAG,"ArrayList<Mat> images has clear:"+images);
                 Log.i(TAG,"ArrayList<String> imagesLabels has clear:"+images);
             }

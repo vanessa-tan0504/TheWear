@@ -42,6 +42,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import androidx.appcompat.widget.SearchView;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
@@ -179,22 +180,29 @@ public class HomeFragment extends Fragment {
             @Override
             public void onCallback(String tempgender) {
 
-                db_rec.collection("items").whereArrayContains("tag",tempgender+"").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                if(tempgender==null){ //user first time register bug, cannot read fast from firestore, so need to refresh again
+                    //refresh page without animation
+                    FragmentTransaction ft = getFragmentManager().beginTransaction();
+                    ft.detach(HomeFragment.this).attach(HomeFragment.this).commit();
+                    Toast.makeText(getContext(), "please wait"+tempgender, Toast.LENGTH_SHORT).show();
+                }else {
 
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        if (!queryDocumentSnapshots.isEmpty()) {
-                            List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
-                            for (DocumentSnapshot d : list) {
-                                Clothes c = d.toObject(Clothes.class);
-                                clothesList.add(c);
+                    db_rec.collection("items").whereArrayContains("tag", tempgender + "").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+
+                        @Override
+                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                            if (!queryDocumentSnapshots.isEmpty()) {
+                                List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
+                                for (DocumentSnapshot d : list) {
+                                    Clothes c = d.toObject(Clothes.class);
+                                    clothesList.add(c);
+                                }
                             }
+                            recRVAdapter.notifyDataSetChanged();
+                            loading_anim2.setVisibility(View.GONE);
                         }
-                        recRVAdapter.notifyDataSetChanged();
-                        loading_anim2.setVisibility(View.GONE);
-                    }
-                });
-
+                    });
+                }
             }
         });
         //staggered recycler view (recommandation) end-----------------------------------------------
