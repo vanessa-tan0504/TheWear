@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Patterns;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -73,7 +74,41 @@ public class RegisterActivity extends AppCompatActivity {
         bitmapCross = ((BitmapDrawable)cross).getBitmap();
         constraintLayout=findViewById(R.id.register);
 
+
+        //login button
+        btnLogIn.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction()== MotionEvent.ACTION_DOWN){
+                    btnLogIn.setBackgroundResource(R.drawable.rounded_btn_grey);
+                    btnLogIn.setTextColor(Color.parseColor("#FFFFFF"));
+                }
+                if(event.getAction()==MotionEvent.ACTION_UP){
+                    //when button released
+                    btnLogIn.setBackgroundResource(R.drawable.rounded_btn_black);
+                    btnLogIn.setTextColor(Color.parseColor("#FFFFFF"));
+                }
+                return false;
+            }
+        });
+
         //register button
+        btnRegister.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction()== MotionEvent.ACTION_DOWN){
+                    btnRegister.setBackgroundResource(R.drawable.rounded_btn_grey);
+                    btnRegister.setTextColor(Color.parseColor("#FFFFFF"));
+                }
+                if(event.getAction()==MotionEvent.ACTION_UP){
+                    //when button released
+                    btnRegister.setBackgroundResource(R.drawable.rounded_btn_white);
+                    btnRegister.setTextColor(Color.parseColor("#000000"));
+                }
+                return false;
+            }
+        });
+
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

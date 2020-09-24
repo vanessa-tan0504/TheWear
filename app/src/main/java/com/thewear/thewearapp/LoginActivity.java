@@ -15,6 +15,7 @@ import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.Patterns;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -79,6 +80,22 @@ public class LoginActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
 
         //go to sign up interface
+
+        btnSignup.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction()== MotionEvent.ACTION_DOWN){
+                    btnSignup.setBackgroundResource(R.drawable.rounded_btn_grey);
+                    btnSignup.setTextColor(Color.parseColor("#FFFFFF"));
+                }
+                if(event.getAction()==MotionEvent.ACTION_UP){
+                    //when button released
+                    btnSignup.setBackgroundResource(R.drawable.rounded_btn_black);
+                    btnSignup.setTextColor(Color.parseColor("#FFFFFF"));
+                }
+                return false;
+            }
+        });
 //        btnSignup.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -91,6 +108,22 @@ public class LoginActivity extends AppCompatActivity {
 
 
         //log in button settings
+        btnLogin.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction()== MotionEvent.ACTION_DOWN){
+                    btnLogin.setBackgroundResource(R.drawable.rounded_btn_grey);
+                    btnLogin.setTextColor(Color.parseColor("#FFFFFF"));
+                }
+                if(event.getAction()==MotionEvent.ACTION_UP){
+                    //when button released
+                    btnLogin.setBackgroundResource(R.drawable.rounded_btn_white);
+                    btnLogin.setTextColor(Color.parseColor("#000000"));
+                }
+                return false;
+            }
+        });
+
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -189,6 +222,22 @@ public class LoginActivity extends AppCompatActivity {
 
                 final TextInputEditText inputReset= dialog.findViewById(R.id.reset_email);
                 final CircularProgressButton btnReset=dialog.findViewById(R.id.btn_reset);
+
+                btnReset.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        if(event.getAction()== MotionEvent.ACTION_DOWN){
+                            btnReset.setBackgroundResource(R.drawable.rounded_btn_grey);
+                            btnReset.setTextColor(Color.parseColor("#FFFFFF"));
+                        }
+                        if(event.getAction()==MotionEvent.ACTION_UP){
+                            //when button released
+                            btnReset.setBackgroundResource(R.drawable.rounded_btn_black);
+                            btnReset.setTextColor(Color.parseColor("#FFFFFF"));
+                        }
+                        return false;
+                    }
+                });
 
                 btnReset.setOnClickListener(new View.OnClickListener() {
                     @Override

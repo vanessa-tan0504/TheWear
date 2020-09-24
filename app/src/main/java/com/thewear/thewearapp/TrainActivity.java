@@ -26,6 +26,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import android.provider.MediaStore;
 import android.text.InputType;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -404,6 +405,22 @@ public class TrainActivity extends AppCompatActivity implements CameraBridgeView
         openCVCamera.setCvCameraViewListener(this);
         local = new Storage(this);
 
+        prestart.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction()== MotionEvent.ACTION_DOWN){
+                    prestart.setBackgroundResource(R.drawable.rounded_btn_grey);
+                    prestart.setTextColor(Color.parseColor("#FFFFFF"));
+                }
+                if(event.getAction()==MotionEvent.ACTION_UP){
+                    //when button released
+                    prestart.setBackgroundResource(R.drawable.rounded_btn_black);
+                    prestart.setTextColor(Color.parseColor("#FFFFFF"));
+                }
+                return false;
+            }
+        });
+
         prestart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -416,6 +433,22 @@ public class TrainActivity extends AppCompatActivity implements CameraBridgeView
                 prestart_screen.setBackgroundColor(Color.parseColor("#001C1B1B"));
                 detect.setVisibility(View.VISIBLE);
                 detect.setEnabled(true);
+            }
+        });
+
+        detect.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction()== MotionEvent.ACTION_DOWN){
+                    detect.setBackgroundResource(R.drawable.rounded_btn_grey);
+                    detect.setTextColor(Color.parseColor("#FFFFFF"));
+                }
+                if(event.getAction()==MotionEvent.ACTION_UP){
+                    //when button released
+                    detect.setBackgroundResource(R.drawable.rounded_btn_black);
+                    detect.setTextColor(Color.parseColor("#FFFFFF"));
+                }
+                return false;
             }
         });
 

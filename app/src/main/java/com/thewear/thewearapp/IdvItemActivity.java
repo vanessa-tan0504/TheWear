@@ -228,8 +228,8 @@ public class IdvItemActivity extends AppCompatActivity {
                             @Override
                             public boolean onTouch(View v, MotionEvent event) {
                                 if(event.getAction()== MotionEvent.ACTION_DOWN){
-                                    btncart.setBackgroundResource(R.drawable.rounded_btn_whitestroke);
-                                    btncart.setTextColor(Color.parseColor("#000000"));
+                                    btncart.setBackgroundResource(R.drawable.rounded_btn_grey);
+                                    btncart.setTextColor(Color.parseColor("#FFFFFF"));
                                 }
                                 if(event.getAction()==MotionEvent.ACTION_UP){
                                     //when button released
@@ -279,7 +279,7 @@ public class IdvItemActivity extends AppCompatActivity {
                                                         @Override
                                                         public boolean onTouch(View v, MotionEvent event) {
                                                             if(event.getAction()== MotionEvent.ACTION_DOWN){
-                                                                btn_home.setBackgroundResource(R.drawable.rounded_btn_black);
+                                                                btn_home.setBackgroundResource(R.drawable.rounded_btn_grey);
                                                                 btn_home.setTextColor(Color.parseColor("#FFFFFF"));
                                                             }
                                                             if(event.getAction()==MotionEvent.ACTION_UP){
@@ -302,7 +302,7 @@ public class IdvItemActivity extends AppCompatActivity {
                                                         @Override
                                                         public boolean onTouch(View v, MotionEvent event) {
                                                             if(event.getAction()== MotionEvent.ACTION_DOWN){
-                                                                btn_shop.setBackgroundResource(R.drawable.rounded_btn_black);
+                                                                btn_shop.setBackgroundResource(R.drawable.rounded_btn_grey);
                                                                 btn_shop.setTextColor(Color.parseColor("#FFFFFF"));
                                                             }
                                                             if(event.getAction()==MotionEvent.ACTION_UP){

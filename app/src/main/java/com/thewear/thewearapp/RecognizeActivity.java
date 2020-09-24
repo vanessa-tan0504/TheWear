@@ -3,6 +3,7 @@ package com.thewear.thewearapp;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Environment;
@@ -14,6 +15,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.os.Handler;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -199,6 +201,22 @@ public class RecognizeActivity extends AppCompatActivity implements CameraBridge
         local = new Storage(this);
 
         final Button recogniz = (Button) findViewById(R.id.recognize_button);
+        recogniz.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction()== MotionEvent.ACTION_DOWN){
+                    recogniz.setBackgroundResource(R.drawable.rounded_btn_grey);
+                    recogniz.setTextColor(Color.parseColor("#FFFFFF"));
+                }
+                if(event.getAction()==MotionEvent.ACTION_UP){
+                    //when button released
+                    recogniz.setBackgroundResource(R.drawable.rounded_btn_black);
+                    recogniz.setTextColor(Color.parseColor("#FFFFFF"));
+                }
+                return false;
+            }
+        });
+
         recogniz.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
