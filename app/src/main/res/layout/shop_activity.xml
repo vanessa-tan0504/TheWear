@@ -27,7 +27,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.viewpager.widget.ViewPager
-        android:id="@+id/viewpager"
+        android:id="@+id/item_img"
         android:layout_width="match_parent"
         android:layout_height="846dp"
         app:layout_constraintBottom_toBottomOf="parent"

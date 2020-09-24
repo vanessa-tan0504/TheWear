@@ -1,18 +1,18 @@
 package com.thewear.thewearapp;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
-import com.bumptech.glide.request.RequestOptions;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityOptionsCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class RecRVAdapter extends RecyclerView.Adapter<RecRVAdapter.ViewHolder>{
@@ -49,7 +50,7 @@ public class RecRVAdapter extends RecyclerView.Adapter<RecRVAdapter.ViewHolder>{
 
     @SuppressLint("ResourceType")
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
         final Clothes clothes = clothesList.get(position);
 
         if (position % 2 != 0) { //odd position - left
@@ -98,7 +99,7 @@ public class RecRVAdapter extends RecyclerView.Adapter<RecRVAdapter.ViewHolder>{
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            img=itemView.findViewById(R.id.row_img);
+            img=itemView.findViewById(R.id.item_img);
             card= itemView.findViewById(R.id.rec_card);
             title=itemView.findViewById(R.id.clothes_title);
             price=itemView.findViewById(R.id.clothes_price);

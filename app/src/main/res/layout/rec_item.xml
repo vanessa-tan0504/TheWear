@@ -18,13 +18,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/loading"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-
         <ImageView
-            android:id="@+id/row_img"
+            android:id="@+id/item_img"
             android:layout_width="match_parent"
             android:layout_height="230dp"
             android:adjustViewBounds="true"
@@ -46,7 +41,7 @@
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/row_img"
+            app:layout_constraintTop_toBottomOf="@+id/item_img"
             app:layout_constraintVertical_bias="0.0" />
 
         <TextView

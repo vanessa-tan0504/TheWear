@@ -2,36 +2,36 @@ package com.thewear.thewearapp;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.viewpager.widget.ViewPager;
 
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Outline;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
+import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewOutlineProvider;
+import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.collection.LLRBNode;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.tbuonomo.viewpagerdotsindicator.DotsIndicator;
 
 import java.text.DateFormat;
@@ -65,7 +65,7 @@ public class IdvItemActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_idv_item);
-        final ViewPager viewPager = findViewById(R.id.viewpager);
+        final ViewPager viewPager = findViewById(R.id.item_img);
 
         Intent intent = getIntent();
         String itemid = intent.getExtras().getString("ItemID");
@@ -87,9 +87,7 @@ public class IdvItemActivity extends AppCompatActivity {
         btncart = findViewById(R.id.add_cart);
         radioGroupSize = findViewById(R.id.radioGroupsize);
         radioGroupCol = findViewById(R.id.radioGroupcol);
-        userID= FirebaseAuth.getInstance().getCurrentUser().getUid();
-
-
+        userID= getInstance().getCurrentUser().getUid();
 
 
         //back button on top---------------------------------------
@@ -114,12 +112,14 @@ public class IdvItemActivity extends AppCompatActivity {
             viewPager.setClipToOutline(true);
         }
 
+
         //viewpager get item url
         db=FirebaseFirestore.getInstance();
         db.collection("items").document(itemid+"").get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+
                         DocumentSnapshot document = task.getResult();
 
                         //viewpager get itemurl and set adapter and indicator
@@ -208,7 +208,6 @@ public class IdvItemActivity extends AppCompatActivity {
                                         Snackbar.make(scrollView,"Quantity cannot be less than 1",Snackbar.LENGTH_LONG).show();
                                     }
                                     else if(amt>1){
-                                        btnminus.setEnabled(true);
                                         btnminus.setBackgroundResource(R.drawable.rounded_btn_black);
                                         btnminus.setTextColor(Color.parseColor("#FFFFFF"));
                                         amt--;
@@ -225,6 +224,21 @@ public class IdvItemActivity extends AppCompatActivity {
                             }
                         });
 
+                        btncart.setOnTouchListener(new View.OnTouchListener() {
+                            @Override
+                            public boolean onTouch(View v, MotionEvent event) {
+                                if(event.getAction()== MotionEvent.ACTION_DOWN){
+                                    btncart.setBackgroundResource(R.drawable.rounded_btn_whitestroke);
+                                    btncart.setTextColor(Color.parseColor("#000000"));
+                                }
+                                if(event.getAction()==MotionEvent.ACTION_UP){
+                                    //when button released
+                                    btncart.setBackgroundResource(R.drawable.rounded_btn_black);
+                                    btncart.setTextColor(Color.parseColor("#FFFFFF"));
+                                }
+                                return false;
+                            }
+                        });
                         btncart.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -236,10 +250,9 @@ public class IdvItemActivity extends AppCompatActivity {
                                 String orderID = sdf.format(date);
 
                                 if(size==null || color==null){
-                                    Snackbar.make(scrollView,"option not completed",Snackbar.LENGTH_LONG).show();
+                                    Snackbar.make(scrollView,"Size and color must be chosen",Snackbar.LENGTH_LONG).show();
                                 }
                                 else {
-
                                     //create new order (init ispaid is false)
                                     final Order neworder = new Order(orderID, title, size, color, amt, total, userID, false);
 
@@ -247,7 +260,92 @@ public class IdvItemActivity extends AppCompatActivity {
                                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                 @Override
                                                 public void onSuccess(Void aVoid) {
-                                                    Snackbar.make(scrollView, "Added to cart", Snackbar.LENGTH_LONG).show();
+                                                    final Dialog dialog = new Dialog(IdvItemActivity.this);
+                                                    dialog.setContentView(R.layout.dialog_cart);
+
+                                                    TextView dialog_text = dialog.findViewById(R.id.dialog_text);
+                                                    LottieAnimationView dialog_anim = dialog.findViewById(R.id.dialog_anim);
+                                                    final Button btn_home = dialog.findViewById(R.id.btn_home);
+                                                    final Button btn_shop = dialog.findViewById(R.id.btn_shop);
+                                                    dialog_anim.setAnimation(R.raw.cart);
+
+                                                    //dialog anim
+                                                    dialog_anim.setColorFilter(R.color.colorAccent);
+                                                    dialog_anim.setSpeed(0.8f);
+                                                    dialog_anim.playAnimation();
+
+                                                    //dialog buttons
+                                                    btn_home.setOnTouchListener(new View.OnTouchListener() {
+                                                        @Override
+                                                        public boolean onTouch(View v, MotionEvent event) {
+                                                            if(event.getAction()== MotionEvent.ACTION_DOWN){
+                                                                btn_home.setBackgroundResource(R.drawable.rounded_btn_black);
+                                                                btn_home.setTextColor(Color.parseColor("#FFFFFF"));
+                                                            }
+                                                            if(event.getAction()==MotionEvent.ACTION_UP){
+                                                                //when button released
+                                                                btn_home.setBackgroundResource(R.drawable.rounded_btn_white);
+                                                                btn_home.setTextColor(Color.parseColor("#000000"));
+                                                            }
+                                                            return false;
+                                                        }
+                                                    });
+
+                                                    btn_home.setOnClickListener(new View.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(View v) {
+                                                            onBackPressed();
+                                                        }
+                                                    });
+
+                                                    btn_shop.setOnTouchListener(new View.OnTouchListener() {
+                                                        @Override
+                                                        public boolean onTouch(View v, MotionEvent event) {
+                                                            if(event.getAction()== MotionEvent.ACTION_DOWN){
+                                                                btn_shop.setBackgroundResource(R.drawable.rounded_btn_black);
+                                                                btn_shop.setTextColor(Color.parseColor("#FFFFFF"));
+                                                            }
+                                                            if(event.getAction()==MotionEvent.ACTION_UP){
+                                                                //when button released
+                                                                btn_shop.setBackgroundResource(R.drawable.rounded_btn_white);
+                                                                btn_shop.setTextColor(Color.parseColor("#000000"));
+                                                            }
+                                                            return false;
+                                                        }
+                                                    });
+
+                                                    btn_shop.setOnClickListener(new View.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(View v) {
+                                                            //refresh page without animation
+                                                            finish();
+                                                            overridePendingTransition( 0, 0);
+                                                            startActivity(getIntent());
+                                                            overridePendingTransition( 0, 0);
+                                                        }
+                                                    });
+
+                                                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT)); //remove white corners
+                                                    dialog.show();
+                                                    DisplayMetrics displayMetrics = new DisplayMetrics();
+                                                    WindowManager wm = (WindowManager)getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
+                                                    wm.getDefaultDisplay().getMetrics(displayMetrics);
+
+                                                    int displayWidth = displayMetrics.widthPixels;
+
+                                                    int displayHeight = displayMetrics.heightPixels;
+
+                                                    WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+
+                                                    layoutParams.copyFrom(dialog.getWindow().getAttributes());
+
+                                                    int dialogWindowWidth = (int) (displayWidth * 0.9f);
+                                                    int dialogWindowHeight = (int) (displayHeight * 0.4f);
+
+                                                    layoutParams.width = dialogWindowWidth;
+                                                    layoutParams.height = dialogWindowHeight;
+
+                                                    dialog.getWindow().setAttributes(layoutParams);
 
                                                 }
                                             }).addOnFailureListener(new OnFailureListener() {
@@ -269,13 +367,6 @@ public class IdvItemActivity extends AppCompatActivity {
         viewPager.setPageTransformer(true, fadeOutTransformation);
 
         //item viewpager end--------------------------------------------------------------
-
-
-
-
-
-
-
     }
 
 
