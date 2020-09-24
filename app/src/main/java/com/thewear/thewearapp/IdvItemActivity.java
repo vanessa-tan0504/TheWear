@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.Outline;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewOutlineProvider;
@@ -21,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
@@ -32,7 +34,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.tbuonomo.viewpagerdotsindicator.DotsIndicator;
 
+import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import static com.google.firebase.auth.FirebaseAuth.getInstance;
 
@@ -50,7 +57,8 @@ public class IdvItemActivity extends AppCompatActivity {
     private int amt = 1;
     private ScrollView scrollView;
     private RadioGroup radioGroupSize,radioGroupCol;
-    String userID;
+    String userID,color,size;
+
 
 
     @Override
@@ -120,9 +128,10 @@ public class IdvItemActivity extends AppCompatActivity {
                         viewPager.setAdapter(adapter);
                         dotsIndicator.setViewPager(viewPager);
                         //title and desc
-                        String title = document.getString("title");
+                        final String title = document.getString("title");
                         String desc = document.getString("desc");
                         final double price = document.getDouble("price");
+
                         tvtitle.setText(title);
                         tvdesc.setText(desc);
                         btncart.setText(String.format("ADD TO CART\t\tRM %.2f",price*amt));
@@ -133,16 +142,16 @@ public class IdvItemActivity extends AppCompatActivity {
                             public void onCheckedChanged(RadioGroup group, int checkedId) {
                                 switch (checkedId){
                                     case R.id.rad_s:
-                                        Toast.makeText(IdvItemActivity.this, "s", Toast.LENGTH_SHORT).show();
+                                        size="S";
                                         break;
                                     case R.id.rad_m:
-                                        Toast.makeText(IdvItemActivity.this, "m", Toast.LENGTH_SHORT).show();
+                                        size="M";
                                         break;
                                     case R.id.rad_l:
-                                        Toast.makeText(IdvItemActivity.this, "l", Toast.LENGTH_SHORT).show();
+                                        size="L";
                                         break;
                                     case R.id.rad_x:
-                                        Toast.makeText(IdvItemActivity.this, "x", Toast.LENGTH_SHORT).show();
+                                        size="XL";
                                         break;
                                 }
                             }
@@ -153,13 +162,13 @@ public class IdvItemActivity extends AppCompatActivity {
                             public void onCheckedChanged(RadioGroup group, int checkedId) {
                                 switch (checkedId){
                                     case R.id.rad_black:
-                                        Toast.makeText(IdvItemActivity.this, "blcc", Toast.LENGTH_SHORT).show();
+                                        color="Black";
                                         break;
                                     case R.id.rad_blue:
-                                        Toast.makeText(IdvItemActivity.this, "blue", Toast.LENGTH_SHORT).show();
+                                        color="Blue";
                                         break;
                                     case R.id.rad_white:
-                                        Toast.makeText(IdvItemActivity.this, "lwhite", Toast.LENGTH_SHORT).show();
+                                        color="White";
                                         break;
 
                                 }
@@ -219,7 +228,36 @@ public class IdvItemActivity extends AppCompatActivity {
                         btncart.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Toast.makeText(IdvItemActivity.this, userID+"", Toast.LENGTH_SHORT).show();
+                                DecimalFormat df = new DecimalFormat("#.##");
+                                double total = Double.parseDouble(df.format(price*amt));
+                               //generating order id based on timestamp
+                                Date date = new Date();
+                                DateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss.SSS", Locale.getDefault());
+                                String orderID = sdf.format(date);
+
+                                if(size==null || color==null){
+                                    Snackbar.make(scrollView,"option not completed",Snackbar.LENGTH_LONG).show();
+                                }
+                                else {
+
+                                    //create new order (init ispaid is false)
+                                    final Order neworder = new Order(orderID, title, size, color, amt, total, userID, false);
+
+                                    db.collection("orders").document(neworder.getOrderID() + "").set(neworder)
+                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void aVoid) {
+                                                    Snackbar.make(scrollView, "Added to cart", Snackbar.LENGTH_LONG).show();
+
+                                                }
+                                            }).addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Snackbar.make(scrollView, "failed to cart", Snackbar.LENGTH_LONG).show();
+                                        }
+                                    });
+
+                                }
                             }
                         });
 
