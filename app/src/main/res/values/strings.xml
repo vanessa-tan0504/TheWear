@@ -17,4 +17,8 @@ anywhere</string>
     <string name="intro2">Shop for the latest
 collection</string>
     <string name="recommendation">You May Like</string>
+    <string-array name="delivery">
+        <item>Standard</item>
+        <item>Express</item>
+    </string-array>
 </resources>
