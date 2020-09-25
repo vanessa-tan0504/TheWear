@@ -73,13 +73,6 @@ public class IdvItemActivity extends AppCompatActivity {
         dotsIndicator=findViewById(R.id.dots_indicator);
         tvtitle=findViewById(R.id.item_title);
         tvdesc = findViewById(R.id.item_desc);
-        //rad_s=findViewById(R.id.rad_s);
-//        rad_m=findViewById(R.id.rad_m);
-//        rad_l=findViewById(R.id.rad_l);
-//        rad_x=findViewById(R.id.rad_x);
-//        rad_black=findViewById(R.id.rad_black);
-//        rad_blue=findViewById(R.id.rad_blue);
-//        rad_white=findViewById(R.id.rad_white);
         btnminus = findViewById(R.id.qyt_minus);
         btnplus = findViewById(R.id.qyt_add);
         qty = findViewById(R.id.qyt_text);
@@ -127,6 +120,7 @@ public class IdvItemActivity extends AppCompatActivity {
                         IdvItemImageAdapter adapter = new IdvItemImageAdapter(getApplicationContext(),url);
                         viewPager.setAdapter(adapter);
                         dotsIndicator.setViewPager(viewPager);
+                        final String idvurl= document.getString("coverURL");
                         //title and desc
                         final String title = document.getString("title");
                         String desc = document.getString("desc");
@@ -254,7 +248,7 @@ public class IdvItemActivity extends AppCompatActivity {
                                 }
                                 else {
                                     //create new order (init ispaid is false)
-                                    final Order neworder = new Order(orderID, title, size, color, amt, total, userID, false);
+                                    final Order neworder = new Order(orderID, title, size, color, amt, total, userID, false, idvurl);
 
                                     db.collection("orders").document(neworder.getOrderID() + "").set(neworder)
                                             .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -284,8 +278,8 @@ public class IdvItemActivity extends AppCompatActivity {
                                                             }
                                                             if(event.getAction()==MotionEvent.ACTION_UP){
                                                                 //when button released
-                                                                btn_home.setBackgroundResource(R.drawable.rounded_btn_white);
-                                                                btn_home.setTextColor(Color.parseColor("#000000"));
+                                                                btn_home.setBackgroundResource(R.drawable.rounded_btn_black);
+                                                                btn_home.setTextColor(Color.parseColor("#FFFFFF"));
                                                             }
                                                             return false;
                                                         }
@@ -307,8 +301,8 @@ public class IdvItemActivity extends AppCompatActivity {
                                                             }
                                                             if(event.getAction()==MotionEvent.ACTION_UP){
                                                                 //when button released
-                                                                btn_shop.setBackgroundResource(R.drawable.rounded_btn_white);
-                                                                btn_shop.setTextColor(Color.parseColor("#000000"));
+                                                                btn_shop.setBackgroundResource(R.drawable.rounded_btn_black);
+                                                                btn_shop.setTextColor(Color.parseColor("#FFFFFF"));
                                                             }
                                                             return false;
                                                         }
@@ -326,6 +320,8 @@ public class IdvItemActivity extends AppCompatActivity {
                                                     });
 
                                                     dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT)); //remove white corners
+                                                    dialog.setCanceledOnTouchOutside(false);
+                                                    dialog.setCancelable(false);
                                                     dialog.show();
                                                     DisplayMetrics displayMetrics = new DisplayMetrics();
                                                     WindowManager wm = (WindowManager)getApplicationContext().getSystemService(Context.WINDOW_SERVICE);

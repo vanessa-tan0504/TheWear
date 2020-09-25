@@ -291,7 +291,7 @@ public class ShopActivity extends AppCompatActivity {
         viewPager.setCurrentItem(0);
 
         //initialize fragment displayed by viewpager
-        viewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
+        viewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager(),FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
             @Override
             public Fragment getItem(int position) {
                 switch (position) {
@@ -303,6 +303,11 @@ public class ShopActivity extends AppCompatActivity {
                         return fragment3;
                 }
                 return null;
+            }
+
+            @Override
+            public int getItemPosition(@NonNull Object object) {
+                return POSITION_NONE;
             }
 
             @Override
@@ -324,6 +329,8 @@ public class ShopActivity extends AppCompatActivity {
                 final InputMethodManager imm = (InputMethodManager)getSystemService(
                         Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(viewPager.getWindowToken(), 0);
+                viewPager.getAdapter().notifyDataSetChanged();
+
             }
 
             @Override

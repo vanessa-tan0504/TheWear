@@ -1,7 +1,7 @@
 package com.thewear.thewearapp;
 
 public class Order {
-    private String title, color, size,user,orderID;
+    private String title, color, size,user,orderID,itemURL;
     private double totalprice;
     private int qty;
     private boolean isPaid;
@@ -10,7 +10,7 @@ public class Order {
         //empty constructor do not delete
     }
 
-    public Order(String orderID, String title, String size, String color, int qty, double totalprice, String user,boolean isPaid) {
+    public Order(String orderID, String title, String size, String color, int qty, double totalprice, String user,boolean isPaid,String itemURL) {
         this.title = title;
         this.color = color;
         this.size = size;
@@ -19,6 +19,7 @@ public class Order {
         this.totalprice = totalprice;
         this.qty = qty;
         this.isPaid = isPaid;
+        this.itemURL=itemURL;
     }
 
 
@@ -78,11 +79,15 @@ public class Order {
         this.qty = qty;
     }
 
-    public boolean isPaid() {
+    public boolean getPaid() {
         return isPaid;
     }
 
-    public void setPaid(boolean paid) {
-        isPaid = paid;
+    public void setPaid(boolean isPaid) {
+        this.isPaid = isPaid;
     }
+
+    public String getItemURL(){ return itemURL;}
+
+    public void setItemURL(String itemURL){this.itemURL=itemURL;}
 }
