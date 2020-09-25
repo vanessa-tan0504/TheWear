@@ -39,7 +39,6 @@ public class CartFragment extends Fragment {
         // Inflate the layout for this fragment
         View v=inflater.inflate(R.layout.fragment_cart, container, false);
         Button btn = v.findViewById(R.id.signout);
-        Button refresh = v.findViewById(R.id.rv_refresh);
 
 
         rv_cart=v.findViewById(R.id.rv_cart);
@@ -92,14 +91,6 @@ public class CartFragment extends Fragment {
             }
         });
 
-        refresh.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentTransaction ft = getFragmentManager().beginTransaction();
-                ft.detach(CartFragment.this).attach(CartFragment.this).commit();
-            }
-
-        });
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
