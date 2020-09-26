@@ -21,4 +21,10 @@ collection</string>
         <item>Standard</item>
         <item>Express</item>
     </string-array>
+    <string-array name="payment">
+        <item>Credit/Debit Card</item>
+        <item>Online Banking</item>
+        <item>Cash on Delivery</item>
+        <item>Bank Transfer</item>
+    </string-array>
 </resources>

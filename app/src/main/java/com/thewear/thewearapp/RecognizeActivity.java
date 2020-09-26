@@ -75,7 +75,7 @@ public class RecognizeActivity extends AppCompatActivity implements CameraBridge
     private double predict[] = new double[1];
     private Storage local;
     private FaceRecognizer recognize; //LBPHFaceRecognizer.create() ; .read() ; .predict
-    int number;
+    String intentfrom;
 
     //b.1 to check if opencv library get to call back /connect (opencv setting)
     private BaseLoaderCallback callbackLoader = new BaseLoaderCallback(this) {
@@ -166,16 +166,28 @@ public class RecognizeActivity extends AppCompatActivity implements CameraBridge
          */
         //recognize.predict(croped, label, predict);
         recognize.predict(destination, label, predict);
-        if (label[0] != -1 && (int) predict[0] < 125) { //"predict" need to be small value as possible to get high confidence
-            showLoader();
-            new Handler().postDelayed(new Runnable() { //pause 3 second only resume to shop
-                @Override
-                public void run() {
-                    Intent intent = new Intent(RecognizeActivity.this, ShopActivity.class);
-                    startActivity(intent);
-                }
-            }, 3000);
-
+        if (label[0] != -1 && (int) predict[0] < 125) {//"predict" need to be small value as possible to get high confidence
+            Log.e("intentfrom2",intentfrom+"");
+            if(intentfrom.equals("login")){ //verify from login
+                showLoader();
+                new Handler().postDelayed(new Runnable() { //pause 3 second only resume to shop
+                    @Override
+                    public void run() {
+                        Intent intent = new Intent(RecognizeActivity.this, ShopActivity.class);
+                        startActivity(intent);
+                    }
+                }, 3000);
+            }
+            else if(intentfrom.equals("cart")){ //verify from checkout
+                showLoader();
+                new Handler().postDelayed(new Runnable() { //pause 3 second only resume to shop
+                    @Override
+                    public void run() {
+                        Intent intent = new Intent(RecognizeActivity.this, MainActivity.class);
+                        startActivity(intent);
+                    }
+                }, 3000);
+            }
         } else if (predict[0] >= 125)
             Toast.makeText(getApplicationContext(), "You're not the right person " + predict[0], LENGTH_SHORT).show();
 
@@ -193,7 +205,8 @@ public class RecognizeActivity extends AppCompatActivity implements CameraBridge
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         Stetho.initializeWithDefaults(this);
         Intent intent = getIntent(); //add 26/5
-        number = intent.getIntExtra("NUMBER", 0); //add 26/5
+        intentfrom = intent.getStringExtra("intentfrom");
+        Log.e("intentfrom: ",intentfrom+"");
 
         openCVCamera = (CameraBridgeViewBase) findViewById(R.id.java_camera_view2);
         openCVCamera.setCameraIndex(CameraBridgeViewBase.CAMERA_ID_FRONT);

@@ -70,5 +70,18 @@ public class CartRVAdapter extends RecyclerView.Adapter<CartRVAdapter.ViewHolder
         return orderList.size();
     }
 
+    public void removeItem(int position) {
+        orderList.remove(position);
+        notifyItemRemoved(position);
+    }
+
+//    public void restoreItem(String item, int position) {
+//        data.add(position, item);
+//        notifyItemInserted(position);
+//    }
+
+    public ArrayList<Order> getData() {
+        return orderList;
+    }
 
 }

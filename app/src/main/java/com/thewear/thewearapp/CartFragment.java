@@ -1,6 +1,7 @@
 package com.thewear.thewearapp;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 
@@ -23,8 +24,10 @@ import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -90,6 +93,9 @@ public class CartFragment extends Fragment {
         userUID=currentUser.getUid();
 
         emptytv.setVisibility(View.GONE);
+
+
+
 
         //get total price amount after load from firebase
         readData(new DropdownCallback() {
@@ -160,8 +166,43 @@ public class CartFragment extends Fragment {
                     total_price.setText(String.format("RM %.2f",all_price));
                     spinner.setClickable(true);
                     loading_anim.setVisibility(View.GONE);
+                    btn_checkout.setEnabled(true);
                     dropdownCallback.onCallback(all_price);
                     cartRVAdapter.notifyDataSetChanged();
+
+                    //set swipehelper
+                    SwipeHelper swipeHelper = new SwipeHelper(getContext()) {
+                        @Override
+                        public void instantiateUnderlayButton(RecyclerView.ViewHolder viewHolder, List<UnderlayButton> underlayButtons) {
+                            underlayButtons.add(new SwipeHelper.UnderlayButton("Delete", 0, Color.parseColor("#FF3C30"),
+                                    new UnderlayButtonClickListener() {
+                                        @Override
+                                        public void onClick(int pos) {
+                                            final Order order_del = cartRVAdapter.getData().get(pos);
+                                            cartRVAdapter.removeItem(pos);
+                                            db.collection("orders").document(order_del.getOrderID()+"").delete()
+                                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                        @Override
+                                                        public void onSuccess(Void aVoid) {
+                                                            FragmentTransaction ft = getFragmentManager().beginTransaction();
+                                                            ft.detach(CartFragment.this).attach(CartFragment.this).commit();
+                                                            Snackbar.make(getView(),"Item has been deleted",Snackbar.LENGTH_LONG).show();
+                                                        }
+                                                    })
+                                                    .addOnFailureListener(new OnFailureListener() {
+                                                        @Override
+                                                        public void onFailure(@NonNull Exception e) {
+                                                            Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    });
+                                        }
+                                    })
+                            );
+                        }
+                    };
+                    swipeHelper.attachToRecyclerView(rv_cart);
+
+
 
                     if(orderList.isEmpty()){ //if specific user no order anything
                         total_qty.setText("0");
@@ -170,8 +211,7 @@ public class CartFragment extends Fragment {
                         emptytv.setVisibility(View.VISIBLE);
                         spinner.setClickable(false);
                         loading_anim.setVisibility(View.GONE);
-                        //textView.setVisibility(View.VISIBLE);
-                        //btn_sent.setEnabled(false); //disable sent order button if no data shown
+                        btn_checkout.setEnabled(false); //disable sent order button if no data shown
                     }
 
                 }
@@ -182,10 +222,38 @@ public class CartFragment extends Fragment {
                     emptytv.setVisibility(View.VISIBLE);
                     spinner.setClickable(false);
                     loading_anim.setVisibility(View.GONE);
+                    btn_checkout.setEnabled(false);
                 }
             }
         });
 
+        btn_checkout.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction()== MotionEvent.ACTION_DOWN){
+                    btn_checkout.setBackgroundResource(R.drawable.rounded_btn_grey);
+                    btn_checkout.setTextColor(Color.parseColor("#FFFFFF"));
+                }
+                if(event.getAction()==MotionEvent.ACTION_UP){
+                    //when button released
+                    btn_checkout.setBackgroundResource(R.drawable.rounded_btn_black);
+                    btn_checkout.setTextColor(Color.parseColor("#FFFFFF"));
+                }
+                return false;
+            }
+        });
+
+        btn_checkout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                Intent intent = new Intent(getContext(), RecognizeActivity.class);
+////                intent.putExtra("intentfrom","cart");
+////                startActivity(intent);
+                Intent intent = new Intent(getContext(), CheckoutActivity.class);
+                //intent.putExtra("intentfrom","cart");
+                startActivity(intent);
+            }
+        });
     }
 
     private interface DropdownCallback {
