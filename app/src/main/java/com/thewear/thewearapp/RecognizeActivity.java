@@ -76,6 +76,7 @@ public class RecognizeActivity extends AppCompatActivity implements CameraBridge
     private Storage local;
     private FaceRecognizer recognize; //LBPHFaceRecognizer.create() ; .read() ; .predict
     String intentfrom;
+    int reg_chance=0;
 
     //b.1 to check if opencv library get to call back /connect (opencv setting)
     private BaseLoaderCallback callbackLoader = new BaseLoaderCallback(this) {
@@ -166,6 +167,9 @@ public class RecognizeActivity extends AppCompatActivity implements CameraBridge
          */
         //recognize.predict(croped, label, predict);
         recognize.predict(destination, label, predict);
+//        if(reg_chance<3){
+//
+//        }
         if (label[0] != -1 && (int) predict[0] < 125) {//"predict" need to be small value as possible to get high confidence
             Log.e("intentfrom2",intentfrom+"");
             if(intentfrom.equals("login")){ //verify from login
@@ -178,19 +182,33 @@ public class RecognizeActivity extends AppCompatActivity implements CameraBridge
                     }
                 }, 3000);
             }
-            else if(intentfrom.equals("cart")){ //verify from checkout
-                showLoader();
+            else if(intentfrom.equals("checkout")){ //verify from checkout
+                showLoader2();
                 new Handler().postDelayed(new Runnable() { //pause 3 second only resume to shop
                     @Override
                     public void run() {
-                        Intent intent = new Intent(RecognizeActivity.this, MainActivity.class);
+                        Intent intent = new Intent(RecognizeActivity.this, ShopActivity.class);
+                        intent.putExtra("isverified",true);
                         startActivity(intent);
                     }
                 }, 3000);
             }
-        } else if (predict[0] >= 125)
-            Toast.makeText(getApplicationContext(), "You're not the right person " + predict[0], LENGTH_SHORT).show();
-
+        } else if (predict[0] >= 125) {
+            reg_chance++;//if wrong person verified more than 3 times, exit to prev screen
+            Toast.makeText(getApplicationContext(), reg_chance+" You're not the right person " + predict[0], LENGTH_SHORT).show();
+            if(reg_chance==3){
+                if (intentfrom.equals("login")) { //verify from login
+                    Toast.makeText(this, "wrong person, proceed you back to prev screen", LENGTH_SHORT).show();
+                    finish();
+                    Intent intent = new Intent(RecognizeActivity.this, MainActivity.class);
+                    startActivity(intent);
+                }
+                else if(intentfrom.equals("checkout")){
+                    Toast.makeText(this, "wrong person, proceed you back to prev screen", LENGTH_SHORT).show();
+                    finish();
+                }
+            }
+        }
         Log.i(TAG, "RECOGNIZE: label value is " + label[0]);
         Log.i(TAG, "RECOGNIZE: predict value is " + predict[0]);
 
@@ -380,6 +398,23 @@ public class RecognizeActivity extends AppCompatActivity implements CameraBridge
         LottieAnimationView dialog_anim = dialog.findViewById(R.id.dialog_anim);
 
         dialog_text.setText("Profile Verified. Welcome Back"); //for regconize
+        dialog_anim.setAnimation(R.raw.selfie_cam); //for regconize
+        dialog_anim.setSpeed(2f);
+        dialog_anim.playAnimation();
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT)); //remove white corners
+        dialog.setCanceledOnTouchOutside(false); // touch outsie cnnt cancel dialogbox
+        dialog.setCancelable(false);
+        dialog.show();
+    }
+
+    public void showLoader2(){
+        final Dialog dialog= new Dialog(this);
+        dialog.setContentView(R.layout.dialog_loading);
+
+        TextView dialog_text = dialog.findViewById(R.id.dialog_text);
+        LottieAnimationView dialog_anim = dialog.findViewById(R.id.dialog_anim);
+
+        dialog_text.setText("Profile Verified. \nThank you for shopping with us"); //for regconize
         dialog_anim.setAnimation(R.raw.selfie_cam); //for regconize
         dialog_anim.setSpeed(2f);
         dialog_anim.playAnimation();

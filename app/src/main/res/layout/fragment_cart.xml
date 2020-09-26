@@ -173,6 +173,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="left"
+                android:popupBackground="@drawable/rounded_btn_whitestroke"
                 android:theme="@style/SpinnerTheme" />
 
         </LinearLayout>

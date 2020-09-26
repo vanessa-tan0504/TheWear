@@ -52,7 +52,8 @@ public class CartFragment extends Fragment {
     private LottieAnimationView loading_anim;
     private Button btn_checkout;
     private Spinner spinner;
-    private double deliveryfee;
+    private double deliveryfee,grandprice;
+    private String deliverymethod;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -100,8 +101,9 @@ public class CartFragment extends Fragment {
         //get total price amount after load from firebase
         readData(new DropdownCallback() {
             @Override
-            public void onCallback(final double allprice) {
+            public void onCallback(final double allprice,final int allqty) {
                 //set spinner adapter and grand total
+
                 ArrayAdapter<CharSequence>adapter = ArrayAdapter.createFromResource(getContext(),R.array.delivery,android.R.layout.simple_spinner_dropdown_item);
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 spinner.setAdapter(adapter);
@@ -110,11 +112,13 @@ public class CartFragment extends Fragment {
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         switch (position){
                             case 0 : deliveryfee=5;
-                                //dropdownCallback.onCallback(deliveryfee);
+                                deliverymethod="Standard";
+                                grandprice=allprice+deliveryfee;
                                 grand_price.setText(String.format("RM %.2f",(allprice+deliveryfee)));
                                 break;
                             case 1:deliveryfee=10;
-                                //dropdownCallback.onCallback(deliveryfee);
+                                deliverymethod="Express";
+                                grandprice=allprice+deliveryfee;
                                 grand_price.setText(String.format("RM %.2f",(allprice+deliveryfee)));
                                 break;
                         }
@@ -122,6 +126,33 @@ public class CartFragment extends Fragment {
                     @Override
                     public void onNothingSelected(AdapterView<?> parent) {
 
+                    }
+                });
+
+                btn_checkout.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        if(event.getAction()== MotionEvent.ACTION_DOWN){
+                            btn_checkout.setBackgroundResource(R.drawable.rounded_btn_grey);
+                            btn_checkout.setTextColor(Color.parseColor("#FFFFFF"));
+                        }
+                        if(event.getAction()==MotionEvent.ACTION_UP){
+                            //when button released
+                            btn_checkout.setBackgroundResource(R.drawable.rounded_btn_black);
+                            btn_checkout.setTextColor(Color.parseColor("#FFFFFF"));
+                        }
+                        return false;
+                    }
+                });
+
+                btn_checkout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(getContext(), CheckoutActivity.class);
+                        intent.putExtra("price",grandprice);
+                        intent.putExtra("qty",allqty);
+                        intent.putExtra("delivery",deliverymethod);
+                        startActivity(intent);
                     }
                 });
 
@@ -167,7 +198,7 @@ public class CartFragment extends Fragment {
                     spinner.setClickable(true);
                     loading_anim.setVisibility(View.GONE);
                     btn_checkout.setEnabled(true);
-                    dropdownCallback.onCallback(all_price);
+                    dropdownCallback.onCallback(all_price,all_qty);
                     cartRVAdapter.notifyDataSetChanged();
 
                     //set swipehelper
@@ -227,37 +258,11 @@ public class CartFragment extends Fragment {
             }
         });
 
-        btn_checkout.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if(event.getAction()== MotionEvent.ACTION_DOWN){
-                    btn_checkout.setBackgroundResource(R.drawable.rounded_btn_grey);
-                    btn_checkout.setTextColor(Color.parseColor("#FFFFFF"));
-                }
-                if(event.getAction()==MotionEvent.ACTION_UP){
-                    //when button released
-                    btn_checkout.setBackgroundResource(R.drawable.rounded_btn_black);
-                    btn_checkout.setTextColor(Color.parseColor("#FFFFFF"));
-                }
-                return false;
-            }
-        });
 
-        btn_checkout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                Intent intent = new Intent(getContext(), RecognizeActivity.class);
-////                intent.putExtra("intentfrom","cart");
-////                startActivity(intent);
-                Intent intent = new Intent(getContext(), CheckoutActivity.class);
-                //intent.putExtra("intentfrom","cart");
-                startActivity(intent);
-            }
-        });
     }
 
     private interface DropdownCallback {
-        void onCallback(double allprice);
+        void onCallback(double allprice,int qty);
     }
 
 }

@@ -191,7 +191,7 @@ public class LoginActivity extends AppCompatActivity {
                                             new Handler().postDelayed(new Runnable() { //pause 3 second only resume to walkthru
                                                 @Override
                                                 public void run() {
-                                                    Intent intent = new Intent(LoginActivity.this, RecognizeActivity.class);
+                                                    Intent intent = new Intent(LoginActivity.this, ShopActivity.class);
                                                     intent.putExtra("intentfrom","login");
                                                     startActivity(intent);
                                                 }

@@ -2,6 +2,7 @@ package com.thewear.thewearapp;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -19,11 +20,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.WriteBatch;
 import com.google.firebase.ml.common.FirebaseMLException;
 import com.google.firebase.ml.common.modeldownload.FirebaseModelManager;
 import com.google.firebase.ml.custom.FirebaseCustomLocalModel;
@@ -40,6 +48,8 @@ import com.google.firebase.storage.StorageReference;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -64,9 +74,11 @@ public class ShopActivity extends AppCompatActivity {
     private HomeFragment fragment1 = new HomeFragment();
     private CartFragment fragment2 = new CartFragment();
     private ProfileFragment fragment3 = new ProfileFragment();
-    private FirebaseFirestore db;
+    private FirebaseFirestore db,db_order;
     AnimatedBottomBar bottomBar;
     ViewPager viewPager;
+    private boolean isVerified;
+    private ArrayList<Order> orderList;
 
 
 
@@ -75,6 +87,7 @@ public class ShopActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.shop_activity);
         db = FirebaseFirestore.getInstance();
+
 
         //viewpager settings
         viewPager = (ViewPager) findViewById(R.id.item_img);
@@ -342,7 +355,50 @@ public class ShopActivity extends AppCompatActivity {
         //bottom nav bar lib
         bottomBar.setupWithViewPager(viewPager);
 
+        //if user is come from checkout
+        Intent intent=getIntent();
+        isVerified=intent.getBooleanExtra("isverified",false);
+        if(isVerified){ //if user already verified at checkout
+            db_order = FirebaseFirestore.getInstance();
+            db_order.collection("orders").whereEqualTo("user",user.getUid()+"")
+                    .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if(task.isSuccessful()){
+                        List<String> list = new ArrayList<>();
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            list.add(document.getId()); //get filtered document id
+                        }
+                        Log.d("getverified", list.toString());
+                        updateData(list); // *** new ***
+                    }
+                    else{
+                        Log.d("getverified", "Error getting documents: ", task.getException());
+                    }
+                }
+            });
+
         }
+
+    }
+
+    public void updateData(List<String> list){
+        WriteBatch batch = db_order.batch();
+
+        for(int i =0;i<list.size();i++){
+
+            //update each list item
+            DocumentReference ref = db_order.collection("orders").document(list.get(i));
+            batch.update(ref,"paid",true);
+
+        }
+        batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                Toast.makeText(ShopActivity.this, "update paid", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
     //hide status bar and below softkey
     @Override
