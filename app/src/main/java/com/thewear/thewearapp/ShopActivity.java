@@ -342,10 +342,6 @@ public class ShopActivity extends AppCompatActivity {
         //bottom nav bar lib
         bottomBar.setupWithViewPager(viewPager);
 
-        //viewpager fade anim
-        FadeOutTransformation fadeOutTransformation = new FadeOutTransformation();
-        viewPager.setPageTransformer(true, fadeOutTransformation);
-
         }
 
     //hide status bar and below softkey
