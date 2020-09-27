@@ -184,5 +184,14 @@ public class SearchFragment extends Fragment {
         });
     }
 
-
+    @Override
+    public void onResume() { //reset searchview to empty after sliding
+        super.onResume();
+        if (searchView != null && !searchView.getQuery().toString().isEmpty()) {
+            searchView.setQuery(null, false);
+            searchView.setIconified(true);
+            searchView.setIconified(true);
+            Toast.makeText(getContext(), "resume", Toast.LENGTH_SHORT).show();
+        }
+    }
 }
