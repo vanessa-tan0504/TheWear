@@ -191,7 +191,6 @@ public class SearchFragment extends Fragment {
             searchView.setQuery(null, false);
             searchView.setIconified(true);
             searchView.setIconified(true);
-            Toast.makeText(getContext(), "resume", Toast.LENGTH_SHORT).show();
         }
     }
 }
