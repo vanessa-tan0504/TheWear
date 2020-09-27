@@ -72,6 +72,7 @@ dependencies {
     implementation 'com.firebaseui:firebase-ui-firestore:6.2.1'
     implementation 'nl.joery.animatedbottombar:library:1.0.8'
     implementation 'com.synnapps:carouselview:0.1.5'
+    implementation 'com.github.arimorty:floatingsearchview:2.1.1'
 
 
 

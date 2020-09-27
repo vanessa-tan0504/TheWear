@@ -106,4 +106,6 @@ public class RecRVAdapter extends RecyclerView.Adapter<RecRVAdapter.ViewHolder>{
             constraintLayout= itemView.findViewById(R.id.rec_constraint);
         }
     }
+
+
 }

@@ -8,6 +8,12 @@
         android:title="HOME"
         app:showAsAction="ifRoom" />
     <item
+        android:id="@+id/search"
+        android:enabled="true"
+        android:icon="@drawable/cross_icon"
+        android:title="SEARCH"
+        app:showAsAction="ifRoom" />
+    <item
         android:id="@+id/cart"
         android:enabled="true"
         android:icon="@drawable/cross_icon"

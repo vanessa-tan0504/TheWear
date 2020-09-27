@@ -74,8 +74,9 @@ public class ShopActivity extends AppCompatActivity {
     int gender_counter;
     private static String TAG = TrainActivity.class.getSimpleName();
     private HomeFragment fragment1 = new HomeFragment();
-    private CartFragment fragment2 = new CartFragment();
-    private ProfileFragment fragment3 = new ProfileFragment();
+    private SearchFragment fragment2 = new SearchFragment();
+    private CartFragment fragment3 = new CartFragment();
+    private ProfileFragment fragment4 = new ProfileFragment();
     private FirebaseFirestore db,db_order;
     AnimatedBottomBar bottomBar;
     ViewPager viewPager;
@@ -318,6 +319,8 @@ public class ShopActivity extends AppCompatActivity {
                         return fragment2;
                     case 2:
                         return fragment3;
+                    case 3:
+                        return fragment4;
                 }
                 return null;
             }
@@ -329,7 +332,7 @@ public class ShopActivity extends AppCompatActivity {
 
             @Override
             public int getCount() {
-                return 3;
+                return 4;
             }
         });
 

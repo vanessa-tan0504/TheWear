@@ -6,6 +6,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -110,6 +111,10 @@ public class CartFragment extends Fragment {
                 spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                        Typeface font = ResourcesCompat.getFont(getContext(), R.font.montserrat);
+//                        ((TextView) parent.getChildAt(0)).setTypeface(font);
+//                        ((TextView) parent.getChildAt(0)).setTextSize(12);
+
                         switch (position){
                             case 0 : deliveryfee=5;
                                 deliverymethod="Standard";

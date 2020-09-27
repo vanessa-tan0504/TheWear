@@ -49,7 +49,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import static com.google.firebase.auth.FirebaseAuth.getInstance;
 
 public class HomeFragment extends Fragment {
-    View v, v2;
+    View v;
     androidx.appcompat.widget.SearchView searchView;
     CarouselView carouselView;
     String[] urlstring = new String[3];
@@ -77,36 +77,6 @@ public class HomeFragment extends Fragment {
         loading_anim2.setAnimation(R.raw.circle_loading);
         loading_anim2.setSpeed(1);
         loading_anim2.playAnimation();
-
-
-        //search bar start---------------------------------------------------------------------------------------------
-        searchView = v.findViewById(R.id.search_view);
-        //search bar icon layout on right
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            searchView.setLayoutParams(new Toolbar.LayoutParams(Gravity.RIGHT));
-        }
-
-        //search bar input text settings
-        EditText txtSearch = ((EditText) searchView.findViewById(androidx.appcompat.R.id.search_src_text));
-        txtSearch.setHintTextColor(Color.WHITE);
-        txtSearch.setHint("Search for");
-        txtSearch.setTextColor(Color.WHITE);
-
-        //search bar listener
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                Toast.makeText(getContext(), "onQueryTextSubmit", Toast.LENGTH_SHORT).show();
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                Toast.makeText(getContext(), "onQueryTextChange", Toast.LENGTH_SHORT).show();
-                return false;
-            }
-        });
-        //end of search bar methods----------------------------------------------------------------------------
 
         //slide show slider, image and desc load from cloud firestore-----------------------------------------------
         carouselView = v.findViewById(R.id.carousel);

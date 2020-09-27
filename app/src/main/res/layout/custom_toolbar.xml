@@ -28,14 +28,4 @@
                 app:layout_constraintTop_toTopOf="parent"
                 android:gravity="center_vertical"/>
 
-    <androidx.appcompat.widget.SearchView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/search_view"
-        android:queryHint="Search here"
-        app:searchIcon="@drawable/tick_icon"
-        app:closeIcon="@drawable/cross_icon"
-        android:gravity="center_vertical"/>
-
-
 </Toolbar>
