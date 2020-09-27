@@ -12,9 +12,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.arlib.floatingsearchview.FloatingSearchView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -45,12 +48,27 @@ public class SearchFragment extends Fragment {
     private ArrayList<Clothes> clothesList;
     private RecRVAdapter browseRVAdapter;
     FirebaseFirestore db_browse;
+    private LottieAnimationView loading_anim;
+    private TextView tv_empty;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_search, container, false);
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
+        recyclerView=v.findViewById(R.id.browse_rv);
+        clothesList = new ArrayList<>();
+        browseRVAdapter = new RecRVAdapter(getActivity(),clothesList);
+        tv_empty=v.findViewById(R.id.empty_browse);
+
+        //loading anim
+        loading_anim=v.findViewById(R.id.loading_anim);
+        loading_anim.setSpeed(1);
+        loading_anim.playAnimation();
+
+        //empty search tv
+        tv_empty.setVisibility(View.GONE);
 
         //search bar start---------------------------------------------------------------------------------------------
         searchView = v.findViewById(R.id.search_view);
@@ -68,13 +86,10 @@ public class SearchFragment extends Fragment {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 //call when press search- when press submit, hide keyboard
-                if(query.equals("")){
-                    searchView.clearFocus(); //when press submit, hide keyboard
-                    showAll();
-                }else {
+                loading_anim.setVisibility(View.VISIBLE);
+                if(!query.equals("")){
                     searchData(query);
                     searchView.clearFocus(); //when press submit, hide keyboard
-                    Toast.makeText(getContext(), "query " + query, Toast.LENGTH_SHORT).show();
                 }
                 return true;
             }
@@ -83,32 +98,24 @@ public class SearchFragment extends Fragment {
             public boolean onQueryTextChange(String newText) {
                 //call when we type
                 if(newText.equals("")){
+                    loading_anim.setVisibility(View.VISIBLE);
                     searchView.clearFocus(); //when query is empty, hide keyboard
                     showAll();
                 }
-                else {
-                    searchData(newText);
-                    Toast.makeText(getContext(), "newText " + newText, Toast.LENGTH_SHORT).show();
+                else{
+
                 }
                 return true;
             }
         });
 
-//        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
-//            @Override
-//            public void onFocusChange(View v, boolean hasFocus) {
-//                if(!hasFocus){
-//                    searchView.onActionViewCollapsed();
-//                    searchView.setQuery("",false);
-//                }
-//            }
-//        });
+
+        ImageView btnClose = searchView.findViewById(R.id.search_close_btn);
+        btnClose.setEnabled(false);
+
         //end of search bar methods----------------------------------------------------------------------------
 
-        //setup adapter and recyclerview
-        recyclerView=v.findViewById(R.id.browse_rv);
-        clothesList = new ArrayList<>();
-        browseRVAdapter = new RecRVAdapter(getActivity(),clothesList);
+        //setup adapter and recyclerview to show result
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         recyclerView.setAdapter(browseRVAdapter);
 
@@ -118,9 +125,11 @@ public class SearchFragment extends Fragment {
     //show all items
     private void showAll(){
         db_browse= FirebaseFirestore.getInstance();
-        db_browse.collection("items").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        db_browse.collection("items").get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                clothesList.clear();
                 if (!queryDocumentSnapshots.isEmpty()) {
                     List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
                     for (DocumentSnapshot d : list) {
@@ -129,11 +138,19 @@ public class SearchFragment extends Fragment {
                     }
                 }
                 browseRVAdapter.notifyDataSetChanged();
+                loading_anim.setVisibility(View.GONE);
+
+                if(clothesList.isEmpty()){ //if result list is empty
+                    tv_empty.setVisibility(View.VISIBLE);
+                                   }
+                else{ //if result list is not empty
+                    tv_empty.setVisibility(View.GONE);
+                }
             }
         });
     }
 
-    //filter data
+    //show filtered items
     private void searchData(String query) {
         db_browse = FirebaseFirestore.getInstance();
         db_browse.collection("items").whereArrayContains("tag", query.toLowerCase())
@@ -150,6 +167,14 @@ public class SearchFragment extends Fragment {
                             }
                         }
                         browseRVAdapter.notifyDataSetChanged();
+                        loading_anim.setVisibility(View.GONE);
+
+                        if(clothesList.isEmpty()){ //if result list is empty
+                            tv_empty.setVisibility(View.VISIBLE);
+                        }
+                        else{ //if result list is not empty
+                            tv_empty.setVisibility(View.GONE);
+                        }
                     }
                 }).addOnFailureListener(new OnFailureListener() {
             @Override
