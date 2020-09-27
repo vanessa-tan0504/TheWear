@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 import android.os.Handler;
 import android.util.Log;
@@ -77,6 +78,7 @@ public class RecognizeActivity extends AppCompatActivity implements CameraBridge
     private FaceRecognizer recognize; //LBPHFaceRecognizer.create() ; .read() ; .predict
     String intentfrom;
     int reg_chance=0;
+    private CoordinatorLayout coordinatorLayout;
 
     //b.1 to check if opencv library get to call back /connect (opencv setting)
     private BaseLoaderCallback callbackLoader = new BaseLoaderCallback(this) {
@@ -193,19 +195,29 @@ public class RecognizeActivity extends AppCompatActivity implements CameraBridge
                     }
                 }, 3000);
             }
-        } else if (predict[0] >= 125) {
+        } else if (predict[0] >= 125) { //if predict more than 125, means not the person
             reg_chance++;//if wrong person verified more than 3 times, exit to prev screen
             Toast.makeText(getApplicationContext(), reg_chance+" You're not the right person " + predict[0], LENGTH_SHORT).show();
             if(reg_chance==3){
                 if (intentfrom.equals("login")) { //verify from login
-                    Toast.makeText(this, "wrong person, proceed you back to prev screen", LENGTH_SHORT).show();
-                    finish();
-                    Intent intent = new Intent(RecognizeActivity.this, MainActivity.class);
-                    startActivity(intent);
+                    showLoader3();
+                    new Handler().postDelayed(new Runnable() { //pause 3 second only resume back to prev screen
+                        @Override
+                        public void run() {
+                            finish();
+                            Intent intent = new Intent(RecognizeActivity.this, MainActivity.class);
+                            startActivity(intent);
+                        }
+                    }, 3000);
                 }
                 else if(intentfrom.equals("checkout")){
-                    Toast.makeText(this, "wrong person, proceed you back to prev screen", LENGTH_SHORT).show();
-                    finish();
+                    showLoader3();
+                    new Handler().postDelayed(new Runnable() { //pause 3 second only resume back to prev screen
+                        @Override
+                        public void run() {
+                            finish();
+                        }
+                    }, 3000);
                 }
             }
         }
@@ -223,9 +235,10 @@ public class RecognizeActivity extends AppCompatActivity implements CameraBridge
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         Stetho.initializeWithDefaults(this);
         Intent intent = getIntent(); //add 26/5
-        intentfrom = intent.getStringExtra("intentfrom");
+        intentfrom = intent.getStringExtra("intentfrom"); //get intentfrom either login or checkout
         Log.e("intentfrom: ",intentfrom+"");
 
+        coordinatorLayout=findViewById(R.id.regact);
         openCVCamera = (CameraBridgeViewBase) findViewById(R.id.java_camera_view2);
         openCVCamera.setCameraIndex(CameraBridgeViewBase.CAMERA_ID_FRONT);
         openCVCamera.setVisibility(SurfaceView.VISIBLE);
@@ -253,15 +266,14 @@ public class RecognizeActivity extends AppCompatActivity implements CameraBridge
             @Override
             public void onClick(View view) {
                 if (gray.total() == 0)
-                    Toast.makeText(getApplicationContext(), "Can't Detect Faces", LENGTH_SHORT).show();
-                //Snackbar.make(scrollView, "failed to cart", Snackbar.LENGTH_LONG).show();
+                    //Toast.makeText(getApplicationContext(), "Can't Detect Faces", LENGTH_SHORT).show();
+                    Snackbar.make(coordinatorLayout, "Can't detect faces", Snackbar.LENGTH_LONG).show();
 
                 classifier.detectMultiScale(gray, faces, 1.1, 3, 0 | CASCADE_SCALE_IMAGE, new Size(30, 30)); //get face to chg to gray scale image
 
                 if (!faces.empty()) {
                     if (faces.toArray().length > 1)
-                        Toast.makeText(getApplicationContext(), "Multiple Faces Are not allowed", LENGTH_SHORT).show();
-                    //Snackbar.make(scrollView, "failed to cart", Snackbar.LENGTH_LONG).show();
+                        Snackbar.make(coordinatorLayout, "Multiple faces are not allowed", Snackbar.LENGTH_LONG).show();
 
                     else {
                         if (gray.total() == 0) {
@@ -270,10 +282,9 @@ public class RecognizeActivity extends AppCompatActivity implements CameraBridge
                         }
                         recognizeImage(gray); //if got only 1 face detected goto 2.
                     }
-                } else
-                    Toast.makeText(getApplicationContext(), "Unknown Face", LENGTH_SHORT).show();
-                //Snackbar.make(scrollView, "failed to cart", Snackbar.LENGTH_LONG).show();
 
+                } else
+                    Snackbar.make(coordinatorLayout, "Unknown Face", Snackbar.LENGTH_LONG).show();
             }
         });
     }
@@ -414,9 +425,28 @@ public class RecognizeActivity extends AppCompatActivity implements CameraBridge
         TextView dialog_text = dialog.findViewById(R.id.dialog_text);
         LottieAnimationView dialog_anim = dialog.findViewById(R.id.dialog_anim);
 
-        dialog_text.setText("Profile Verified. \nThank you for shopping with us"); //for regconize
+        dialog_text.setText("Profile Verified. \nThank You For Shopping With Us"); //for regconize
         dialog_anim.setAnimation(R.raw.selfie_cam); //for regconize
         dialog_anim.setSpeed(2f);
+        dialog_anim.playAnimation();
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT)); //remove white corners
+        dialog.setCanceledOnTouchOutside(false); // touch outsie cnnt cancel dialogbox
+        dialog.setCancelable(false);
+        dialog.show();
+    }
+
+    public void showLoader3(){
+        final Dialog dialog= new Dialog(this);
+        dialog.setContentView(R.layout.dialog_error);
+
+        TextView dialog_text = dialog.findViewById(R.id.dialog_text);
+        LottieAnimationView dialog_anim = dialog.findViewById(R.id.dialog_anim);
+
+        dialog_text.setText("Validation Failed.\nProceed You To Previous Screen"); //for regconize
+        dialog_anim.setAnimation(R.raw.error); //for regconize
+        dialog_anim.setSpeed(1f);
+        dialog_anim.setRepeatCount(0);
+        dialog_anim.setColorFilter(Color.BLUE);
         dialog_anim.playAnimation();
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT)); //remove white corners
         dialog.setCanceledOnTouchOutside(false); // touch outsie cnnt cancel dialogbox

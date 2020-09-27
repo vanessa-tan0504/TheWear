@@ -46,7 +46,7 @@
         android:layout_marginTop="12dp"
         android:fontFamily="@font/montserrat"
         android:gravity="center_horizontal"
-        android:text="Items have added to cart"
+        android:text="Items Have Added To Cart !"
         android:textColor="#000000"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"

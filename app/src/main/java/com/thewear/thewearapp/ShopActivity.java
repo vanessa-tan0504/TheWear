@@ -25,6 +25,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -54,6 +55,7 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
@@ -79,6 +81,7 @@ public class ShopActivity extends AppCompatActivity {
     ViewPager viewPager;
     private boolean isVerified;
     private ArrayList<Order> orderList;
+    private ConstraintLayout constraintLayout;
 
 
 
@@ -87,6 +90,7 @@ public class ShopActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.shop_activity);
         db = FirebaseFirestore.getInstance();
+        constraintLayout=findViewById(R.id.shopact);
 
 
         //viewpager settings
@@ -358,7 +362,7 @@ public class ShopActivity extends AppCompatActivity {
         //if user is come from checkout
         Intent intent=getIntent();
         isVerified=intent.getBooleanExtra("isverified",false);
-        if(isVerified){ //if user already verified at checkout
+        if(isVerified){ //if user already verified at checkout, change order paid status as true
             db_order = FirebaseFirestore.getInstance();
             db_order.collection("orders").whereEqualTo("user",user.getUid()+"")
                     .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -369,8 +373,7 @@ public class ShopActivity extends AppCompatActivity {
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             list.add(document.getId()); //get filtered document id
                         }
-                        Log.d("getverified", list.toString());
-                        updateData(list); // *** new ***
+                        updateData(list); //after filtered go to updateData funtion
                     }
                     else{
                         Log.d("getverified", "Error getting documents: ", task.getException());
@@ -390,12 +393,11 @@ public class ShopActivity extends AppCompatActivity {
             //update each list item
             DocumentReference ref = db_order.collection("orders").document(list.get(i));
             batch.update(ref,"paid",true);
-
         }
         batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                Toast.makeText(ShopActivity.this, "update paid", Toast.LENGTH_SHORT).show();
+                Snackbar.make(constraintLayout, "Your order has successfully sent",Snackbar.LENGTH_LONG).show();
             }
         });
     }
