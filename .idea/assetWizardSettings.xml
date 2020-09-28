@@ -323,7 +323,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material/icons/materialicons/search/baseline_search_24.xml" />
+                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material/icons/materialicons/keyboard_arrow_up/baseline_keyboard_arrow_up_24.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -333,7 +333,8 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="outputName" value="search_black" />
+                            <entry key="color" value="ffffff" />
+                            <entry key="outputName" value="ic_baseline_keyboard_arrow_up_24" />
                             <entry key="sourceFile" value="C:\Users\User\Downloads\OpenCVFaceRecogonition-master\OpenCVFaceRecogonition-master" />
                           </map>
                         </option>
