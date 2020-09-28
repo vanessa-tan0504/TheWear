@@ -161,6 +161,7 @@ public class HomeFragment extends Fragment {
 
                         @Override
                         public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                            clothesList.clear();
                             if (!queryDocumentSnapshots.isEmpty()) {
                                 List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
                                 for (DocumentSnapshot d : list) {

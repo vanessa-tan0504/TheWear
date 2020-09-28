@@ -1,64 +1,129 @@
 package com.thewear.thewearapp;
 
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ProfileFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldPath;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class ProfileFragment extends Fragment {
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public ProfileFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ProfileFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ProfileFragment newInstance(String param1, String param2) {
-        ProfileFragment fragment = new ProfileFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    private FirebaseFirestore db;
+    private String userUID;
+    private FirebaseAuth auth;
+    private FirebaseUser currentUser;
+    private ArrayList<Order> orderList;
+    private HisRVAdapter hisRVAdapter;
+    private RecyclerView rv_his;
+    private LinearLayoutManager linearLayoutManager;
+    private TextView tvname;
+    private Button edit;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+      View v = inflater.inflate(R.layout.fragment_profile, container, false);
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_profile, container, false);
+        rv_his=v.findViewById(R.id.rv_latest);
+        linearLayoutManager= new LinearLayoutManager(getActivity());
+        tvname=v.findViewById(R.id.tv_name);
+        edit=v.findViewById(R.id.editprofile);
+
+        //set firebase instance
+        db= FirebaseFirestore.getInstance();
+        auth= FirebaseAuth.getInstance();
+
+        //get current user and id
+        currentUser= FirebaseAuth.getInstance().getCurrentUser();
+        userUID=currentUser.getUid();
+
+        //content in cart list
+        orderList = new ArrayList<>();
+        hisRVAdapter = new HisRVAdapter(getActivity(),orderList);
+
+        //set layout manager and adapter
+        rv_his.setLayoutManager(linearLayoutManager);
+        rv_his.setAdapter(hisRVAdapter);
+
+        //show user name
+        tvname.setText(currentUser.getDisplayName()+"");
+
+        edit.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction()== MotionEvent.ACTION_DOWN){
+                    edit.setBackgroundResource(R.drawable.rounded_btn_grey);
+                    edit.setTextColor(Color.parseColor("#FFFFFF"));
+                }
+                if(event.getAction()==MotionEvent.ACTION_UP){
+                    //when button released
+                    edit.setBackgroundResource(R.drawable.rounded_btn_black);
+                    edit.setTextColor(Color.parseColor("#FFFFFF"));
+                }
+                return false;
+            }
+        });
+
+        edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(), "clicked", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getContext(),EditActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        //history recyclerview
+        db.collection("orders")
+                .whereEqualTo("user",userUID+"")
+                .orderBy("orderID", Query.Direction.DESCENDING)
+                .limit(5)
+                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                orderList.clear();
+                if(!queryDocumentSnapshots.isEmpty()){
+                    List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
+                    for(DocumentSnapshot d : list){
+                        Order order = d.toObject(Order.class);
+
+                        //if paid status is true
+                        if(order.getPaid()){
+                            orderList.add(order);
+                        }
+                    }
+                    hisRVAdapter.notifyDataSetChanged();
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.e("History",e.getMessage());
+            }
+        });
+        return v;
     }
 }

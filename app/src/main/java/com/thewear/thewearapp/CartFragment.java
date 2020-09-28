@@ -180,9 +180,13 @@ public class CartFragment extends Fragment {
     // async with delivery data-----------------------------------------------------------
     private void readData(final CartFragment.DropdownCallback dropdownCallback){
         //retrieve order data from firebase
-        db.collection("orders").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        db.collection("orders")
+                .whereEqualTo("user",userUID+"")
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                orderList.clear();
                 if(!queryDocumentSnapshots.isEmpty()){ // if firebase db hv data
                     List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
                     int all_qty=0;
@@ -192,7 +196,7 @@ public class CartFragment extends Fragment {
                         Order order = d.toObject(Order.class);
 
                         //get specific account's order and paid status is false
-                        if(order.getUser().equals(userUID)&&(!order.getPaid())){
+                        if(!order.getPaid()){
                             orderList.add(order);
                             all_qty+=order.getQty();
                             all_price+=order.getTotalprice();
