@@ -9,6 +9,7 @@ import androidx.core.content.res.ResourcesCompat;
 import br.com.simplepass.loadingbutton.customViews.CircularProgressButton;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -26,6 +27,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -37,6 +39,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -118,7 +121,6 @@ public class EditActivity extends AppCompatActivity {
         desc2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //expandableView.setVisibility( expandableView.isShown() ? View.GONE : View.VISIBLE );
                 if(expandableView2.getVisibility()==View.VISIBLE){
                     expandableView2.setVisibility(View.GONE);
                 }
@@ -404,7 +406,7 @@ public class EditActivity extends AppCompatActivity {
         });
         //end of address-----------------------------------------------------------------------
 
-        //logout
+        //logout-------------------------------------------------------------------------------------
         logout.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -424,15 +426,101 @@ public class EditActivity extends AppCompatActivity {
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                final Dialog dialog = new Dialog(EditActivity.this);
+                dialog.setContentView(R.layout.dialog_quit);
+
+                TextView dialog_text = dialog.findViewById(R.id.dialog_text);
+                LottieAnimationView dialog_anim = dialog.findViewById(R.id.dialog_anim);
+                final Button btn_cfm = dialog.findViewById(R.id.btn_cfm);
+                final Button btn_cancel = dialog.findViewById(R.id.btn_cancel);
+                dialog_anim.setAnimation(R.raw.logout);
+
+                //dialog text
+                dialog_text.setText("Confirm Logout?");
+
+                //dialog anim
+                dialog_anim.setColorFilter(R.color.colorAccent);
+                dialog_anim.setSpeed(0.8f);
+                dialog_anim.playAnimation();
+
+                //dialog buttons
+                btn_cfm.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        if(event.getAction()== MotionEvent.ACTION_DOWN){
+                            btn_cfm.setBackgroundResource(R.drawable.rounded_btn_grey);
+                            btn_cfm.setTextColor(Color.parseColor("#FFFFFF"));
+                        }
+                        if(event.getAction()==MotionEvent.ACTION_UP){
+                            //when button released
+                            btn_cfm.setBackgroundResource(R.drawable.rounded_btn_red);
+                            btn_cfm.setTextColor(Color.parseColor("#FFFFFF"));
+                        }
+                        return false;
+                    }
+                });
+
+                btn_cfm.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
                         auth.getInstance().signOut();
                         Intent intent = new Intent(EditActivity.this,MainActivity.class);
                         finish();
                         startActivity(intent);
+                    }
+                });
+
+                btn_cancel.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        if(event.getAction()== MotionEvent.ACTION_DOWN){
+                            btn_cancel.setBackgroundResource(R.drawable.rounded_btn_grey);
+                            btn_cancel.setTextColor(Color.parseColor("#FFFFFF"));
+                        }
+                        if(event.getAction()==MotionEvent.ACTION_UP){
+                            //when button released
+                            btn_cancel.setBackgroundResource(R.drawable.rounded_btn_black);
+                            btn_cancel.setTextColor(Color.parseColor("#FFFFFF"));
+                        }
+                        return false;
+                    }
+                });
+
+                btn_cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.cancel();
+                    }
+                });
+
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT)); //remove white corners
+
+                dialog.show();
+                DisplayMetrics displayMetrics = new DisplayMetrics();
+                WindowManager wm = (WindowManager)getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
+                wm.getDefaultDisplay().getMetrics(displayMetrics);
+
+                int displayWidth = displayMetrics.widthPixels;
+
+                int displayHeight = displayMetrics.heightPixels;
+
+                WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+
+                layoutParams.copyFrom(dialog.getWindow().getAttributes());
+
+                int dialogWindowWidth = (int) (displayWidth * 0.9f);
+                int dialogWindowHeight = (int) (displayHeight * 0.4f);
+
+                layoutParams.width = dialogWindowWidth;
+                layoutParams.height = dialogWindowHeight;
+
+                dialog.getWindow().setAttributes(layoutParams);
+
 
             }
         });
 
-        //delete account
+        //delete account------------------------------------------------------------
 
         delete.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -453,7 +541,123 @@ public class EditActivity extends AppCompatActivity {
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                final Dialog dialog = new Dialog(EditActivity.this);
+                dialog.setContentView(R.layout.dialog_quit);
 
+                TextView dialog_text = dialog.findViewById(R.id.dialog_text);
+                LottieAnimationView dialog_anim = dialog.findViewById(R.id.dialog_anim);
+                final Button btn_cfm = dialog.findViewById(R.id.btn_cfm);
+                final Button btn_cancel = dialog.findViewById(R.id.btn_cancel);
+                dialog_anim.setAnimation(R.raw.delete);
+
+                //dialog text
+                dialog_text.setText("Confirm delete account?\nAccount won't be retrieved back after confirm");
+
+                //dialog anim
+                dialog_anim.setColorFilter(R.color.colorAccent);
+                dialog_anim.setSpeed(0.8f);
+                dialog_anim.playAnimation();
+
+                //dialog buttons
+                btn_cfm.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        if(event.getAction()== MotionEvent.ACTION_DOWN){
+                            btn_cfm.setBackgroundResource(R.drawable.rounded_btn_grey);
+                            btn_cfm.setTextColor(Color.parseColor("#FFFFFF"));
+                        }
+                        if(event.getAction()==MotionEvent.ACTION_UP){
+                            //when button released
+                            btn_cfm.setBackgroundResource(R.drawable.rounded_btn_red);
+                            btn_cfm.setTextColor(Color.parseColor("#FFFFFF"));
+                        }
+                        return false;
+                    }
+                });
+
+                btn_cfm.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(user!=null){
+                            //delete firestore data
+                            db.collection("users").document(user.getUid()+"")
+                                    .delete()
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            Log.d("Setting", "DocumentSnapshot successfully deleted!");
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.e("Setting", "Error deleting document:"+ e.getMessage());
+                                }
+                            });
+
+                            //delete auth data
+                            user.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if(task.isSuccessful()){
+                                        Toast.makeText(EditActivity.this, "Account deleted", Toast.LENGTH_SHORT).show();
+                                        Intent intent = new Intent(EditActivity.this, MainActivity.class); //delete account and go to main page
+                                        startActivity(intent);
+                                        finish();
+                                    }
+                                    else{
+                                        Toast.makeText(EditActivity.this, "Account delete fail: "+task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                        }
+                    }
+                });
+
+                btn_cancel.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        if(event.getAction()== MotionEvent.ACTION_DOWN){
+                            btn_cancel.setBackgroundResource(R.drawable.rounded_btn_grey);
+                            btn_cancel.setTextColor(Color.parseColor("#FFFFFF"));
+                        }
+                        if(event.getAction()==MotionEvent.ACTION_UP){
+                            //when button released
+                            btn_cancel.setBackgroundResource(R.drawable.rounded_btn_black);
+                            btn_cancel.setTextColor(Color.parseColor("#FFFFFF"));
+                        }
+                        return false;
+                    }
+                });
+
+                btn_cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.cancel();
+                    }
+                });
+
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT)); //remove white corners
+
+                dialog.show();
+                DisplayMetrics displayMetrics = new DisplayMetrics();
+                WindowManager wm = (WindowManager)getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
+                wm.getDefaultDisplay().getMetrics(displayMetrics);
+
+                int displayWidth = displayMetrics.widthPixels;
+
+                int displayHeight = displayMetrics.heightPixels;
+
+                WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+
+                layoutParams.copyFrom(dialog.getWindow().getAttributes());
+
+                int dialogWindowWidth = (int) (displayWidth * 0.9f);
+                int dialogWindowHeight = (int) (displayHeight * 0.4f);
+
+                layoutParams.width = dialogWindowWidth;
+                layoutParams.height = dialogWindowHeight;
+
+                dialog.getWindow().setAttributes(layoutParams);
 
             }
         });

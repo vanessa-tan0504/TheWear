@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/dialog_bg"
     android:layout_width="match_parent"
-    android:layout_height="330dp"
+    android:layout_height="wrap_content"
     android:background="@drawable/rounded_btn_white">
 
 
@@ -20,24 +20,25 @@
         app:layout_constraintTop_toBottomOf="@+id/dialog_text">
 
         <Button
-            android:id="@+id/btn_home"
+            android:id="@+id/btn_cfm"
             android:layout_width="260dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:background="@drawable/rounded_btn_black"
-            android:gravity="center"
-            android:text="Back to Home"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/rounded_btn_red"
             android:fontFamily="@font/montserrat"
+            android:gravity="center"
+            android:text="Confirm"
             android:textColor="#FFFFFF" />
 
         <Button
-            android:id="@+id/btn_shop"
+            android:id="@+id/btn_cancel"
             android:layout_width="260dp"
             android:layout_height="wrap_content"
             android:background="@drawable/rounded_btn_black"
-            android:gravity="center"
-            android:text="Shop more"
             android:fontFamily="@font/montserrat"
+            android:gravity="center"
+            android:text="Cancel"
+
             android:textColor="#FFFFFF" />
     </LinearLayout>
 
@@ -48,7 +49,6 @@
         android:layout_marginTop="12dp"
         android:fontFamily="@font/montserrat"
         android:gravity="center_horizontal"
-        android:text="Items Have Added To Cart !"
         android:textColor="#000000"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -63,7 +63,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:lottie_colorFilter="@color/colorPrimary"
-        app:lottie_rawRes="@raw/cart" />
+        app:lottie_colorFilter="@color/colorPrimary" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
