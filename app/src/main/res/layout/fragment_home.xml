@@ -16,28 +16,41 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <include
-        android:id="@+id/include"
-        layout="@layout/custom_toolbar" />
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="56dp"
+            android:fontFamily="@font/montserrat"
+            android:text="Home"
+            android:textColor="#000000"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/loading_anim"
             android:layout_width="match_parent"
             android:layout_height="300dp"
+            android:layout_marginTop="32dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/include"
-            app:lottie_loop="true"/>
+            app:layout_constraintTop_toBottomOf="@+id/textView3"
+            app:lottie_loop="true" />
 
         <com.synnapps.carouselview.CarouselView
             android:id="@+id/carousel"
             android:layout_width="match_parent"
             android:layout_height="300dp"
+            android:layout_marginTop="32dp"
             app:fillColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/include"
+            app:layout_constraintTop_toBottomOf="@+id/textView3"
             app:pageColor="@color/colorAccent"
             app:pageTransformer="zoom"
             app:radius="6dp"
