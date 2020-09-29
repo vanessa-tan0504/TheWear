@@ -60,7 +60,6 @@ public class CartFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v=inflater.inflate(R.layout.fragment_cart, container, false);
-        Button btn = v.findViewById(R.id.signout);
 
         total_qty = v.findViewById(R.id.cart_qty);
         total_price = v.findViewById(R.id.total);
@@ -164,15 +163,6 @@ public class CartFragment extends Fragment {
             }
         });
 
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                auth.getInstance().signOut();
-                Intent intent = new Intent(getActivity(),MainActivity.class);
-                startActivity(intent);
-                getActivity().finish();
-            }
-        });
         return v;
     }
 
@@ -226,7 +216,7 @@ public class CartFragment extends Fragment {
                                                         public void onSuccess(Void aVoid) {
                                                             FragmentTransaction ft = getFragmentManager().beginTransaction();
                                                             ft.detach(CartFragment.this).attach(CartFragment.this).commit();
-                                                            Snackbar.make(getView(),"Item has been deleted",Snackbar.LENGTH_LONG).show();
+                                                            Snackbar.make(getView(),"Item has been deleted",Snackbar.LENGTH_SHORT).show();
                                                         }
                                                     })
                                                     .addOnFailureListener(new OnFailureListener() {
@@ -251,7 +241,12 @@ public class CartFragment extends Fragment {
                         emptytv.setVisibility(View.VISIBLE);
                         spinner.setClickable(false);
                         loading_anim.setVisibility(View.GONE);
-                        btn_checkout.setEnabled(false); //disable sent order button if no data shown
+                        btn_checkout.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Snackbar.make(getView(),"Cart is empty",Snackbar.LENGTH_SHORT).show();
+                            }
+                        });
                     }
 
                 }
@@ -262,7 +257,12 @@ public class CartFragment extends Fragment {
                     emptytv.setVisibility(View.VISIBLE);
                     spinner.setClickable(false);
                     loading_anim.setVisibility(View.GONE);
-                    btn_checkout.setEnabled(false);
+                    btn_checkout.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Snackbar.make(getView(),"Cart is empty",Snackbar.LENGTH_SHORT).show();
+                        }
+                    });
                 }
             }
         });

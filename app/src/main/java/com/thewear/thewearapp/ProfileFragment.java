@@ -90,7 +90,6 @@ public class ProfileFragment extends Fragment {
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(), "clicked", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getContext(),EditActivity.class);
                 startActivity(intent);
             }

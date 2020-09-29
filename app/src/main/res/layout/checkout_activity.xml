@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".CheckoutActivity">
+    tools:context=".CheckoutActivity"
+    android:id="@+id/paymentview">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -107,8 +108,10 @@
 
         <TextView
             android:id="@+id/address"
-            android:layout_width="336dp"
+            android:layout_width="236dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:layout_marginLeft="40dp"
             android:layout_marginTop="12dp"
             android:fontFamily="@font/montserrat"
             android:gravity="left"
@@ -116,8 +119,6 @@
             android:text="address"
             android:textColor="#000000"
             android:textSize="14sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.533"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
