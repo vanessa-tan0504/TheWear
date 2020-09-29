@@ -133,6 +133,10 @@ public class ProfileFragment extends Fragment {
                         loading_anim.setVisibility(View.GONE);
                     }
                 }
+                else{ //if firebase don't have data from order
+                    empty_his.setVisibility(View.VISIBLE);
+                    loading_anim.setVisibility(View.GONE);
+                }
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override

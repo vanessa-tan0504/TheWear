@@ -1,10 +1,17 @@
 package com.thewear.thewearapp;
+import android.Manifest;
 import android.content.Intent;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.transition.TransitionInflater;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -13,8 +20,12 @@ import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class MainActivity extends AppCompatActivity {
     private static String TAG = TrainActivity.class.getSimpleName();
+    private static final int PERMISSION_REQUEST_CODE = 1;
 
     final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -23,7 +34,18 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //if user already login before
+        //for first-time user permission
+        if(Build.VERSION.SDK_INT >= 23){
+            if(checkPermission()){
+                Toast.makeText(MainActivity.this, "permission granted", Toast.LENGTH_SHORT).show();
+                Log.e(TAG,"permission granted");
+            }
+            else{
+                requestPermission();
+            }
+        }
+
+        //if user already login before (non first=-time user)
         if(user!=null){
             Intent swap = new Intent(MainActivity.this, ShopActivity.class);
             startActivity(swap);
@@ -31,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
+        //register button---------------
         final Button register = (Button) findViewById(R.id.btn_register);
         register.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -56,6 +79,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+        //login button---------------
         final Button login = (Button) findViewById(R.id.btn_login);
 
         login.setOnTouchListener(new View.OnTouchListener() {
@@ -83,8 +108,72 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+    }
+//permission settings-----------------
+    private boolean checkPermission() {
+        //Check for READ_EXTERNAL_STORAGE access, using ContextCompat.checkSelfPermission()//
+        int storage = ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE);
+        int camera=ContextCompat.checkSelfPermission(MainActivity.this,Manifest.permission.CAMERA);
+        //If the app does have this permission, then return true
+        if (storage == PackageManager.PERMISSION_GRANTED && camera == PackageManager.PERMISSION_GRANTED) {
+            return true;
+        } else {
+            //If the app doesn’t have this permission, then return false//
+            return false;
+        }
     }
 
+    private void requestPermission() {
+
+        ActivityCompat.requestPermissions(this,
+                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                PERMISSION_REQUEST_CODE);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSION_REQUEST_CODE:
+                Map<String, Integer> perms = new HashMap<String, Integer>();
+                perms.put(Manifest.permission.READ_EXTERNAL_STORAGE, PackageManager.PERMISSION_GRANTED);
+                perms.put(Manifest.permission.CAMERA, PackageManager.PERMISSION_GRANTED);
+                perms.put(Manifest.permission.WRITE_EXTERNAL_STORAGE, PackageManager.PERMISSION_GRANTED);
+
+                // Fill with results
+                for (int i = 0; i < permissions.length; i++) {
+                    perms.put(permissions[i], grantResults[i]);
+                }
+                if (perms.get(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
+                        perms.get(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED&&
+                        perms.get(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                    //Toast.makeText(MainActivity.this, "Permission accepted", Toast.LENGTH_LONG).show();
+                    Log.e(TAG,"Permissions granted");
+                }
+                else {
+                    Toast.makeText(MainActivity.this, "Some Permission is Denied.", Toast.LENGTH_LONG).show();
+                    closeapp();
+
+                }
+                break;
+        }
+    }
+
+    private void closeapp() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
+        {
+            finishAffinity();
+            startActivity(new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                    Uri.fromParts("package", getPackageName(), null)));
+        }
+        else
+        {
+            finish();
+            startActivity(new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                    Uri.fromParts("package", getPackageName(), null)));
+        }
+    }
+    //permission settings end-----------------
 
     //hide status bar and below softkey
     @Override

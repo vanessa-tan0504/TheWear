@@ -154,7 +154,7 @@ public class HomeFragment extends Fragment {
                     //refresh page without animation
                     FragmentTransaction ft = getFragmentManager().beginTransaction();
                     ft.detach(HomeFragment.this).attach(HomeFragment.this).commit();
-                    Toast.makeText(getContext(), "please wait"+tempgender, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getContext(), "please wait"+tempgender, Toast.LENGTH_SHORT).show();
                 }else {
 
                     db_rec.collection("items").whereArrayContains("tag", tempgender + "").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {

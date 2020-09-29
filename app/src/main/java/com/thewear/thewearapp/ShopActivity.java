@@ -103,7 +103,7 @@ public class ShopActivity extends AppCompatActivity {
 
         //gender predict in background--------------------------------------------
         if (user != null) {
-            Toast.makeText(this, "shop in " + user.getDisplayName(), Toast.LENGTH_SHORT).show();
+            Log.e(TAG, "shop in " + user.getDisplayName());
             //gender predict in background
             imageView = findViewById(R.id.imageView);
             textview = findViewById(R.id.tvIdentifiedItem);
