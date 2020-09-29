@@ -112,12 +112,12 @@ public class EditActivity extends AppCompatActivity {
                 final String postal = edit_postal.getText().toString();
 
                 if (TextUtils.isEmpty(address)) {
-                    edit_oldpw.setError("Enter address");
+                    edit_add.setError("Enter address");
                     //delay_anim(white_btn,btnLogin); //delay and revert anim
                     return;
                 }
                 if (TextUtils.isEmpty(postal)) {
-                    edit_oldpw.setError("Enter address");
+                    edit_postal.setError("Enter address");
                     //delay_anim(white_btn,btnLogin); //delay and revert anim
                     return;
                 }
