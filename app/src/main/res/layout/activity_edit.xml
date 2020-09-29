@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".EditActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <TextView
         android:id="@+id/textView3"
@@ -22,7 +26,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <View
-        android:id="@+id/view2"
+        android:id="@+id/borlineview2"
         android:layout_width="350dp"
         android:layout_height="2dp"
         android:layout_marginTop="32dp"
@@ -31,319 +35,359 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
-<!--    <LinearLayout-->
-<!--        android:id="@+id/main"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/view"-->
-<!--        android:orientation="vertical">-->
-
-<!--        <androidx.cardview.widget.CardView-->
-<!--            android:id="@+id/expheader1"-->
-<!--            android:layout_width="350dp"-->
-<!--            android:layout_height="70dp"-->
-<!--            android:layout_marginTop="32dp"-->
-<!--            android:background="@drawable/rounded_btn_whitestroke"-->
-<!--            android:onClick="expand_content"-->
-<!--            app:cardBackgroundColor="@color/black"-->
-<!--            app:cardCornerRadius="15dp"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintTop_toBottomOf="@+id/view">-->
-
-<!--            <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="match_parent">-->
-
-<!--                <ImageButton-->
-<!--                    android:id="@+id/btnexp"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:onClick="expand_content"-->
-<!--                    android:src="@drawable/alarm"-->
-<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                    app:layout_constraintEnd_toEndOf="parent"-->
-<!--                    app:layout_constraintTop_toTopOf="parent" />-->
-
-<!--                <TextView-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginStart="8dp"-->
-<!--                    android:layout_marginLeft="8dp"-->
-<!--                    android:layout_marginTop="8dp"-->
-<!--                    android:layout_marginBottom="8dp"-->
-<!--                    android:fontFamily="@font/montserrat"-->
-<!--                    android:text="Change Password"-->
-<!--                    android:textColor="#FFF"-->
-<!--                    android:textSize="24sp"-->
-<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                    app:layout_constraintStart_toStartOf="parent"-->
-<!--                    app:layout_constraintTop_toTopOf="parent" />-->
-
-<!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
-<!--        </androidx.cardview.widget.CardView>-->
-
-<!--        <androidx.cardview.widget.CardView-->
-<!--            android:id="@+id/expcontent1"-->
-<!--            android:layout_width="350dp"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:background="@drawable/rounded_btn_whitestroke"-->
-<!--            android:onClick="expand_content"-->
-<!--            app:cardBackgroundColor="@color/light_gray"-->
-<!--            app:cardCornerRadius="15dp"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintTop_toBottomOf="@+id/expheader1">-->
-
-<!--            <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="match_parent">-->
-
-<!--                <TextView-->
-<!--                    android:id="@+id/dialog_text"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginStart="8dp"-->
-<!--                    android:layout_marginLeft="8dp"-->
-<!--                    android:layout_marginTop="32dp"-->
-<!--                    android:layout_marginEnd="8dp"-->
-<!--                    android:layout_marginRight="8dp"-->
-<!--                    android:fontFamily="@font/montserrat"-->
-<!--                    android:gravity="center_horizontal"-->
-<!--                    android:text="Enter your old password"-->
-<!--                    android:textColor="#000000"-->
-<!--                    android:textSize="16sp"-->
-<!--                    android:textStyle="bold"-->
-<!--                    app:layout_constraintEnd_toEndOf="parent"-->
-<!--                    app:layout_constraintHorizontal_bias="0.495"-->
-<!--                    app:layout_constraintStart_toStartOf="parent"-->
-<!--                    app:layout_constraintTop_toTopOf="parent" />-->
-
-<!--                <br.com.simplepass.loadingbutton.customViews.CircularProgressButton-->
-<!--                    android:id="@+id/btn_chg_pw"-->
-<!--                    android:layout_width="295dp"-->
-<!--                    android:layout_height="41dp"-->
-<!--                    android:layout_marginTop="16dp"-->
-<!--                    android:layout_marginBottom="16dp"-->
-<!--                    android:background="@drawable/rounded_btn_black"-->
-<!--                    android:fontFamily="@font/montserrat"-->
-<!--                    android:text="SUBMIT"-->
-<!--                    android:textColor="#FFFFFF"-->
-<!--                    android:textStyle="bold"-->
-<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                    app:layout_constraintEnd_toEndOf="parent"-->
-<!--                    app:layout_constraintStart_toStartOf="parent"-->
-<!--                    app:layout_constraintTop_toBottomOf="@+id/chg_pw_layout"-->
-<!--                    app:spinning_bar_color="#FFFFFF" />-->
-
-<!--                <com.google.android.material.textfield.TextInputLayout-->
-<!--                    android:id="@+id/chg_pw_layout"-->
-<!--                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"-->
-<!--                    android:layout_width="252dp"-->
-<!--                    android:layout_height="60dp"-->
-<!--                    android:layout_marginStart="32dp"-->
-<!--                    android:layout_marginLeft="32dp"-->
-<!--                    android:layout_marginEnd="32dp"-->
-<!--                    android:layout_marginRight="32dp"-->
-<!--                    android:textColorHint="#000000"-->
-<!--                    app:boxStrokeColor="#000000"-->
-<!--                    app:hintTextAppearance="@style/hintText"-->
-<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                    app:layout_constraintEnd_toEndOf="parent"-->
-<!--                    app:layout_constraintHorizontal_bias="0.494"-->
-<!--                    app:layout_constraintStart_toStartOf="parent"-->
-<!--                    app:layout_constraintTop_toBottomOf="@+id/dialog_text"-->
-<!--                    app:layout_constraintVertical_bias="0.175">-->
-
-<!--                    <com.google.android.material.textfield.TextInputEditText-->
-<!--                        android:id="@+id/chg_pw"-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:layout_marginStart="8dp"-->
-<!--                        android:layout_marginLeft="8dp"-->
-<!--                        android:layout_marginEnd="8dp"-->
-<!--                        android:layout_marginRight="8dp"-->
-<!--                        android:fontFamily="@font/montserrat"-->
-<!--                        android:hint="Old Password"-->
-<!--                        android:inputType="textPassword"-->
-<!--                        android:maxLines="1"-->
-<!--                        android:singleLine="true"-->
-<!--                        android:textColor="#000000"-->
-<!--                        android:textColorHighlight="#000000"-->
-<!--                        android:textColorHint="#000000"-->
-<!--                        android:textColorLink="#000000"-->
-<!--                        android:textCursorDrawable="@android:drawable/screen_background_dark"-->
-<!--                        app:layout_constraintEnd_toEndOf="parent"-->
-<!--                        app:layout_constraintHorizontal_bias="0.0"-->
-<!--                        app:layout_constraintStart_toStartOf="parent"-->
-<!--                        app:layout_constraintTop_toBottomOf="@+id/dialog_text" />-->
-<!--                </com.google.android.material.textfield.TextInputLayout>-->
-<!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
-<!--        </androidx.cardview.widget.CardView>-->
-<!--    </LinearLayout>-->
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardView"
-        style="@style/CardView.Light"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        app:layout_constraintTop_toBottomOf="@+id/view2">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView"
+            style="@style/CardView.Light"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="12dp">
-
-            <Button
-                android:id="@+id/arrowBtn"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginEnd="12dp"
-                android:background="@drawable/alarm"
-                app:layout_constraintBottom_toBottomOf="@+id/view"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/view" />
-
-            <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/main"
-                app:layout_constraintDimensionRatio="H,16:9"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/desc"
-                style="@style/TextAppearance.AppCompat.Body1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:text="Work"
-                android:textColor="#8A000000"
-                app:layout_constraintStart_toEndOf="@+id/view"
-                app:layout_constraintTop_toBottomOf="@+id/name" />
-
-            <TextView
-                android:id="@+id/name"
-                style="@style/TextAppearance.AppCompat.Title"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:text="Victoria Smith"
-                app:layout_constraintBottom_toTopOf="@+id/desc"
-                app:layout_constraintStart_toEndOf="@+id/view"
-                app:layout_constraintTop_toTopOf="@+id/view" />
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/view"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginStart="12dp"
-                android:layout_marginTop="16dp"
-                android:elevation="12dp"
-                app:cardCornerRadius="25dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageView">
-
-                <ImageView
-                    android:id="@+id/circleImage"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/main" />
-
-            </androidx.cardview.widget.CardView>
+            android:layout_marginStart="40dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="40dp"
+            android:layout_marginRight="40dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/borlineview2">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/expandableView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:paddingBottom="12dp"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/desc">
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp">
 
-                <ImageView
-                    android:id="@+id/phoneIcon"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginTop="22dp"
-                    android:src="@drawable/alarm"
+                <TextView
+                    android:id="@+id/desc"
+                    style="@style/TextAppearance.AppCompat.Body1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginBottom="12dp"
+                    android:fontFamily="@font/montserrat"
+                    android:text="Change Password"
+                    android:textColor="#000000"
+                    android:textSize="20sp"
+                    app:layout_constraintBottom_toTopOf="@+id/expandableView"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <ImageView
-                    android:id="@+id/mailIcon"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginTop="22dp"
-                    android:src="@drawable/alarm"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/expandableView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:paddingBottom="12dp"
+                    android:visibility="visible"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/phoneIcon" />
+                    app:layout_constraintTop_toBottomOf="@+id/desc">
 
-                <TextView
-                    android:id="@+id/phoneDesc"
-                    style="@style/TextAppearance.AppCompat.Body1"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="32dp"
-                    android:text="Mobile"
-                    android:textColor="#8A000000"
-                    app:layout_constraintBottom_toBottomOf="@+id/phoneIcon"
-                    app:layout_constraintStart_toEndOf="@id/phoneIcon"
-                    app:layout_constraintTop_toBottomOf="@+id/phoneNumber" />
+                    <TextView
+                        android:id="@+id/dialog_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginTop="32dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginRight="8dp"
+                        android:fontFamily="@font/montserrat"
+                        android:gravity="center_horizontal"
+                        android:text="Enter your old password"
+                        android:textColor="#000000"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.495"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
-                    android:id="@+id/phoneNumber"
-                    style="@style/TextAppearance.AppCompat.Medium"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="32dp"
-                    android:text="(999) 345 32 45"
-                    android:textColor="#000"
-                    app:layout_constraintBottom_toTopOf="@+id/phoneDesc"
-                    app:layout_constraintStart_toEndOf="@id/phoneIcon"
-                    app:layout_constraintTop_toTopOf="@+id/phoneIcon" />
+                    <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
+                        android:id="@+id/btn_chg_pw"
+                        android:layout_width="295dp"
+                        android:layout_height="41dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginBottom="16dp"
+                        android:background="@drawable/rounded_btn_black"
+                        android:fontFamily="@font/montserrat"
+                        android:text="SUBMIT"
+                        android:textColor="#FFFFFF"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/chg_pw_layout"
+                        app:spinning_bar_color="#FFFFFF" />
 
-                <TextView
-                    android:id="@+id/mailNumber"
-                    style="@style/TextAppearance.AppCompat.Medium"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="32dp"
-                    android:text="workemail@gmail.com"
-                    android:textColor="#000"
-                    app:layout_constraintBottom_toTopOf="@+id/mailDesc"
-                    app:layout_constraintStart_toEndOf="@id/mailIcon"
-                    app:layout_constraintTop_toTopOf="@+id/mailIcon" />
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/chg_pw_layout"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.494"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/dialog_text"
+                        app:layout_constraintVertical_bias="0.175"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="252dp"
+                        android:layout_height="60dp"
+                        android:layout_marginStart="32dp"
+                        android:layout_marginLeft="32dp"
+                        android:layout_marginEnd="32dp"
+                        android:layout_marginRight="32dp"
+                        android:textColorHint="#000000"
+                        app:boxStrokeColor="#000000"
+                        app:hintTextAppearance="@style/hintText">
 
-                <TextView
-                    android:id="@+id/mailDesc"
-                    style="@style/TextAppearance.AppCompat.Body1"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="32dp"
-                    android:text="Work"
-                    android:textColor="#8A000000"
-                    app:layout_constraintBottom_toBottomOf="@+id/mailIcon"
-                    app:layout_constraintStart_toEndOf="@id/mailIcon"
-                    app:layout_constraintTop_toBottomOf="@+id/mailNumber" />
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/input_pw"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.0"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/dialog_text"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:layout_marginRight="8dp"
+                            android:fontFamily="@font/montserrat"
+                            android:hint="Old Password"
+                            android:inputType="textPassword"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:textColor="#000000"
+                            android:textColorHighlight="#000000"
+                            android:textColorHint="#000000"
+                            android:textColorLink="#000000"
+                            android:textCursorDrawable="@android:drawable/screen_background_dark"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView2"
+            style="@style/CardView.Light"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="40dp"
+            android:layout_marginRight="40dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cardView">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp">
 
 
-    </androidx.cardview.widget.CardView>
+                <TextView
+                    android:id="@+id/desc2"
+                    style="@style/TextAppearance.AppCompat.Body1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginBottom="12dp"
+                    android:fontFamily="@font/montserrat"
+                    android:text="Update Address"
+                    android:textColor="#000000"
+                    android:textSize="20sp"
+                    app:layout_constraintBottom_toTopOf="@+id/expandableView2"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/expandableView2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:paddingBottom="12dp"
+                    android:visibility="visible"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/desc2">
+
+                    <Spinner
+                        android:id="@+id/input_country_spin"
+                        android:layout_width="252dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="32dp"
+                        android:layout_marginLeft="32dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="32dp"
+                        android:layout_marginRight="32dp"
+                        android:layout_weight="1"
+                        android:backgroundTint="@color/black"
+                        android:gravity="left"
+                        android:popupBackground="@drawable/rounded_btn_whitestroke"
+                        android:spinnerMode="dropdown"
+                        android:theme="@style/SpinnerTheme"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/chg_add_layout2" />
+
+                    <TextView
+                        android:id="@+id/dialog_text2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginTop="32dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginRight="8dp"
+                        android:fontFamily="@font/montserrat"
+                        android:gravity="center_horizontal"
+                        android:text="Enter your address"
+                        android:textColor="#000000"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.495"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
+                        android:id="@+id/btn_add"
+                        android:layout_width="295dp"
+                        android:layout_height="41dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginBottom="16dp"
+                        android:background="@drawable/rounded_btn_black"
+                        android:fontFamily="@font/montserrat"
+                        android:text="SUBMIT"
+                        android:textColor="#FFFFFF"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/input_country_spin"
+                        app:layout_constraintVertical_bias="0.0"
+                        app:spinning_bar_color="#FFFFFF" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/chg_add_layout2"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="252dp"
+                        android:layout_height="60dp"
+                        android:layout_marginStart="32dp"
+                        android:layout_marginLeft="32dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="32dp"
+                        android:layout_marginRight="32dp"
+                        android:textColorHint="#000000"
+                        app:boxStrokeColor="#000000"
+                        app:hintTextAppearance="@style/hintText"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.494"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/chg_add_layout">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/input_postal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:layout_marginRight="8dp"
+                            android:fontFamily="@font/montserrat"
+                            android:hint="Postal"
+                            android:inputType="text|textPostalAddress"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:textColor="#000000"
+                            android:textColorHighlight="#000000"
+                            android:textColorHint="#000000"
+                            android:textColorLink="#000000"
+                            android:textCursorDrawable="@android:drawable/screen_background_dark"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.0"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/dialog_text" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/chg_add_layout"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="252dp"
+                        android:layout_height="60dp"
+                        android:layout_marginStart="32dp"
+                        android:layout_marginLeft="32dp"
+                        android:layout_marginEnd="32dp"
+                        android:layout_marginRight="32dp"
+                        android:textColorHint="#000000"
+                        app:boxStrokeColor="#000000"
+                        app:hintTextAppearance="@style/hintText"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.494"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/dialog_text2">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/input_add"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:layout_marginRight="8dp"
+                            android:fontFamily="@font/montserrat"
+                            android:hint="Address"
+                            android:inputType="text|textPostalAddress"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:textColor="#000000"
+                            android:textColorHighlight="#000000"
+                            android:textColorHint="#000000"
+                            android:textColorLink="#000000"
+                            android:textCursorDrawable="@android:drawable/screen_background_dark"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.0"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/dialog_text" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
+        <Button
+            android:id="@+id/logout"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/rounded_btn_black"
+            android:fontFamily="@font/montserrat"
+            android:text="Logout"
+            android:textColor="@color/colorAccent"
+            app:layout_constraintBottom_toTopOf="@+id/delete"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cardView2" />
+
+        <Button
+            android:id="@+id/delete"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp"
+            android:background="@drawable/rounded_btn_red"
+            android:fontFamily="@font/montserrat"
+            android:text="Delete Account"
+            android:textColor="@color/colorAccent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/logout" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
