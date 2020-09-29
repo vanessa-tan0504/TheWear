@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -40,17 +41,26 @@ public class ProfileFragment extends Fragment {
     private HisRVAdapter hisRVAdapter;
     private RecyclerView rv_his;
     private LinearLayoutManager linearLayoutManager;
-    private TextView tvname;
+    private TextView tvname,empty_his;
     private Button edit;
+    private LottieAnimationView loading_anim;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
       View v = inflater.inflate(R.layout.fragment_profile, container, false);
 
+        loading_anim=v.findViewById(R.id.loading_anim);
         rv_his=v.findViewById(R.id.rv_latest);
         linearLayoutManager= new LinearLayoutManager(getActivity());
         tvname=v.findViewById(R.id.tv_name);
         edit=v.findViewById(R.id.editprofile);
+        empty_his=v.findViewById(R.id.empty_history);
+        empty_his.setVisibility(View.GONE);
+
+        //loading anim
+        loading_anim.setAnimation(R.raw.circle_loading);
+        loading_anim.setSpeed(1);
+        loading_anim.playAnimation();
 
         //set firebase instance
         db= FirebaseFirestore.getInstance();
@@ -114,7 +124,14 @@ public class ProfileFragment extends Fragment {
                             orderList.add(order);
                         }
                     }
+                    loading_anim.setVisibility(View.GONE);
+                    empty_his.setVisibility(View.GONE);
                     hisRVAdapter.notifyDataSetChanged();
+
+                    if(orderList.isEmpty()){
+                        empty_his.setVisibility(View.VISIBLE);
+                        loading_anim.setVisibility(View.GONE);
+                    }
                 }
             }
         }).addOnFailureListener(new OnFailureListener() {

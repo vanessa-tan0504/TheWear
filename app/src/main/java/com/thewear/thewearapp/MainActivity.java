@@ -8,6 +8,8 @@ import android.transition.TransitionInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -20,6 +22,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //if user already login before
+        if(user!=null){
+            Intent swap = new Intent(MainActivity.this, ShopActivity.class);
+            startActivity(swap);
+            finish();
+        }
+
 
         final Button register = (Button) findViewById(R.id.btn_register);
         register.setOnTouchListener(new View.OnTouchListener() {
