@@ -34,6 +34,7 @@ import com.facebook.stetho.Stetho;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -205,6 +206,9 @@ public class RecognizeActivity extends AppCompatActivity implements CameraBridge
                         @Override
                         public void run() {
                             finish();
+                            //sign out then cs of failed verification
+                            FirebaseAuth auth= FirebaseAuth.getInstance();
+                            auth.getInstance().signOut();
                             Intent intent = new Intent(RecognizeActivity.this, MainActivity.class);
                             startActivity(intent);
                         }
@@ -449,7 +453,7 @@ public class RecognizeActivity extends AppCompatActivity implements CameraBridge
         dialog_anim.setColorFilter(Color.BLUE);
         dialog_anim.playAnimation();
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT)); //remove white corners
-        dialog.setCanceledOnTouchOutside(false); // touch outsie cnnt cancel dialogbox
+        dialog.setCanceledOnTouchOutside(false); // touch outside cnnt cancel dialogbox
         dialog.setCancelable(false);
         dialog.show();
     }
