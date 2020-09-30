@@ -739,4 +739,9 @@ public class TrainActivity extends AppCompatActivity implements CameraBridgeView
         dialog.setCancelable(false);
         dialog.show();
     }
+
+    @Override
+    public void onBackPressed()
+    {
+    }
 }

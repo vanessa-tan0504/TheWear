@@ -8,8 +8,10 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 
+import android.os.Build;
 import android.os.Bundle;
 
+import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.Log;
 
@@ -83,8 +85,7 @@ public class ShopActivity extends AppCompatActivity {
     private boolean isVerified;
     private ArrayList<Order> orderList;
     private ConstraintLayout constraintLayout;
-
-
+    boolean doubleBackToExitPressedOnce = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -421,4 +422,26 @@ public class ShopActivity extends AppCompatActivity {
 
     }
 
+    //back twice to exit app
+    @Override
+    public void onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
+                finishAffinity();
+            else
+                finish();
+            return;
+        }
+
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, "Press back again to exit", Toast.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce=false;
+            }
+        }, 2000);
+    }
 }

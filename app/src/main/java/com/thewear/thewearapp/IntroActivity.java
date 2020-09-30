@@ -64,6 +64,11 @@ public class IntroActivity extends AppCompatActivity implements ViewPager.OnPage
 
     }
 
+    @Override
+    public void onBackPressed()
+    {
+    }
+
     //hide status bar and below softkey
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {

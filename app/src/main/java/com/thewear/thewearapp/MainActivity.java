@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.transition.TransitionInflater;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -28,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int PERMISSION_REQUEST_CODE = 1;
 
     final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    boolean doubleBackToExitPressedOnce = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         //for first-time user permission
         if(Build.VERSION.SDK_INT >= 23){
             if(checkPermission()){
-                Toast.makeText(MainActivity.this, "permission granted", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(MainActivity.this, "permission granted", Toast.LENGTH_SHORT).show();
                 Log.e(TAG,"permission granted");
             }
             else{
@@ -159,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void closeapp() {
+    private void closeapp() { //close app to device settings
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
         {
             finishAffinity();
@@ -191,5 +193,28 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
+    @Override
+    public void onBackPressed() { //if press 2 times close app
+        if (doubleBackToExitPressedOnce) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
+                finishAffinity();
+            else
+                finish();
+            return;
+        }
+
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, "Press back again to exit", Toast.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce=false;
+            }
+        }, 2000);
     }
+
+}
 

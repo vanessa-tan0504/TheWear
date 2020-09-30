@@ -457,4 +457,9 @@ public class RecognizeActivity extends AppCompatActivity implements CameraBridge
         dialog.setCancelable(false);
         dialog.show();
     }
+
+    @Override
+    public void onBackPressed()
+    {
+    }
 }
