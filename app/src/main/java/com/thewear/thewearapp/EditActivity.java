@@ -33,6 +33,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
@@ -55,7 +56,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class EditActivity extends AppCompatActivity {
 
-    private ConstraintLayout expandableView,expandableView2;
+    private ConstraintLayout expandableView,expandableView2,backview;
     private CircularProgressButton btn_add,btn_chg_pw;
     private TextView desc,desc2;
     private EditText edit_oldpw,edit_add,edit_postal;
@@ -66,6 +67,7 @@ public class EditActivity extends AppCompatActivity {
     private String country;
     private FirebaseFirestore db;
     private Button logout,delete;
+    private ImageView img1,img2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,7 +92,17 @@ public class EditActivity extends AppCompatActivity {
         settingview=findViewById(R.id.settingsview);
         logout=findViewById(R.id.logout);
         delete=findViewById(R.id.delete);
+        img1=findViewById(R.id.imgview1);
+        img2=findViewById(R.id.imgview2);
+        backview=findViewById(R.id.back_layout);
 
+        //back
+        backview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
         //get firebase auth instance
         auth= FirebaseAuth.getInstance();
@@ -104,16 +116,39 @@ public class EditActivity extends AppCompatActivity {
         desc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //expandableView.setVisibility( expandableView.isShown() ? View.GONE : View.VISIBLE );
                 if(expandableView.getVisibility()==View.VISIBLE){
                     expandableView.setVisibility(View.GONE);
+                    img1.setImageResource(R.drawable.right_icon);
+
                 }
                 else{
                     expandableView.setVisibility(View.VISIBLE);
+                    img1.setImageResource(R.drawable.down_icon);
                 }
 
                 if(expandableView2.getVisibility()==View.VISIBLE){
                     expandableView2.setVisibility(View.GONE);
+                    img2.setImageResource(R.drawable.right_icon);
+                }
+            }
+        });
+
+        img1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(expandableView.getVisibility()==View.VISIBLE){
+                    expandableView.setVisibility(View.GONE);
+                    img1.setImageResource(R.drawable.right_icon);
+
+                }
+                else{
+                    expandableView.setVisibility(View.VISIBLE);
+                    img1.setImageResource(R.drawable.down_icon);
+                }
+
+                if(expandableView2.getVisibility()==View.VISIBLE){
+                    expandableView2.setVisibility(View.GONE);
+                    img2.setImageResource(R.drawable.right_icon);
                 }
             }
         });
@@ -123,13 +158,35 @@ public class EditActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if(expandableView2.getVisibility()==View.VISIBLE){
                     expandableView2.setVisibility(View.GONE);
+                    img2.setImageResource(R.drawable.right_icon);
                 }
                 else{
                     expandableView2.setVisibility(View.VISIBLE);
+                    img2.setImageResource(R.drawable.down_icon);
                 }
 
                 if(expandableView.getVisibility()==View.VISIBLE){
                     expandableView.setVisibility(View.GONE);
+                    img1.setImageResource(R.drawable.right_icon);
+                }
+            }
+        });
+
+        img2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(expandableView2.getVisibility()==View.VISIBLE){
+                    expandableView2.setVisibility(View.GONE);
+                    img2.setImageResource(R.drawable.right_icon);
+                }
+                else{
+                    expandableView2.setVisibility(View.VISIBLE);
+                    img2.setImageResource(R.drawable.down_icon);
+                }
+
+                if(expandableView.getVisibility()==View.VISIBLE){
+                    expandableView.setVisibility(View.GONE);
+                    img1.setImageResource(R.drawable.right_icon);
                 }
             }
         });

@@ -70,7 +70,7 @@ public class ProfileFragment extends Fragment {
         currentUser= FirebaseAuth.getInstance().getCurrentUser();
         userUID=currentUser.getUid();
 
-        //content in cart list
+        //content in cart_icon list
         orderList = new ArrayList<>();
         hisRVAdapter = new HisRVAdapter(getActivity(),orderList);
 

@@ -347,7 +347,7 @@ public class IdvItemActivity extends AppCompatActivity {
                                             }).addOnFailureListener(new OnFailureListener() {
                                         @Override
                                         public void onFailure(@NonNull Exception e) {
-                                            Snackbar.make(scrollView, "failed to cart", Snackbar.LENGTH_LONG).show();
+                                            Snackbar.make(scrollView, "failed to cart_icon", Snackbar.LENGTH_LONG).show();
                                         }
                                     });
 

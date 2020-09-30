@@ -2,6 +2,7 @@ package com.thewear.thewearapp;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -35,6 +36,7 @@ public class CheckoutActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private FirebaseAuth auth;
     private ScrollView paymentview;
+    private ConstraintLayout backview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +49,15 @@ public class CheckoutActivity extends AppCompatActivity {
         verify=findViewById(R.id.verify);
         tv_add=findViewById(R.id.address);
         paymentview=findViewById(R.id.paymentview);
+        backview=findViewById(R.id.back_layout);
+
+        //back
+        backview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
 
         //set firebase instance

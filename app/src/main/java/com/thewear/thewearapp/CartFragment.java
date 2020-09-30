@@ -77,7 +77,7 @@ public class CartFragment extends Fragment {
         loading_anim.setSpeed(1);
         loading_anim.playAnimation();
 
-        //content in cart list
+        //content in cart_icon list
         orderList = new ArrayList<>();
         cartRVAdapter = new CartRVAdapter(getActivity(),orderList);
 
