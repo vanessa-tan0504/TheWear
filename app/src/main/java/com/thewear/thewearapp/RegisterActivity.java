@@ -92,6 +92,14 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
+        btnLogIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(RegisterActivity.this,LoginActivity.class));
+                finish();
+            }
+        });
+
         //register button
         btnRegister.setOnTouchListener(new View.OnTouchListener() {
             @Override
