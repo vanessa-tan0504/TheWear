@@ -185,7 +185,7 @@ public class LoginActivity extends AppCompatActivity {
                                             new Handler().postDelayed(new Runnable() { //pause 3 second only resume to walkthru
                                                 @Override
                                                 public void run() {
-                                                    btnLogin.doneLoadingAnimation(Color.BLACK,bitmapTick);
+                                                    btnLogin.doneLoadingAnimation(Color.GREEN,bitmapTick);
                                                 }
                                                 }, 1000);
                                             new Handler().postDelayed(new Runnable() { //pause 3 second only resume to walkthru

@@ -196,7 +196,7 @@ public class RegisterActivity extends AppCompatActivity {
                                                                             new Handler().postDelayed(new Runnable() { //pause 3 second only resume to walkthru
                                                                                 @Override
                                                                                 public void run() {
-                                                                                    btnRegister.doneLoadingAnimation(Color.BLACK,bitmapTick);
+                                                                                    btnRegister.doneLoadingAnimation(Color.GREEN,bitmapTick);
                                                                                 }
                                                                             }, 1000);
                                                                             new Handler().postDelayed(new Runnable() { //pause 3 second only resume to walkthru
