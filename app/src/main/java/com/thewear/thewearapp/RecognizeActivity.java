@@ -198,7 +198,8 @@ public class RecognizeActivity extends AppCompatActivity implements CameraBridge
             }
         } else if (predict[0] >= 125) { //if predict more than 125, means not the person
             reg_chance++;//if wrong person verified more than 3 times, exit to prev screen
-            Toast.makeText(getApplicationContext(), reg_chance+" You're not the right person " + predict[0], LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), reg_chance+" You're not the right person" + predict[0], LENGTH_SHORT).show();
+            Log.e(TAG,predict[0]+"");
             if(reg_chance==3){
                 if (intentfrom.equals("login")) { //verify from login
                     showLoader3();
