@@ -469,30 +469,11 @@ public class TrainActivity extends AppCompatActivity implements CameraBridgeView
                         cropedImages(gray); //5. crop image
 
                         addLabel(username);
-                        detect.setText("CAPTURED FACE :"+capture_count +"/8");
+                        detect.setText("CAPTURED FACE :"+capture_count +"/5");
                         capture_count++;
-                        if(capture_count==3){ //9 for 8 image
+                        if(capture_count==6){ //6 for 5 image
                             detect.setEnabled(false);
                             Toast.makeText(TrainActivity.this, "Capture complete", Toast.LENGTH_SHORT).show();
-//                            new AlertDialog.Builder(TrainActivity.this).setTitle("capture complete")
-//                                    .setMessage("Face Recognition Success")
-//                                    .setNeutralButton("start train", new DialogInterface.OnClickListener() {
-//                                        @Override
-//                                        public void onClick(DialogInterface dialog, int which) {
-//                                            onStop();
-//                                            new Handler().postDelayed(new Runnable() { //pause 3 second only resume to walkthru
-//                                                @Override
-//                                                public void run() {
-//                                                    Intent intent1 = new Intent(TrainActivity.this, IntroActivity.class);
-//                                                    startActivity(intent1);
-//                                                   // finish();//finish welcome activity
-//                                                }
-//                                            }, 5000);
-//
-//                                        }
-//                                    })
-//                            .show();
-
                             showLoader();
                             new Handler().postDelayed(new Runnable() { //pause 3 second only resume to shop
                                 @Override
