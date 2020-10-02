@@ -358,13 +358,13 @@ public class TrainActivity extends AppCompatActivity implements CameraBridgeView
             rect_Crop = new Rect(face.x, face.y, face.width, face.height);
         }
         Mat croped = new Mat(mat, rect_Crop);
-        //images.add(croped); //store a croped image into ArrayList<Mat>
+        images.add(croped); //store a croped image into ArrayList<Mat>
         //add 6/6 to enhance sharpness
-        Mat source = croped;
-        Mat destination = new Mat(source.rows(),source.cols(),source.type());
-        Imgproc.GaussianBlur(source,destination,new Size(0,0),10);
-        Core.addWeighted(source,1.5,destination,-0.5, 0, destination);
-        images.add(destination); //added 6/6
+       // Mat source = croped;
+      //  Mat destination = new Mat(source.rows(),source.cols(),source.type());
+      //  Imgproc.GaussianBlur(source,destination,new Size(0,0),10);
+      //  Core.addWeighted(source,1.5,destination,-0.5, 0, destination);
+      //  images.add(destination); //added 6/6
 
     }
 

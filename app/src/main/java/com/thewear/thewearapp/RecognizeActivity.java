@@ -150,16 +150,16 @@ public class RecognizeActivity extends AppCompatActivity implements CameraBridge
         //added
         //added (can only store 1 image at a time, might get overwrite)
 
-        String cropfilename2 = "recognize2.jpg";
-        File cropfile2 = new File(croppath, cropfilename2);
-        Boolean bool2 = null;
-        cropfilename2 = cropfile2.toString();
-        bool2 = Imgcodecs.imwrite(cropfilename2, destination); //croped is Mat file
-        if (bool2 == true)
-            Log.i(TAG, "RECOGNIZE: SUCCESS writing image to external storage");
-        else
-            Log.i(TAG, "RECOGNIZE: Fail writing image to external storage");
-        //added
+//        String cropfilename2 = "recognize2.jpg";
+//        File cropfile2 = new File(croppath, cropfilename2);
+//        Boolean bool2 = null;
+//        cropfilename2 = cropfile2.toString();
+//        bool2 = Imgcodecs.imwrite(cropfilename2, destination); //croped is Mat file
+//        if (bool2 == true)
+//            Log.i(TAG, "RECOGNIZE: SUCCESS writing image to external storage");
+//        else
+//            Log.i(TAG, "RECOGNIZE: Fail writing image to external storage");
+//        //added
 
         /**
          * recognize.predict()- Predicts a label and associated confidence (e.g. distance) for a given input image.
@@ -169,7 +169,7 @@ public class RecognizeActivity extends AppCompatActivity implements CameraBridge
          * @return
          */
         //recognize.predict(croped, label, predict);
-        recognize.predict(destination, label, predict);
+        recognize.predict(croped, label, predict);
 //        if(reg_chance<3){
 //
 //        }
