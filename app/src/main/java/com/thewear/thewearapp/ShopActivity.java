@@ -401,7 +401,7 @@ public class ShopActivity extends AppCompatActivity {
         batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                Snackbar.make(constraintLayout, "Your order has successfully sent",Snackbar.LENGTH_LONG).show();
+                Snackbar.make(constraintLayout, "Your order has successfully sent",Snackbar.LENGTH_SHORT).show();
             }
         });
     }
