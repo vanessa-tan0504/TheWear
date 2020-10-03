@@ -98,7 +98,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/montserrat"
             android:hint="Username"
-            android:inputType="textEmailAddress"
+            android:inputType="text"
             android:maxLines="1"
             android:singleLine="true"
             android:textColor="#FFFFFF"

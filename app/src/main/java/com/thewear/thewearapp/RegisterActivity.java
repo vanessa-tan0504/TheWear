@@ -213,7 +213,7 @@ public class RegisterActivity extends AppCompatActivity {
                                                                         public void onComplete(@NonNull Task<Void> task) {
                                                                             if (task.isSuccessful()) {
                                                                                 if (user != null) {
-                                                                                    User newuser = new User(user.getDisplayName(), user.getEmail(), null);
+                                                                                    User newuser = new User(user.getDisplayName(), user.getEmail(), null,user.getUid());
                                                                                     db.collection("users").document(user.getUid() + "").set(newuser)
                                                                                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                                                                 @Override
