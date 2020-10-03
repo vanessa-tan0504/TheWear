@@ -28,11 +28,18 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import androidx.annotation.NonNull;
@@ -43,13 +50,14 @@ import br.com.simplepass.loadingbutton.customViews.CircularProgressButton;
 public class RegisterActivity extends AppCompatActivity {
     private FirebaseAuth auth;
     private FirebaseFirestore db;
-    private EditText inputEmail,inputPw,inputConfirmPw,inputUser;
+    private EditText inputEmail, inputPw, inputConfirmPw, inputUser;
     private Button btnLogIn;
     private CircularProgressButton btnRegister;
     private ProgressBar progressBar;
     private static String TAG = RegisterActivity.class.getSimpleName();
-    private Bitmap bitmapTick,bitmapCross;
+    private Bitmap bitmapTick, bitmapCross;
     ConstraintLayout constraintLayout;
+    FirebaseFirestore db_user;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -57,33 +65,33 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.register_activity);
 
         //get firebase auth instance
-        auth= FirebaseAuth.getInstance();
+        auth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
-        inputEmail=findViewById(R.id.signup_email);
-        inputPw=findViewById(R.id.signup_pw);
-        inputConfirmPw=findViewById(R.id.signup_confirmpw);
-        inputUser=findViewById(R.id.signup_username);
-        btnRegister=findViewById(R.id.btn_register);
-        btnLogIn=findViewById(R.id.btn_login);
+        inputEmail = findViewById(R.id.signup_email);
+        inputPw = findViewById(R.id.signup_pw);
+        inputConfirmPw = findViewById(R.id.signup_confirmpw);
+        inputUser = findViewById(R.id.signup_username);
+        btnRegister = findViewById(R.id.btn_register);
+        btnLogIn = findViewById(R.id.btn_login);
         final Drawable black_btn = getResources().getDrawable(R.drawable.rounded_btn_black);
         final Drawable white_btn = getResources().getDrawable(R.drawable.rounded_btn_white);
         Drawable tick = getResources().getDrawable(R.drawable.tick_icon);
-        bitmapTick = ((BitmapDrawable)tick).getBitmap();
+        bitmapTick = ((BitmapDrawable) tick).getBitmap();
         Drawable cross = getResources().getDrawable(R.drawable.cross_icon);
-        bitmapCross = ((BitmapDrawable)cross).getBitmap();
-        constraintLayout=findViewById(R.id.register);
+        bitmapCross = ((BitmapDrawable) cross).getBitmap();
+        constraintLayout = findViewById(R.id.register);
 
 
         //login button
         btnLogIn.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if(event.getAction()== MotionEvent.ACTION_DOWN){
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     btnLogIn.setBackgroundResource(R.drawable.rounded_btn_grey);
                     btnLogIn.setTextColor(Color.parseColor("#FFFFFF"));
                 }
-                if(event.getAction()==MotionEvent.ACTION_UP){
+                if (event.getAction() == MotionEvent.ACTION_UP) {
                     //when button released
                     btnLogIn.setBackgroundResource(R.drawable.rounded_btn_black);
                     btnLogIn.setTextColor(Color.parseColor("#FFFFFF"));
@@ -95,7 +103,7 @@ public class RegisterActivity extends AppCompatActivity {
         btnLogIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(RegisterActivity.this,LoginActivity.class));
+                startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
                 finish();
             }
         });
@@ -104,11 +112,11 @@ public class RegisterActivity extends AppCompatActivity {
         btnRegister.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if(event.getAction()== MotionEvent.ACTION_DOWN){
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     btnRegister.setBackgroundResource(R.drawable.rounded_btn_grey);
                     btnRegister.setTextColor(Color.parseColor("#FFFFFF"));
                 }
-                if(event.getAction()==MotionEvent.ACTION_UP){
+                if (event.getAction() == MotionEvent.ACTION_UP) {
                     //when button released
                     btnRegister.setBackgroundResource(R.drawable.rounded_btn_white);
                     btnRegister.setTextColor(Color.parseColor("#000000"));
@@ -123,11 +131,11 @@ public class RegisterActivity extends AppCompatActivity {
                 onWindowFocusChanged(true);
                 btnRegister.startAnimation();
                 final String email = inputEmail.getText().toString().trim();
-                String password = inputPw.getText().toString().trim();
+                final String password = inputPw.getText().toString().trim();
                 String confirm_pass = inputConfirmPw.getText().toString().trim();
-                String username = inputUser.getText().toString().trim();
+                final String username = inputUser.getText().toString().trim();
 
-                if(TextUtils.isEmpty(username)){
+                if (TextUtils.isEmpty(username)) {
                     inputUser.setError("Enter user name");
                     delay_anim(white_btn); //delay and revert anim
                     return;
@@ -170,82 +178,104 @@ public class RegisterActivity extends AppCompatActivity {
                     return;
                 }
 
-                //if all fields okay, create user to firebase
-                auth.createUserWithEmailAndPassword(email,password)
-                        .addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
+                FirebaseFirestore rootRef = FirebaseFirestore.getInstance();
+                CollectionReference usersRef = rootRef.collection("users");
+                Query query = usersRef.whereEqualTo("userName", username);
+                query.get()
+                        .addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<QuerySnapshot>() {
                             @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                btnRegister.startAnimation();
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    //start check every query if username existed
+                                    if (task.getResult().isEmpty()) { //if no same username is found
+                                        Log.d(TAG, "no username found");
+                                        //if all fields okay, create user to firebase
+                                        auth.createUserWithEmailAndPassword(email, password)
+                                                .addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<AuthResult> task) {
+                                                        btnRegister.startAnimation();
 
-                                if(!task.isSuccessful()){//if account cannot register
-                                    btnRegister.doneLoadingAnimation(Color.RED,bitmapCross);
-                                    delay_anim(white_btn); //delay and revert
+                                                        if (!task.isSuccessful()) {//if account cannot register
+                                                            btnRegister.doneLoadingAnimation(Color.RED, bitmapCross);
+                                                            delay_anim(white_btn); //delay and revert
 
-                                    Snackbar.make(constraintLayout,"Authentication failed ."+task.getException().getMessage(),Snackbar.LENGTH_LONG).show();
+                                                            Snackbar.make(constraintLayout, "Authentication failed ." + task.getException().getMessage(), Snackbar.LENGTH_LONG).show();
 
-                                }
-                                else {// if account register success ,store user's username
-                                    final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                                    UserProfileChangeRequest profileChangeRequest = new UserProfileChangeRequest.Builder()
-                                            .setDisplayName(inputUser.getText().toString().trim())
-                                            .build();
-                                    user.updateProfile(profileChangeRequest)
-                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                @Override
-                                                public void onComplete(@NonNull Task<Void> task) {
-                                                    if (task.isSuccessful()) {
-                                                        if(user!=null){
-                                                            User newuser = new User(user.getDisplayName(),user.getEmail(),null);
-                                                            db.collection("users").document(user.getUid()+"").set(newuser)
-                                                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                        } else {// if account register success ,store user's username
+                                                            final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                                                            UserProfileChangeRequest profileChangeRequest = new UserProfileChangeRequest.Builder()
+                                                                    .setDisplayName(inputUser.getText().toString().trim())
+                                                                    .build();
+                                                            user.updateProfile(profileChangeRequest)
+                                                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
                                                                         @Override
-                                                                        public void onSuccess(Void aVoid) {
-                                                                            Log.i(TAG,"Firestore updated");
-                                                                            new Handler().postDelayed(new Runnable() { //pause 3 second only resume to walkthru
-                                                                                @Override
-                                                                                public void run() {
-                                                                                    btnRegister.doneLoadingAnimation(Color.GREEN,bitmapTick);
-                                                                                }
-                                                                            }, 1000);
-                                                                            new Handler().postDelayed(new Runnable() { //pause 3 second only resume to walkthru
-                                                                                @Override
-                                                                                public void run() {
-                                                                                    Intent intent= new Intent(RegisterActivity.this, TrainActivity.class);
-                                                                                    intent.putExtra("username",user.getDisplayName()+"");
-                                                                                    startActivity(intent);
-                                                                                }
-                                                                            }, 2000);
-                                                                        }
-                                                                    })
-                                                                    .addOnFailureListener(new OnFailureListener() {
-                                                                        @Override
-                                                                        public void onFailure(@NonNull Exception e) {
-                                                                            btnRegister.doneLoadingAnimation(Color.RED,bitmapCross);
-                                                                            Snackbar.make(constraintLayout,"Cannot connect to server "+e.getMessage(),Snackbar.LENGTH_LONG).show();
+                                                                        public void onComplete(@NonNull Task<Void> task) {
+                                                                            if (task.isSuccessful()) {
+                                                                                if (user != null) {
+                                                                                    User newuser = new User(user.getDisplayName(), user.getEmail(), null);
+                                                                                    db.collection("users").document(user.getUid() + "").set(newuser)
+                                                                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                                                @Override
+                                                                                                public void onSuccess(Void aVoid) {
+                                                                                                    Log.i(TAG, "Firestore updated");
+                                                                                                    new Handler().postDelayed(new Runnable() { //pause 3 second only resume to walkthru
+                                                                                                        @Override
+                                                                                                        public void run() {
+                                                                                                            btnRegister.doneLoadingAnimation(Color.GREEN, bitmapTick);
+                                                                                                        }
+                                                                                                    }, 1000);
+                                                                                                    new Handler().postDelayed(new Runnable() { //pause 3 second only resume to walkthru
+                                                                                                        @Override
+                                                                                                        public void run() {
+                                                                                                            Intent intent = new Intent(RegisterActivity.this, TrainActivity.class);
+                                                                                                            intent.putExtra("username", user.getDisplayName() + "");
+                                                                                                            startActivity(intent);
+                                                                                                        }
+                                                                                                    }, 2000);
+                                                                                                }
+                                                                                            })
+                                                                                            .addOnFailureListener(new OnFailureListener() {
+                                                                                                @Override
+                                                                                                public void onFailure(@NonNull Exception e) {
+                                                                                                    btnRegister.doneLoadingAnimation(Color.RED, bitmapCross);
+                                                                                                    Snackbar.make(constraintLayout, "Cannot connect to server " + e.getMessage(), Snackbar.LENGTH_LONG).show();
 
+                                                                                                }
+                                                                                            });
+                                                                                }
+                                                                            }
                                                                         }
-                                                                    });
+                                                                    }).addOnFailureListener(new OnFailureListener() {
+                                                                @Override
+                                                                public void onFailure(@NonNull Exception e) {
+                                                                    Toast.makeText(RegisterActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                                    Snackbar.make(constraintLayout, "Please ensure camera and storage permission is enable." + e.getMessage(), Snackbar.LENGTH_LONG).show();
+                                                                }
+                                                            });
+                                                            //finish();
                                                         }
                                                     }
-                                                }
-                                            }).addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            Toast.makeText(RegisterActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                                            Snackbar.make(constraintLayout,"Please ensure camera and storage permission is enable."+e.getMessage(),Snackbar.LENGTH_LONG).show();
-
-                                        }
-                                    });
-                                    //finish();
+                                                });
+                                        //end of register
+                                    } else { // if username is found
+                                        Log.d(TAG, "username existed");
+                                        inputUser.setError("Username already exist");
+                                        delay_anim(white_btn); //delay and revert anim//return;
+                                    }
+                                } else {
+                                    Log.e(TAG, "Error getting document");
+                                    Snackbar.make(constraintLayout, "Error reading firestore database.", Snackbar.LENGTH_LONG).show();
                                 }
                             }
                         });
+
             }
         });
         //end of register button
     }
 
-    public void delay_anim(final Drawable white_btn){
+    public void delay_anim(final Drawable white_btn) {
         new Handler().postDelayed(new Runnable() { //pause 3 second only resume to walkthru
             @Override
             public void run() {
