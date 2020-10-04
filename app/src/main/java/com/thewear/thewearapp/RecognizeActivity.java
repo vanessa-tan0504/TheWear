@@ -142,7 +142,7 @@ public class RecognizeActivity extends AppCompatActivity implements CameraBridge
         File cropfile = new File(croppath, cropfilename);
         Boolean bool = null;
         cropfilename = cropfile.toString();
-        bool = Imgcodecs.imwrite(cropfilename, croped); //croped is Mat file
+        bool = Imgcodecs.imwrite(cropfilename, croped); //croped is Mat file from line 127 (ori)
         if (bool == true)
             Log.i(TAG, "RECOGNIZE: SUCCESS writing image to external storage");
         else
@@ -154,7 +154,7 @@ public class RecognizeActivity extends AppCompatActivity implements CameraBridge
 //        File cropfile2 = new File(croppath, cropfilename2);
 //        Boolean bool2 = null;
 //        cropfilename2 = cropfile2.toString();
-//        bool2 = Imgcodecs.imwrite(cropfilename2, destination); //croped is Mat file
+//        bool2 = Imgcodecs.imwrite(cropfilename2, destination); //destination is Mat file from line 130 (gaussian)
 //        if (bool2 == true)
 //            Log.i(TAG, "RECOGNIZE: SUCCESS writing image to external storage");
 //        else
