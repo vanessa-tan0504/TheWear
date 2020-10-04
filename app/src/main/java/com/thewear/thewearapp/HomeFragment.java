@@ -1,14 +1,18 @@
 package com.thewear.thewearapp;
 
+import android.app.Dialog;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
+import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +33,7 @@ import com.bumptech.glide.request.target.Target;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -36,6 +41,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.synnapps.carouselview.CarouselView;
+import com.synnapps.carouselview.ImageClickListener;
 import com.synnapps.carouselview.ViewListener;
 
 import java.util.ArrayList;
@@ -45,6 +51,7 @@ import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+import br.com.simplepass.loadingbutton.customViews.CircularProgressButton;
 
 import static com.google.firebase.auth.FirebaseAuth.getInstance;
 
@@ -123,6 +130,44 @@ public class HomeFragment extends Fragment {
                                             })
                                             .into(img);
                                     return view;
+                                }
+                            });
+
+                            carouselView.setImageClickListener(new ImageClickListener() {
+                                @Override
+                                public void onClick(int position) {
+
+                                    final Dialog dialog = new Dialog(getContext());
+                                    dialog.setContentView(R.layout.dialog_carousel);
+
+                                    final ImageView carousel_img = dialog.findViewById(R.id.carousel_img);
+                                    final TextView dialog_carousel_title = dialog.findViewById(R.id.dialog_carousel_title);
+                                    final TextView dialog_carousel_content = dialog.findViewById(R.id.dialog_carousel_content);
+                                    final LottieAnimationView dialog_loading = dialog.findViewById(R.id.dialog_loading);
+
+                                    //switch (position){
+                                         Glide.with(getContext()).load(urlstring[position]).listener(new RequestListener<Drawable>() {
+                                            @Override
+                                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                                return false;
+                                            }
+
+                                            @Override
+                                            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                                dialog_loading.setVisibility(View.GONE);
+                                                return false;
+                                            }
+                                        }).into(carousel_img);
+                                            dialog_carousel_title.setText(titlestring[position]);
+                                            dialog_carousel_content.setText(descstring[position]);
+                                           // break;
+                                   // }
+                                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT)); //remove white corners
+                                    DisplayMetrics metrics = getResources().getDisplayMetrics(); //custom width and length of dialog box
+                                    int width = metrics.widthPixels;
+                                    int height = metrics.heightPixels;
+                                    dialog.getWindow().setLayout((6 * width) / 7, ConstraintLayout.LayoutParams.WRAP_CONTENT);
+                                    dialog.show();
                                 }
                             });
                             carouselView.setPageCount(3);
