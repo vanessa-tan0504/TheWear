@@ -19,19 +19,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/loginreg" />
 
-    <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/switchbtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:textOff="Face Reg Off"
-        android:textOn="Face Reg On"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:showText="true" />
-
     <TextView
         android:id="@+id/appname"
         android:layout_width="wrap_content"
@@ -121,40 +108,6 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/login_face_layout"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginLeft="32dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginRight="32dp"
-        android:textColorHint="#FFFFFF"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appname2"
-        app:passwordToggleEnabled="true"
-        app:passwordToggleTint="#FFFFFF"
-        android:visibility="gone">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/login_face"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/montserrat"
-            android:hint="Email/Username"
-            android:inputType="text|textEmailAddress"
-            android:maxLines="1"
-            android:singleLine="true"
-            android:textColor="#FFFFFF"
-            android:textColorHighlight="#FFFFFF"
-            android:textColorHint="#FFFFFF"
-            android:visibility="gone"/>
-
-    </com.google.android.material.textfield.TextInputLayout>
-
     <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
         android:id="@+id/btn_login"
         android:layout_width="295dp"
@@ -167,20 +120,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_forget" />
-
-    <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
-        android:id="@+id/btn_facelogin"
-        android:layout_width="295dp"
-        android:layout_height="41dp"
-        android:layout_marginTop="40dp"
-        android:background="@drawable/rounded_btn_white"
-        android:fontFamily="@font/montserrat"
-        android:text="LOGIN WITH FACE reconition"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_forget"
-        android:visibility="gone"/>
 
     <Button
         android:id="@+id/btn_signup"

@@ -68,18 +68,18 @@ import static com.google.firebase.auth.FirebaseAuth.getInstance;
 
 public class ShopActivity extends AppCompatActivity {
     TextView textview;
-    ImageView imageView ;
-    int counter_m=0;
-    int counter_f=0;
-    int counter_un=0 ;
-    float male=0,female=0,unknown=0;
+    ImageView imageView;
+    int counter_m = 0;
+    int counter_f = 0;
+    int counter_un = 0;
+    float male = 0, female = 0, unknown = 0;
     int gender_counter;
     private static String TAG = TrainActivity.class.getSimpleName();
     private HomeFragment fragment1 = new HomeFragment();
     private SearchFragment fragment2 = new SearchFragment();
     private CartFragment fragment3 = new CartFragment();
     private ProfileFragment fragment4 = new ProfileFragment();
-    private FirebaseFirestore db,db_order;
+    private FirebaseFirestore db, db_order;
     AnimatedBottomBar bottomBar;
     ViewPager viewPager;
     private boolean isVerified;
@@ -92,13 +92,13 @@ public class ShopActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.shop_activity);
         db = FirebaseFirestore.getInstance();
-        constraintLayout=findViewById(R.id.shopact);
+        constraintLayout = findViewById(R.id.shopact);
 
 
         //viewpager settings
         viewPager = (ViewPager) findViewById(R.id.item_img);
         //bottomNavigationView= findViewById(R.id.bottom_navigation);
-        bottomBar=findViewById(R.id.bottom_bar);
+        bottomBar = findViewById(R.id.bottom_bar);
 
         FirebaseUser user = getInstance().getCurrentUser();
 
@@ -243,7 +243,6 @@ public class ShopActivity extends AppCompatActivity {
                                                                     //tmpgender="male";
 
 
-
                                                                     db.collection("users").document(user.getUid() + "")
                                                                             .update("expectedGender", "male")
                                                                             .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -299,8 +298,7 @@ public class ShopActivity extends AppCompatActivity {
                     Toast.makeText(ShopActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
-        }
-        else {
+        } else {
             Toast.makeText(this, "no data", Toast.LENGTH_SHORT).show();
         }
         //end of user gender predict in background---------------------------------------
@@ -310,7 +308,7 @@ public class ShopActivity extends AppCompatActivity {
         viewPager.setCurrentItem(0);
 
         //initialize fragment displayed by viewpager
-        viewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager(),FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+        viewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
             @Override
             public Fragment getItem(int position) {
                 switch (position) {
@@ -347,7 +345,7 @@ public class ShopActivity extends AppCompatActivity {
             public void onPageSelected(int position) {
                 //bottomNavigationView.getMenu().getItem(position).setChecked(true);
                 //hide keyboard when sliding within fragment
-                final InputMethodManager imm = (InputMethodManager)getSystemService(
+                final InputMethodManager imm = (InputMethodManager) getSystemService(
                         Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(viewPager.getWindowToken(), 0);
                 viewPager.getAdapter().notifyDataSetChanged();
@@ -364,22 +362,21 @@ public class ShopActivity extends AppCompatActivity {
         bottomBar.setupWithViewPager(viewPager);
 
         //if user is come from checkout
-        Intent intent=getIntent();
-        isVerified=intent.getBooleanExtra("isverified",false);
-        if(isVerified){ //if user already verified at checkout, change order paid status as true
+        Intent intent = getIntent();
+        isVerified = intent.getBooleanExtra("isverified", false);
+        if (isVerified) { //if user already verified at checkout, change order paid status as true
             db_order = FirebaseFirestore.getInstance();
-            db_order.collection("orders").whereEqualTo("user",user.getUid()+"")
+            db_order.collection("orders").whereEqualTo("user", user.getUid() + "")
                     .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                    if(task.isSuccessful()){
+                    if (task.isSuccessful()) {
                         List<String> list = new ArrayList<>();
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             list.add(document.getId()); //get filtered document id
                         }
                         updateData(list); //after filtered go to updateData funtion
-                    }
-                    else{
+                    } else {
                         Log.d("getverified", "Error getting documents: ", task.getException());
                     }
                 }
@@ -389,19 +386,19 @@ public class ShopActivity extends AppCompatActivity {
 
     }
 
-    public void updateData(List<String> list){
+    public void updateData(List<String> list) {
         WriteBatch batch = db_order.batch();
 
-        for(int i =0;i<list.size();i++){
+        for (int i = 0; i < list.size(); i++) {
 
             //update each list item
             DocumentReference ref = db_order.collection("orders").document(list.get(i));
-            batch.update(ref,"paid",true);
+            batch.update(ref, "paid", true);
         }
         batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                Snackbar.make(constraintLayout, "Your order has successfully sent",Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(constraintLayout, "Your order has successfully sent", Snackbar.LENGTH_SHORT).show();
             }
         });
     }
@@ -440,7 +437,7 @@ public class ShopActivity extends AppCompatActivity {
 
             @Override
             public void run() {
-                doubleBackToExitPressedOnce=false;
+                doubleBackToExitPressedOnce = false;
             }
         }, 2000);
     }
