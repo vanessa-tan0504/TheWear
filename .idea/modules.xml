@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/OpenCVFaceRecogonition-master.iml" filepath="$PROJECT_DIR$/OpenCVFaceRecogonition-master.iml" group="OpenCVFaceRecogonition-master" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="OpenCVFaceRecogonition-master/app" />
-      <module fileurl="file://$PROJECT_DIR$/openCVLibrary400pre/openCVLibrary400pre.iml" filepath="$PROJECT_DIR$/openCVLibrary400pre/openCVLibrary400pre.iml" group="OpenCVFaceRecogonition-master/openCVLibrary400pre" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/TheWear-master.iml" filepath="$PROJECT_DIR$/.idea/modules/TheWear-master.iml" group="TheWear-master" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="TheWear-master/app" />
+      <module fileurl="file://$PROJECT_DIR$/openCVLibrary400pre/openCVLibrary400pre.iml" filepath="$PROJECT_DIR$/openCVLibrary400pre/openCVLibrary400pre.iml" group="TheWear-master/openCVLibrary400pre" />
     </modules>
   </component>
 </project>
