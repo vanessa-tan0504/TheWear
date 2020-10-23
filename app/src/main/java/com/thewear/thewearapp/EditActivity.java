@@ -446,7 +446,7 @@ public class EditActivity extends AppCompatActivity {
                             public void onSuccess(Void aVoid) {
                                 btn_add.doneLoadingAnimation(Color.GREEN,bitmapTick);
                                 delay_anim(black_btn,btn_add); //delay and revert anim
-                                Toast.makeText(EditActivity.this, "data updated", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(EditActivity.this, "Address updated successfully", Toast.LENGTH_SHORT).show();
 
                             }
                         })
