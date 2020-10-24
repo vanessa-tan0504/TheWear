@@ -89,9 +89,7 @@ import javax.annotation.Nonnull;
 
 import static org.opencv.objdetect.Objdetect.CASCADE_SCALE_IMAGE;
 
-/**
- * Created by Assem Abozaid on 6/2/2018.
- */
+
 
 public class TrainActivity extends AppCompatActivity implements CameraBridgeViewBase.CvCameraViewListener2 {
     // private TextView textView; //added
@@ -174,13 +172,15 @@ public class TrainActivity extends AppCompatActivity implements CameraBridgeView
         Log.i(TAG, "Vector Classes "+String.valueOf(vectorClasses.get(0,0,classes)));
         //local.putImage("vectorClasses" + ".jpg", vectorClasses);
 
-        //LBPH regconizer settings
-        //radius- greater the radius, the smoother the image but more spatial information
-        //neighbors -appropriate value is to use 8 sample points, higher sample point, higher computational cost
-        //grid-x - 8 is a common value, higher grid, more horizontal cell, finer grid, higher the dimensionality of feature vector
-        //grid-y - 8 is a common value, higher grid, more vertical cell, finer grid, higher the dimensionality of feature vector
-        //threhold - distance to nearest neighbour > threshold , return -1
-        recognize = LBPHFaceRecognizer.create(3,8,8,8,200); //check out and understand it
+        /**
+         LBPH regconizer settings
+        radius- greater the radius, the smoother the image but more spatial information
+        neighbors -appropriate value is to use 8 sample points, higher sample point, higher computational cost
+        grid-x - 8 is a common value, higher grid, more horizontal cell, finer grid, higher the dimensionality of feature vector
+        grid-y - 8 is a common value, higher grid, more vertical cell, finer grid, higher the dimensionality of feature vector
+        threshold - distance to nearest neighbour > threshold , return -1
+        **/
+         recognize = LBPHFaceRecognizer.create(3,8,8,8,200); //check out and understand it
 
         /**
          * recognize.train()- Trains a FaceRecognizer with given data and associated labels.
@@ -198,12 +198,11 @@ public class TrainActivity extends AppCompatActivity implements CameraBridgeView
             //add
            // recognize=LBPHFaceRecognizer.create();
            // recognize.train(imagesMatrix, vectorClasses);
-            ((LBPHFaceRecognizer) recognize).setThreshold(0.0);
             Log.i(TAG,"Radius: "+ ((LBPHFaceRecognizer) recognize).getRadius());
             Log.i(TAG,"Neighbour: "+ ((LBPHFaceRecognizer) recognize).getNeighbors());
             Log.i(TAG,"Grid X: "+ ((LBPHFaceRecognizer) recognize).getGridX());
             Log.i(TAG,"Grid Y: "+ ((LBPHFaceRecognizer) recognize).getGridY());
-            Log.i(TAG,"Threshold: "+ ((LBPHFaceRecognizer) recognize).getRadius());
+            Log.i(TAG,"Threshold: "+ ((LBPHFaceRecognizer) recognize).getThreshold());
             List<Mat> histograms = ((LBPHFaceRecognizer) recognize).getHistograms();
             Log.i(TAG,"Histogram Size: "+ histograms.size());
 

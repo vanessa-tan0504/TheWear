@@ -161,7 +161,7 @@ public class RegisterActivity extends AppCompatActivity {
                 }
 
                 if (password.length() < 6) {
-                    inputPw.setError("Password too short");
+                    inputPw.setError("Password must be 6 characters or more");
                     delay_anim(white_btn); //delay and revert anim
                     return;
                 }

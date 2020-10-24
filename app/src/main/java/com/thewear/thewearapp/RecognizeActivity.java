@@ -62,9 +62,6 @@ import javax.annotation.Nullable;
 import static android.widget.Toast.LENGTH_SHORT;
 import static org.opencv.objdetect.Objdetect.CASCADE_SCALE_IMAGE;
 
-/**
- * Created by Assem Abozaid on 6/2/2018.
- */
 
 public class RecognizeActivity extends AppCompatActivity implements CameraBridgeViewBase.CvCameraViewListener2 {
     private static String TAG = TrainActivity.class.getSimpleName();

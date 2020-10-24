@@ -27,11 +27,11 @@
         <activity
             android:name=".TrainActivity"
             android:label="@string/app_train_page"
-            android:screenOrientation="fullSensor" />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".RecognizeActivity"
             android:label="@string/app_recognize_page"
-            android:screenOrientation="fullSensor" />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".RegisterActivity"
             android:screenOrientation="portrait" />
