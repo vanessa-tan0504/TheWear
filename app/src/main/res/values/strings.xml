@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">The Wear</string>
+    <string name="app_name">TheWear</string>
     <string name="app_train_page">Face Training</string>
     <string name="app_recognize_page">Face Recognizing</string>
     <string name="precam">TheWear application implements the facial
