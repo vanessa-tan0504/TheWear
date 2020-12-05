@@ -28,7 +28,7 @@
         android:layout_width="354dp"
         android:layout_height="56dp"
         android:layout_marginTop="32dp"
-        android:background="@drawable/rounded_btn_whitestroke"
+        android:background="@drawable/rounded_btn_whitestroke2"
         android:gravity="center_vertical"
         android:queryHint="Search here"
         app:closeIcon="@color/transparent"
